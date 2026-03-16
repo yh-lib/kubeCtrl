@@ -111,7 +111,7 @@ const podStatus = ref({
 
 <style scoped>
 .k8s-dashboard {
-  margin-top: 100px;
+  margin-top: 50px;
   padding: 20px;
 }
 

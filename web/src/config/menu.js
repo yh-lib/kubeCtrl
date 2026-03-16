@@ -11,15 +11,20 @@ export const MENU_CONFIG = [
                 icon: 'DataAnalysis'
             },
             {
-                title: '事件中心',
-                index: '/cluster/events',
-                icon: 'Bell'
+                title: '集群列表',
+                index: '/cluster/list',
+                icon: 'Connection'
             },
             {
                 title: '节点列表',
                 index: '/cluster/nodes',
                 icon: 'Grid'
-            }
+            },
+            {
+                title: '事件中心',
+                index: '/cluster/events',
+                icon: 'Bell'
+            },
         ]
     },
     // 2. 工作负载
