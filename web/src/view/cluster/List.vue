@@ -7,6 +7,7 @@ import Add from './Add.vue'
 
 
 // ++++++增
+
 // add_2:打开添加集群的表单
 const opDialog = ref(false)
 const addItem = () => {
@@ -14,7 +15,7 @@ const addItem = () => {
     data.itemForm={}
     opDialog.value = true
 }
-// add_4:定义表单初始数据
+// add_4 定义表单初始数据
 const data = reactive({
     tableData:[] as Cluster[],
     itemForm:{
@@ -26,12 +27,12 @@ const data = reactive({
         clusterSize:""     
     }    
 })
-// add_7: 监听refresh事件，刷新用户列表
+// add_7 监听refresh事件，刷新用户列表
 const refreshList = () =>{
     opDialog.value = false
     getList()
 }
-// add_8:获取当前列表
+// add_8 获取当前列表
 const getList = () =>{
     loading.value = true
     getListHandler().then((response)=>{
@@ -43,7 +44,13 @@ const getList = () =>{
         }
     })
 }
+// add_9 关闭dialog时刷新用户列表
+const closeDialog = () =>{
+    method.value == 'create' && getList()
+}
+
 // ++++++删
+
 // delete_2 删除集群
 const deleteRow = (row) => {
     // 删除提醒
@@ -69,7 +76,9 @@ const deleteRow = (row) => {
         return
     }) 
 }
+
 // ++++++改
+
 // update_2 更新
 const method = ref('')
 const updateItem = (row) => {
@@ -82,8 +91,22 @@ const updateItem = (row) => {
 }
 // update_3 将method.value、data.itemForm赋值给子组件
 // update_4 在子组件中将值渲染到form表单中
+
 // ++++++查
 
+// select_1 子组件加载时自动获取列表
+onBeforeMount(() => {
+    getList();
+})
+// select_2 搜索功能
+const search = ref('')
+const filterTableData = computed(() =>
+  data.tableData.filter(
+    (data) =>
+      !search.value ||
+      data.clusterId.toLowerCase().includes(search.value.toLowerCase())
+  )
+)
 
 
 // ++++++独立配置
@@ -107,37 +130,12 @@ interface Cluster {
   clusterStatus: string
   clusterSize: number
 }
-
-
-
-
-
-const search = ref('')
-
-const filterTableData = computed(() =>
-  data.tableData.filter(
-    (data) =>
-      !search.value ||
-      data.clusterId.toLowerCase().includes(search.value.toLowerCase())
-  )
-)
-
-// 加载图标
+// 加载图标默认关闭
 const loading = ref(false)
 
 
 
 
-// 关闭弹窗时是否刷新用户列表
-const closeDialog = () =>{
-    method.value == 'create' && getList()
-}
-
-
-// 组件加载时自动调用 getList 方法
-onBeforeMount(() => {
-    getList();
-})
 </script>
 
 <template>
@@ -164,7 +162,7 @@ onBeforeMount(() => {
             <el-table-column :label="tableTtile.f6.label" :prop="tableTtile.f6.prop" />
             <el-table-column align="right">
                 <template #header>
-                    <el-input v-model="search" size="small" placeholder="Type to search" />
+                    <el-input v-model="search" size="small" placeholder="Search by clusterId" />
                 </template>             
                 <template #default="scope">
                     <!-- update_1 触发编辑操作 -->
