@@ -6,7 +6,7 @@ import { CircleCheck, CircleClose } from '@element-plus/icons-vue'
 import Add from './Add.vue'
 
 
-// ++++++++++++++++++++++++++++++++  增
+// ++++++增
 // add_2:打开添加集群的表单
 const opDialog = ref(false)
 const addItem = () => {
@@ -27,8 +27,8 @@ const data = reactive({
     }    
 })
 // add_7: 监听refresh事件，刷新用户列表
-const updateOp = () =>{
-    userDialog.value = false
+const refreshList = () =>{
+    opDialog.value = false
     getList()
 }
 // add_8:获取当前列表
@@ -43,7 +43,7 @@ const getList = () =>{
         }
     })
 }
-// ++++++++++++++++++++++++++++++++  删
+// ++++++删
 // delete_2 删除集群
 const deleteRow = (row) => {
     // 删除提醒
@@ -69,12 +69,24 @@ const deleteRow = (row) => {
         return
     }) 
 }
-// 改
-// 查
+// ++++++改
+// update_2 更新
+const method = ref('')
+const updateItem = (row) => {
+    // 传递给操作参数给子组件
+    method.value='update'
+    // 传递当前用户数据给子组件
+    data.itemForm = row
+    // 打开表单弹窗
+    opDialog.value = true
+}
+// update_3 将method.value、data.itemForm赋值给子组件
+// update_4 在子组件中将值渲染到form表单中
+// ++++++查
 
 
 
-// ++++++++++++++++++++++++++++++++  独立配置
+// ++++++独立配置
 // Main 标题
 const titleName = "集群列表"
 // Table 表头
@@ -110,13 +122,6 @@ const filterTableData = computed(() =>
   )
 )
 
-const handleEdit = (index: number, row: User) => {
-  console.log(index, row)
-}
-const handleDelete = (index: number, row: User) => {
-  console.log(index, row)
-}
-
 // 加载图标
 const loading = ref(false)
 
@@ -127,16 +132,7 @@ const loading = ref(false)
 const closeDialog = () =>{
     method.value == 'create' && getList()
 }
-// 更新用户
-const method = ref('')
-const updateUser = (row) => {
-    // 传递给子组件的操作参数
-    method.value='update'
-    // 传递当前用户数据给子组件
-    data.userForm = row
-    // 打开表单弹窗
-    userDialog.value = true
-}
+
 
 // 组件加载时自动调用 getList 方法
 onBeforeMount(() => {
@@ -171,7 +167,8 @@ onBeforeMount(() => {
                     <el-input v-model="search" size="small" placeholder="Type to search" />
                 </template>             
                 <template #default="scope">
-                    <el-button :disabled="scope.row.clusterStatus != 'true'" size="small" @click="updateOp(scope.row)">
+                    <!-- update_1 触发编辑操作 -->
+                    <el-button :disabled="scope.row.clusterStatus != 'true'" size="small" @click="updateItem(scope.row)">
                         编辑
                     </el-button>
                     <!-- delete_1 触发删除动作 -->
@@ -194,7 +191,8 @@ onBeforeMount(() => {
             destroy-on-close
         >
             <!-- add_6:添加集群表单 -->
-            <Add :subMethod='method' :subRow="data.userForm" @refresh="updateOp"/>
+            <!-- update3 将method.value、data.itemForm赋值给子组件 -->
+            <Add :subMethod='method' :subRow="data.itemForm" @refresh="refreshList"/>
         </el-dialog>            
     </el-card>
 </template>
