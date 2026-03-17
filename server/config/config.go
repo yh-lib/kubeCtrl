@@ -2,9 +2,9 @@
 package config
 
 import (
-	"server/utils/logs"
 	"path"
 	"runtime"
+	"server/utils/logs"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
@@ -28,16 +28,16 @@ var (
 
 // 规范返回给前端的数据
 type ReturnData struct {
-	Status  int                    `json:"status"`
-	Message string                 `json:"message"`
-	Data    map[string]interface{} `json:"data"`
+	Status  int            `json:"status"`
+	Message string         `json:"message"`
+	Data    map[string]any `json:"data"`
 }
 
 // 构造函数
 func NewRetrunData() ReturnData {
 	returnData := ReturnData{}
 	returnData.Status = 200
-	data := make(map[string]interface{})
+	data := make(map[string]any)
 	returnData.Data = data
 	return returnData
 }

@@ -6,7 +6,7 @@
 - 使用方法
 
   ```go
-  logs.Info(map[string]interface{}{"key1": "value1", "key2": "value2"}, "message...")
+  logs.Info(map[string]any{"key1": "value1", "key2": "value2"}, "message...")
   ```
 
 - 显示效果

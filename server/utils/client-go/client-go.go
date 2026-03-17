@@ -247,6 +247,6 @@ func selectActions() {
 	}
 }
 
-func main() {
+func mainBak() {
 	selectActions()
 }
