@@ -10,7 +10,7 @@ func add(clusterGroup *gin.RouterGroup) {
 	clusterGroup.POST("/add", cluster.Add)
 }
 func delete(clusterGroup *gin.RouterGroup) {
-	clusterGroup.POST("/delete", cluster.Delete)
+	clusterGroup.GET("/delete", cluster.Delete)
 }
 func update(clusterGroup *gin.RouterGroup) {
 	clusterGroup.POST("/update", cluster.Update)
