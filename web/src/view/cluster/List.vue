@@ -66,7 +66,7 @@ const deleteRow = (row) => {
         deleteHandler(row.clusterId).then((response)=>{
             ElMessage({
                 type: 'success',
-                message: response.data.msg,
+                message: response.data.message,
             })
             // 刷新列表
             getList()

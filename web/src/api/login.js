@@ -10,7 +10,6 @@ export const login = (username, password) => {
         'post',
         5000
     ).then((response) => {
-        console.log("到这里了")
         console.log('response:', response)
         if (response.data.status === 200) {
             // 将后端返回的token保存到本地
@@ -18,7 +17,7 @@ export const login = (username, password) => {
             window.localStorage.setItem(CONFIG.TOKEN_NAME, token)
             // 提示登录成功
             ElMessage({
-                message: response.data.msg,
+                message: response.data.message,
                 type: 'success',
             })
             router.replace('/')
@@ -27,6 +26,7 @@ export const login = (username, password) => {
         }
     })
         .catch((response) => {
+            console.log('username:', username, 'password:', password, 'url:', API_CONFIG.loginApi)
             console.log('response2:', response)
         })
 }
@@ -56,7 +56,7 @@ export const logout = () => {
                     window.localStorage.removeItem(CONFIG.TOKEN_NAME)
                     // 提示退出成功
                     ElMessage({
-                        message: response.data.msg,
+                        message: response.data.message,
                         type: 'success',
                     })
                     router.replace('/login')

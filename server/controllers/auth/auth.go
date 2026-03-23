@@ -27,6 +27,7 @@ func Login(c *gin.Context) {
 	logs.Debug(map[string]any{"用户名": userInfo.Username, "密码": userInfo.Password}, "开始验证登录信息")
 	// 验证用户名和密码是否正确
 	// 认证成功
+	logs.Debug(map[string]any{"用户名": userInfo.Username, "密码": config.Username}, "开始验证登录信息")
 	if userInfo.Username == config.Username && userInfo.Password == config.Password {
 
 		// 生成 JWT 的 Token
@@ -34,14 +35,14 @@ func Login(c *gin.Context) {
 		if err != nil {
 			logs.Error(map[string]any{"用户名": userInfo.Username, "错误信息": err}, "用户名密码正确,但生成toke失败.")
 			returnData.Status = 401
-			returnData.Message = "生成token失败:"
+			returnData.Message = "登录失败"
 			c.JSON(200, returnData)
 			return
 		}
 		// token 正常生成，返回给前端
-		logs.Info(map[string]any{"用户名": userInfo.Username}, "登录成功")
+		logs.Info(map[string]any{"用户名": userInfo.Username}, "生成token成功")
 		returnData.Status = 200
-		returnData.Message = "生成token成功"
+		returnData.Message = "登录成功"
 		returnData.Data["token"] = jwtToken
 		c.JSON(200, returnData)
 		return

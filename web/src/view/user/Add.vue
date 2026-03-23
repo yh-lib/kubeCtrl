@@ -26,7 +26,7 @@ const submitForm = (userForm) => {
         if (props.subMethod == 'create') {
           addUserHandler(userForm).then((Response)=>{
             ElMessage({
-              message: Response.data.msg,
+              message: response.data.message,
               type: 'success',
             })
             loading.value = false   // 注意：axios是异步运行，必须写在请求里面；
@@ -35,7 +35,7 @@ const submitForm = (userForm) => {
         }else{
           updateUserHandler(userForm).then((Response)=>{
             ElMessage({
-              message: Response.data.msg,
+              message: response.data.message,
               type: 'success',
             })
             loading.value = false   // 注意：axios是异步运行，必须写在请求里面；

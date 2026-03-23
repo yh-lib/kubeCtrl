@@ -74,7 +74,7 @@ const deleteUser = (row) => {
         deleteHandler(row.id).then((response)=>{
             ElMessage({
                 type: 'success',
-                message: response.data.msg,
+                message: response.data.message,
             })
             // 刷新用户列表
             getUserList()

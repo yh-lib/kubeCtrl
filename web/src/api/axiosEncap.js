@@ -42,7 +42,7 @@ axios.interceptors.response.use(
         } else if (response.data.status == 401) {
             // 提示信息
             ElMessage({
-                message: response.data.msg,
+                message: response.data.message,
                 type: 'warning',
             })
             // token已失效,移除本地token

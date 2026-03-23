@@ -33,11 +33,11 @@ router.beforeEach((to, from) => {
     // 1. 访问login页面
     if (to.path == '/login') {
         // 1.1 本地localStorage存有token，跳转至首页
-        window.localStorage.getItem(CONFIG.TOKEN_NAME) && router.replace('/')
+        window.localStorage.getItem(CONFIG.TOKEN_NAME) && router.replace('/cluster/dashboard')
     } else {
         // 2. 访问非login页面
         // 2.1 本地localStorage没有token
-        window.localStorage.getItem(CONFIG.TOKEN_NAME) || router.replace('login')
+        window.localStorage.getItem(CONFIG.TOKEN_NAME) || router.replace('/login')
     }
 })
 

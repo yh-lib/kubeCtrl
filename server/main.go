@@ -14,6 +14,8 @@ func main() {
 	// 初始化程序配置	package initController
 	// 注册gin引擎
 	r := gin.Default()
+	// 开启跨域中间件
+	r.Use(middlerwares.CorsMiddleware())
 	// // 使用中间件鉴权
 	r.Use(middlerwares.JwtAuth)
 	// // 注册路由

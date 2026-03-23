@@ -27,7 +27,7 @@ const submitForm = (itemForm) => {
         if (props.subMethod == 'create') {
           addHandler(itemForm).then((Response)=>{
             ElMessage({
-              message: Response.data.msg,
+              message: response.data.message,
               type: 'success',
             })
             loading.value = false
@@ -36,7 +36,7 @@ const submitForm = (itemForm) => {
           // update_6 调用后端接口，更新集群 
             updateHandler(itemForm).then((Response)=>{
                 ElMessage({
-                message: Response.data.msg,
+                message: response.data.message,
                 type: 'success',
                 })
                 loading.value = false
