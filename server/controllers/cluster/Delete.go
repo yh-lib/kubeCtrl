@@ -10,6 +10,8 @@ import (
 )
 
 func Delete(c *gin.Context) {
+	// 定义存放返回前端数据的变量
+	var returnData = config.NewRetrunData()
 	clusterID := c.Query("clusterid")
 	logs.Info(nil, "开始运行集群 "+clusterID+" 删除逻辑")
 	err := config.InClusterClientSet.CoreV1().Secrets(config.MetadataNamespace).Delete(context.TODO(), clusterID, metav1.DeleteOptions{})

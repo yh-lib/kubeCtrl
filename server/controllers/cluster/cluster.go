@@ -46,11 +46,10 @@ func (c *ClusterConfig) getClusterStatus() (ClusterStatus, error) {
 	return ClusterStatus, nil
 }
 
-// 定义存放返回前端数据的变量
-var returnData = config.NewRetrunData()
-
 // 添加或更新集群信息
 func addOrUpdate(c *gin.Context, method string) {
+	// 定义存放返回前端数据的变量
+	var returnData = config.NewRetrunData()
 	var arg string
 	if method == "create" {
 		arg = "添加"
