@@ -14,6 +14,7 @@ import (
 type BasicInfo struct {
 	ClusterId  string   `json:"clusterId" form:"clusterId"`
 	NameSpace  string   `json:"nameSpace" form:"nameSpace"`
+	Name       string   `json:"name" form:"name"`
 	Item       any      `json:"item"`
 	DeleteList []string `json:"deleteList"`
 }
@@ -31,12 +32,12 @@ func BasicInit(c *gin.Context, item any) (clientSet *kubernetes.Clientset, basic
 	default:
 		err = errors.New("不支持的请求类型")
 	}
-	if basicInfo.NameSpace == "" {
-		basicInfo.NameSpace = "default"
-	}
 	if err != nil {
 		msg := "请求数据绑定后端失败: " + err.Error()
 		return nil, basicInfo, errors.New(msg)
+	}
+	if basicInfo.NameSpace == "" {
+		basicInfo.NameSpace = "default"
 	}
 	// 实例化clientSet
 	kubeConfig := config.ClusterKubeconfig[basicInfo.ClusterId]

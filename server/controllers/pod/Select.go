@@ -7,15 +7,14 @@ import (
 	"server/utils/logs"
 
 	"github.com/gin-gonic/gin"
-	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 func Get(c *gin.Context) {
 	logs.Info(nil, "详情逻辑")
-	var pod corev1.Pod
 	returnData := config.ReturnData{}
-	clientSet, basicInfo, err := controllers.BasicInit(c, &pod)
+	returnData.Data = map[string]any{}
+	clientSet, basicInfo, err := controllers.BasicInit(c, nil)
 	if err != nil {
 		logs.Error(map[string]any{"Error": err}, "clientSet 初始化失败")
 		returnData.Message = err.Error()
@@ -23,22 +22,22 @@ func Get(c *gin.Context) {
 		c.JSON(200, returnData)
 		return
 	}
-	_, err = clientSet.CoreV1().Pods(basicInfo.NameSpace).Create(context.TODO(), &pod, metav1.CreateOptions{})
+	podDetail, err := clientSet.CoreV1().Pods(basicInfo.NameSpace).Get(context.TODO(), basicInfo.Name, metav1.GetOptions{})
 	if err != nil {
+		logs.Error(map[string]any{"Error": err}, "获取 pod: "+basicInfo.Name+" 详情失败")
 		returnData.Status = 400
-		returnData.Message = "创建 pod: " + pod.Name + " 失败:" + err.Error()
-		logs.Error(map[string]any{"Error": err}, "创建 pod: "+pod.Name+" 失败:")
+		returnData.Message = "获取 pod: " + basicInfo.Name + " 详情失败: " + err.Error()
 	} else {
+		logs.Error(map[string]any{"Error": err}, "获取 pod: "+basicInfo.Name+" 详情成功")
 		returnData.Status = 200
-		returnData.Message = "创建 pod: " + pod.Name + " 成功:"
+		returnData.Message = "获取 pod: " + basicInfo.Name + " 详情成功"
+		returnData.Data["item"] = podDetail
 	}
 	c.JSON(200, returnData)
 }
 
 func List(c *gin.Context) {
 	logs.Info(nil, "列表逻辑")
-	var pod corev1.Pod
-
 	returnData := config.ReturnData{}
 	returnData.Data = map[string]any{}
 	clientSet, basicInfo, err := controllers.BasicInit(c, nil)
@@ -51,9 +50,9 @@ func List(c *gin.Context) {
 	}
 	podList, err := clientSet.CoreV1().Pods(basicInfo.NameSpace).List(context.TODO(), metav1.ListOptions{})
 	if err != nil {
-		logs.Error(map[string]any{"Error": err}, "创建 pod: "+pod.Name+" 失败:")
+		logs.Error(map[string]any{"Error": err}, "查询 pod 列表失败")
 		returnData.Status = 400
-		returnData.Message = "查询 pod 列表失败:" + err.Error()
+		returnData.Message = "查询 pod 列表失败: " + err.Error()
 	} else {
 		returnData.Status = 200
 		returnData.Message = "查询 pod 列表成功"
