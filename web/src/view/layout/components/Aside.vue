@@ -1,7 +1,6 @@
 <script setup>
 import { MENU_CONFIG } from '../../../config/menu';
 import * as Icons from '@element-plus/icons-vue';
-import { ref } from 'vue';
 import { useIsCollapse } from '../../../store/index.js'
 import { storeToRefs } from 'pinia';
 
@@ -25,7 +24,7 @@ const getIcon = (iconName) => {
     <router-link to="/cluster/dashboard">
         <el-button text>
             <el-icon><Icons.HomeFilled /></el-icon>
-            <span v-show="!isCollapse">KubeCtrl</span>
+            <span v-show="!isCollapse">Ks</span>
         </el-button>
     </router-link>
     <!-- 菜单 -->
