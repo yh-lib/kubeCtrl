@@ -46,7 +46,7 @@ func NewInfo(c *gin.Context, info *Info) (kubeconfig string) {
 	}
 	logs.Debug(map[string]any{"Info": info}, "数据绑定结果")
 	if err != nil {
-		msg := "请求数据绑定后端失败" + err.Error()
+		msg := "请求数据绑定后端失败: " + err.Error()
 		returnData.Message = msg
 		returnData.Status = 400
 		c.JSON(200, returnData)

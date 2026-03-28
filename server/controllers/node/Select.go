@@ -22,6 +22,8 @@ func Get(c *gin.Context) {
 	instance := kubeutils.NewNode(kubeconfig, nil)
 	kubeUtilser = instance
 	item, _ := kubeUtilser.Get("", info.Name)
+	returndata.Status = 200
+	returndata.Message = "获取成功"
 	returndata.Data = map[string]any{}
 	returndata.Data["item"] = item
 	c.JSON(200, returndata)
@@ -41,6 +43,8 @@ func List(c *gin.Context) {
 	kubeUtilser = instance
 	items, _ := kubeUtilser.List("", info.LabelSelector, info.FieldSelector)
 	returndata.Data = map[string]any{}
+	returndata.Status = 200
+	returndata.Message = "获取成功"
 	returndata.Data["items"] = items
 	c.JSON(200, returndata)
 }
