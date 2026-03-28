@@ -2,18 +2,33 @@
 package node
 
 import (
-	"context"
 	"server/config"
-	"server/utils/logs"
+	"server/controllers"
+	"strconv"
 
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"github.com/dotbalo/kubeutils/kubeutils"
+	"github.com/gin-gonic/gin"
 )
 
-func NodesNum() int {
+func NodesNum(c *gin.Context) string {
 	// 获取节点列表
-	nodes, err := config.InClusterClientSet.CoreV1().Nodes().List(context.TODO(), metav1.ListOptions{})
-	if err != nil {
-		logs.Error(nil, "获取节点数量失败")
+	// 定义变量
+	var (
+		kubeUtilser kubeutils.KubeUtilser
+		returndata  config.ReturnData
+		info        controllers.Info
+		itemsNum    string
+	)
+	kubeconfig := controllers.NewInfo(c, &info)
+	// 通过构造函数 构建一个实例
+	instance := kubeutils.NewNode(kubeconfig, nil)
+	kubeUtilser = instance
+	items, _ := kubeUtilser.List("", info.LabelSelector, info.FieldSelector)
+	if value, ok := items.([]any); ok {
+		itemsNum = strconv.Itoa(len(value))
 	}
-	return len(nodes.Items)
+	returndata.Status = 200
+	returndata.Message = "节点数据量: " + itemsNum
+	c.JSON(200, returndata)
+	return itemsNum
 }

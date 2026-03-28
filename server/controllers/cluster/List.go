@@ -5,7 +5,6 @@ import (
 	"server/config"
 	"server/controllers/node"
 	"server/utils/logs"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -27,7 +26,7 @@ func List(c *gin.Context) {
 		var clusterItem []map[string]string
 		for _, v := range clusterList.Items {
 			// 获取节点数量
-			v.Annotations["clusterSize"] = strconv.Itoa(node.NodesNum())
+			v.Annotations["clusterSize"] = node.NodesNum(c)
 			clusterItem = append(clusterItem, v.Annotations)
 		}
 		returnData.Data["items"] = clusterItem
