@@ -12,6 +12,9 @@ func create(namespaceGroup *gin.RouterGroup) {
 func delete(namespaceGroup *gin.RouterGroup) {
 	namespaceGroup.GET("/delete", namespace.Delete)
 }
+func deleteList(namespaceGroup *gin.RouterGroup) {
+	namespaceGroup.POST("/deleteList", namespace.DeleteList)
+}
 func update(namespaceGroup *gin.RouterGroup) {
 	namespaceGroup.POST("/update", namespace.Update)
 }
@@ -27,6 +30,7 @@ func RegisterSubRouter(g *gin.RouterGroup) {
 	namespaceGroup := g.Group("namespace")
 	create(namespaceGroup)
 	delete(namespaceGroup)
+	deleteList(namespaceGroup)
 	update(namespaceGroup)
 	get(namespaceGroup)
 	list(namespaceGroup)

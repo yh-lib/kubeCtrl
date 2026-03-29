@@ -129,8 +129,9 @@ func KubectlFunc(c *gin.Context, resourceType string, opMethod string) {
 		info               Info
 		gracePeriodSeconds int64
 		// 资源类型
-		node corev1.Node
-		pod  corev1.Pod
+		node      corev1.Node
+		pod       corev1.Pod
+		namespace corev1.Namespace
 	)
 	returndata.Data = map[string]any{}
 	// 初始化 Item 类型
@@ -139,6 +140,8 @@ func KubectlFunc(c *gin.Context, resourceType string, opMethod string) {
 		info.Item = &node
 	case "pod":
 		info.Item = &pod
+	case "namespace":
+		info.Item = &namespace
 	default:
 		logs.Error(nil, "不支持该资源类型")
 		return
@@ -151,6 +154,8 @@ func KubectlFunc(c *gin.Context, resourceType string, opMethod string) {
 		kubeUtilser = kubeutils.NewNode(kubeconfig, &node)
 	case "pod":
 		kubeUtilser = kubeutils.NewPod(kubeconfig, &pod)
+	case "namespace":
+		kubeUtilser = kubeutils.NewNamespace(kubeconfig, &namespace)
 	default:
 		logs.Error(nil, "不支持该资源类型")
 		return
