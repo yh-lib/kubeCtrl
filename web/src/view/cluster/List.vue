@@ -147,12 +147,19 @@ const loading = ref(false)
     <el-card>
         <!-- add_1:添加按钮 -->
         <template #header>
-            <div class="card-header">
-                <span style="font-size: 24px;">{{ titleName }}</span>
-                <el-button type="primary" @click="addItem">添加</el-button>
-            </div>
+            <div>
+                <div class="card-header">
+                    <div>
+                        <span style="font-size: 24px;">{{ titleName }}</span>
+                    </div>
+                    <div>
+                        <el-input v-model="search" placeholder="搜索集群" style="width: 240px"/>   
+                    </div>                
+                    <!-- <el-button type="primary" @click="addItem">添加</el-button> -->
+                </div>
+            </div>          
         </template>
-        <!-- none -->
+        <!-- 列表 -->
         <el-table :data="filterTableData" style="width: 100%"  height="70vh" v-loading="loading">
             <el-table-column :label="tableTtile.f1.label">
                 <template #default="scope">
@@ -172,9 +179,9 @@ const loading = ref(false)
             </el-table-column>
             <el-table-column :label="tableTtile.f6.label" :prop="tableTtile.f6.prop" />
             <el-table-column align="right">
-                <template #header>
-                    <el-input v-model="search" size="small" placeholder="Search by clusterId" />
-                </template>             
+                <template #header>    
+                    <el-button type="primary" @click="addItem" style="width: 105px;">添加集群</el-button> 
+                </template>                          
                 <template #default="scope">
                     <!-- update_1 触发编辑操作 -->
                     <el-button size="small" @click="updateItem(scope.row)">
@@ -190,7 +197,7 @@ const loading = ref(false)
                     </el-button>
                 </template>
             </el-table-column>
-        </el-table>  
+        </el-table>
         <!-- add_3:动态渲染表单抬头/add_5:打开表单-->
         <el-dialog 
             v-model="opDialog"
