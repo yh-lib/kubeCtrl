@@ -21,6 +21,12 @@ export const API_CONFIG = {
     nodeListApi: `${BASE_URL}/node/list`,
     nodeGetApi: `${BASE_URL}/node/get`,
     nodeUpdateApi: `${BASE_URL}/node/update`,
+    // 命名空间管理
+    namespaceCreateApi: `${BASE_URL}/namespace/create`,
+    namespaceDeleteApi: `${BASE_URL}/namespace/delete`,
+    namespaceUpdateApi: `${BASE_URL}/namespace/update`,
+    namespaceListApi: `${BASE_URL}/namespace/list`,
+    namespaceGetApi: `${BASE_URL}/namespace/get`,
 }
 
 export const CONFIG = {

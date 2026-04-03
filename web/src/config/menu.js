@@ -219,22 +219,22 @@ export const MENU_CONFIG = [
     // 6. 系统设置
     {
         title: '系统设置',
-        index: '/settings',
+        index: '/setting',
         icon: 'Tools', // 工具代表系统级设置
         items: [
             {
                 title: '命名空间',
-                index: '/settings/namespaces',
+                index: '/setting/namespaces',
                 icon: 'Box'
             },
             {
                 title: '角色与权限 (RBAC)',
-                index: '/settings/rbac',
+                index: '/setting/rbac',
                 icon: 'UserFilled'
             },
             {
                 title: '集群设置',
-                index: '/settings/cluster-config',
+                index: '/setting/cluster-config',
                 icon: 'Setting'
             }
         ]

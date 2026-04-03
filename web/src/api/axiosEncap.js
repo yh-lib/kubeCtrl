@@ -9,6 +9,24 @@ import { API_CONFIG, CONFIG } from '../config/index.js'
 import router from '../router/index.js'
 import { ElMessage } from 'element-plus'
 
+let lastErrorMessage = ''
+let lastErrorAt = 0
+
+const notifyError = (message) => {
+    const text = message || '请求失败'
+    const now = Date.now()
+    if (text === lastErrorMessage && now - lastErrorAt < 800) {
+        return
+    }
+    lastErrorMessage = text
+    lastErrorAt = now
+    ElMessage.error(text)
+}
+
+const getErrorMessage = (error, fallback = '请求失败') => {
+    return error?.response?.data?.message || error?.message || fallback
+}
+
 // axios 全局配置
 axios.defaults.baseURL = API_CONFIG.baseUrl
 
@@ -16,6 +34,7 @@ axios.defaults.baseURL = API_CONFIG.baseUrl
 // 添加请求拦截器
 axios.interceptors.request.use(
     (config) => {
+        console.log("请求拦截器:::config:::", config)
         // 在发送请求之前做些什么
         // 添加请求时的时间戳，处理浏览器缓存问题
         if (config.method == 'get') {
@@ -40,6 +59,9 @@ axios.interceptors.response.use(
         console.log("响应拦截器:::Response:::", response)
         if (response.data.status === 200) {
             return response;
+        } else if (response.data.status === 400) {
+            notifyError(response.data.message)
+            return Promise.reject(new Error(response.data.message));
         } else if (response.data.status === 401) {
             // 提示信息
             ElMessage({
@@ -54,27 +76,10 @@ axios.interceptors.response.use(
         } else if (response.data.status === 403) {
             // 提示信息
             console.log("响应拦截器403:::Response:::", response.data.status)
-            ElMessage.error({ message: response.data.message })
+            notifyError(response.data.message)
             return Promise.reject(new Error(response.data.message));
         }
     }
-    // (error) => {
-    //     // 超出 2xx 范围的状态码都会触发该函数。
-    //     // 对响应错误做点什么
-    //     if (error.response) {
-    //         // 请求已发出，但服务器响应的状态码不在 2xx 范围内
-    //         ElMessage.error(error.response.data.message || 'An error occurred') // 修改：显示错误信息
-    //         return Promise.reject(new Error(error.response.data.message || 'An error occurred')); // 修改：返回 Promise.reject 并传递错误信息
-    //     } else if (error.request) {
-    //         // 请求已发出，但没有收到响应
-    //         ElMessage.error('No response received') // 修改：显示错误信息
-    //         return Promise.reject(new Error('No response received')); // 修改：返回 Promise.reject 并传递错误信息
-    //     } else {
-    //         // 发生了一些设置请求时发生的问题
-    //         ElMessage.error(error.message) // 修改：显示错误信息
-    //         return Promise.reject(new Error(error.message)); // 修改：返回 Promise.reject 并传递错误信息
-    //     }
-    // }
 );
 
 const request = (url = '', data = {}, method = 'get', timeout = 3000) => {

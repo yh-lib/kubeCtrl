@@ -107,7 +107,7 @@ func BasicInit(c *gin.Context, item any) (clientSet *kubernetes.Clientset, basic
 
 func errorReturnData(c *gin.Context, returndata config.ReturnData, err error, info Info, resourceType string, msg string) {
 	logs.Error(map[string]any{"ERROR": err.Error(), "clusterId": info.ClusterId, "namespace": info.NameSpace, "resourceType": resourceType, "resourceName": info.Name}, msg)
-	returndata.Status = 200
+	returndata.Status = 400
 	returndata.Message = msg + ": " + err.Error()
 	c.JSON(200, returndata)
 }

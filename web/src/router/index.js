@@ -4,6 +4,7 @@ import { CONFIG } from "../config";
 import { userRoutes } from "./user";
 import { clusterRoutes } from "./cluster.js";
 import { nodeRoutes } from "./node.js";
+import { settingRoutes } from "./setting.js";
 
 // 路由配置
 const routes = [
@@ -11,7 +12,8 @@ const routes = [
     { path: "/login", component: () => import('../view/Login.vue') },
     userRoutes,
     clusterRoutes,
-    nodeRoutes
+    nodeRoutes,
+    settingRoutes
 ]
 
 // 实例化路由
