@@ -1,8 +1,36 @@
 <script setup>
 import { reactive } from 'vue';
-import El_card from '../components/El_card.vue';
+import Elcard from '../components/ELCard.vue';
 import Table from './Table.vue';
-import { getPodListHandler } from '../../api/pod.js';
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { getPodListHandler,deletePodHandler } from '../../api/pod'
+
+// 删除 pod
+const deleteItem = (row) => {
+    // 删除提醒
+    ElMessageBox.confirm(
+        '确认删除 pod :  ' + row.metadata.name,
+        {
+            confirmButtonText: '确认',
+            cancelButtonText: '取消',
+            type: 'warning',
+        }
+    )
+    .then(() => {
+        deletePodHandler(data.curClusterId,data.curNsName,row.metadata.name).then((res)=>{
+            if (res.data.status == 200) {
+                ElMessage({
+                    type: 'success',
+                    message: res.data.message,
+                })
+                getList()                
+            }
+        })
+    })
+    .catch(() => {
+        return
+    }) 
+}
 
 // 渲染表格数据
 const getList = () => {
@@ -15,7 +43,7 @@ const getList = () => {
     })
 }
 
-// 从子组件 EL_card 中获取所需数据
+// 从子组件 ELCard 中获取所需数据
 const getSelectValue = (selectValue) =>{
     Object.assign(data, selectValue)
     getList()
@@ -27,17 +55,18 @@ const data = reactive({})
 
 <template>
     <!-- 卡片主体 -->
-    <El_card 
+    <Elcard 
         title="pod 列表" 
         :op-cluster="true" 
         :op-ns="true" 
         :op-search="true" 
-        :op-create="true"
+        :op-refresh="true"
         @change="getSelectValue"
+        @refresh="getList"
     >
         <!-- 卡片 main 部分 table 数据 -->
         <template #table>
-            <Table :table-data="data"></Table>
+            <Table :table-data="data" @delete-item="deleteItem"></Table>
         </template>
-    </El_card> 
+    </Elcard> 
 </template>

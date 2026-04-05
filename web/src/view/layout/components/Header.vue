@@ -34,6 +34,7 @@ const collapseChange = () => {
     align-items: center; 
     button{
         border: 0;
+        margin-top: 20px;
     }
 }
 </style>

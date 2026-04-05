@@ -30,7 +30,7 @@ export const API_CONFIG = {
     // pod 管理
     podListApi: `${BASE_URL}/pod/list`,
     podGetApi: `${BASE_URL}/pod/get`,
-
+    podDeleteApi: `${BASE_URL}/pod/delete`,
 }
 
 export const CONFIG = {

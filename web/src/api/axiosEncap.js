@@ -30,11 +30,23 @@ const getErrorMessage = (error, fallback = '请求失败') => {
 // axios 全局配置
 axios.defaults.baseURL = API_CONFIG.baseUrl
 
+// 获取完整请求url
+const getFullRequestUrl = (config) => {
+    if (!config) {
+        return ''
+    }
+    return axios.getUri({
+        baseURL: axios.defaults.baseURL,
+        url: config.url,
+        params: config.params,
+    })
+}
+
 // axios 拦截器
 // 添加请求拦截器
 axios.interceptors.request.use(
     (config) => {
-        console.log("请求拦截器:::config:::", config)
+        console.log("请求拦截器:::config:::", config, "URL:::", getFullRequestUrl(config))
         // 在发送请求之前做些什么
         // 添加请求时的时间戳，处理浏览器缓存问题
         if (config.method == 'get') {
@@ -56,7 +68,7 @@ axios.interceptors.response.use(
     (response) => {
         // 2xx 范围内的状态码都会触发该函数。
         // 对响应数据做点什么
-        console.log("响应拦截器:::Response:::", response)
+        console.log("响应拦截器:::Response:::", response, "URL:::", getFullRequestUrl(response?.config))
         if (response.data.status === 200) {
             return response;
         } else if (response.data.status === 400) {
@@ -82,7 +94,7 @@ axios.interceptors.response.use(
     }
 );
 
-const request = (url = '', data = {}, method = 'get', timeout = 3000) => {
+const request = (url = '', data = {}, method = 'get', timeout = 9000) => {
     return new Promise(
         (resolve, reject) => {
             // GET POST

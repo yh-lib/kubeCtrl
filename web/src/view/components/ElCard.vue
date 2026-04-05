@@ -4,7 +4,7 @@ import { onBeforeMount, reactive } from 'vue';
 import { getClusterListHandler} from '../../api/cluster.js'
 import { getNamespaceListHandler } from '../../api/namespace.js';
 
-const emit = defineEmits(['change'])
+const emit = defineEmits(['change','refresh'])
 
 const data = reactive({
     // 集群信息
@@ -21,7 +21,7 @@ const props = defineProps({
     opCluster: Boolean,
     opNs:Boolean,
     opSearch: Boolean,
-    opCreate: Boolean,
+    opRefresh: Boolean,
 })
 
 const syncToParent = () => {
@@ -110,7 +110,7 @@ const getclusterOptions = async ()=>{
           <!-- 搜索框 -->
           <el-input v-model="data.search" style="width: 240px;margin-left: 10px;" placeholder="搜索" v-show="props.opSearch"  @change="handleSearchChange"/>
           <!-- 创建按钮 -->
-          <el-button type="primary" style="width: 105px; margin-left: 10px;" v-show="props.opCreate">创建</el-button>
+          <el-button type="primary" style="width: 105px; margin-left: 10px;" v-show="props.opRefresh" @click="emit('refresh')">刷新</el-button>
         </div>
       </div>
     </template>
