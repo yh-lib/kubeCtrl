@@ -9,7 +9,7 @@ export const clusterRoutes = {
         },
         {
             path: "list",
-            component: () => import('../view/cluster/List.vue'),
+            component: () => import('../view/cluster/cluster.vue'),
         },
         {
             path: "events",

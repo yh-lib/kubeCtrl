@@ -1,7 +1,42 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, onBeforeMount, reactive } from 'vue'
 import { Refresh, CircleCheckFilled, WarningFilled } from '@element-plus/icons-vue'
+import { getClusterListHandler } from '../../api/cluster'
 
+// ++++++++++++++++++++++++++++++++++++++++++
+
+onBeforeMount(async () => {
+  await getClusterList()
+  console.log("测试数据：：：",data.clusterItems)
+})
+
+const data = reactive({
+  clusterItems: [],
+  curClusterItem: {},
+  curClusterId: "",
+})
+
+// 获取集群列表
+const getClusterList = async () =>{
+    await getClusterListHandler().then((res)=>{
+        if (res.data.status === 200) {
+            data.clusterItems = res.data.data.items; // 获取集群列表
+            data.curClusterId = data.clusterItems[0].clusterId // 默认集群ID
+        } 
+    })
+}
+
+// 获取集群详情
+const handleClusterChange = async (clusterId) => {
+  data.curClusterItem = data.clusterItems.find(item => item.clusterId === clusterId) || {}
+}
+
+// 获取节点列表
+const getNodeList = () => {
+  
+}
+
+// ++++++++++++++++++++++++++++++++++++++
 const clusterOptions = [
   { clusterId: 'cluster-01', clusterAlias: '生产集群 A' },
   { clusterId: 'cluster-02', clusterAlias: '测试集群 B' },
@@ -89,7 +124,7 @@ const loading = ref(false)
 const selectedClusterId = ref(clusterOptions[0].clusterId)
 const dashboard = ref(dashboardMap[selectedClusterId.value])
 
-const currentCluster = computed(() => clusterOptions.find((item) => item.clusterId === selectedClusterId.value) || clusterOptions[0])
+
 const dashboardEvents = computed(() => dashboard.value.events || [])
 
 const clampPercent = (value) => Math.max(0, Math.min(100, Number(value || 0)))
@@ -103,10 +138,7 @@ const loadDashboard = async (clusterId) => {
   }, 180)
 }
 
-const handleClusterChange = async (clusterId) => {
-  selectedClusterId.value = clusterId
-  await loadDashboard(clusterId)
-}
+
 
 const refreshDashboard = async () => {
   await loadDashboard(selectedClusterId.value)
@@ -115,14 +147,15 @@ const refreshDashboard = async () => {
 
 <template>
   <div class="dashboard-page" v-loading="loading">
+    <!-- 获取集群信息 -->
     <section class="page-header">
       <div>
         <div class="page-kicker">Cluster Dashboard</div>
-        <h1>{{ currentCluster.clusterAlias }}</h1>
+        <h1>{{ data.curClusterItem.clusterAlias }}</h1>
         <p>
           集群概览
           <span class="hero-dot">·</span>
-          {{ dashboard.clusterInfo.version }}
+          {{ data.curClusterItem.clusterVersion }}
           <span class="hero-dot">·</span>
           白色主题
         </p>
@@ -130,20 +163,20 @@ const refreshDashboard = async () => {
 
       <div class="hero-actions">
         <el-select
-          v-model="selectedClusterId"
+          v-model="data.curClusterId"
           class="cluster-select"
           filterable
           placeholder="选择集群"
           @change="handleClusterChange"
         >
           <el-option
-            v-for="item in clusterOptions"
+            v-for="item in data.clusterItems"
             :key="item.clusterId"
-            :label="clusterLabel(item)"
+            :label="item.clusterAlias"
             :value="item.clusterId"
           />
         </el-select>
-        <el-button style="border-radius: 12px;" :icon="Refresh" @click="refreshDashboard">
+        <el-button style="border-radius: 12px;" :icon="Refresh" @click="getClusterList">
           刷新
         </el-button>
       </div>
