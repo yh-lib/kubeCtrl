@@ -7,9 +7,9 @@ export const getPodListHandler = (clusterId, nameSpace) => {
 }
 
 // 获取 pod 详情
-// export const getpodHandler = (clusterId, name) => {
-//     return request(API_CONFIG.podGetApi, { clusterId, name }, 'get')
-// }
+export const getpodHandler = (clusterId, nameSpace, name) => {
+    return request(API_CONFIG.podGetApi, { clusterId, nameSpace, name }, 'get')
+}
 
 // 删除 pod
 export const deletePodHandler = (clusterId, nameSpace, name) => {

@@ -53,6 +53,7 @@ const props = defineProps({
         type: Object,
         default: () => ({
             items: [],
+            item: {},
             curClusterId: '',
             curNsName: '',
             search: '',
@@ -72,13 +73,19 @@ const filterTableData = computed(() =>
             item.status.hostIP.toLowerCase().includes(props.tableData.search.toLowerCase())
     )
 )
+
+const getItem = (row) => {
+    console.log('getItem', row)
+    props.tableData.item = row
+    // emit('getItem', row)
+}
 </script>
 
 <template>
     <el-table :data="filterTableData" height="70vh" >
         <el-table-column label="Pod 名称" prop="metadata.name" width="300px">
             <template #default="scope">
-                <el-button type="primary" link>{{ scope.row.metadata.name }}</el-button>
+                <el-button type="primary" link @click="getItem(scope.row)">{{ scope.row.metadata.name }}</el-button>
             </template>
         </el-table-column>
         <el-table-column label="Pod IP" prop="status.podIP" />

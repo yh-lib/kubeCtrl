@@ -6,6 +6,10 @@ export const settingRoutes = {
         {
             path: "namespaces",
             component: () => import('../view/setting/Namespace.vue'),
+        },
+        {
+            path: "rbac",
+            component: () => import('../view/components/YamlEdit.vue'),
         }
     ]
 }
