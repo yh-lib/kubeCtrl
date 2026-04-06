@@ -16,32 +16,25 @@ const userFormRef = ref()
 const resetForm = () => {
     userFormRef.value.resetFields()
 }
-// 加载图标配置
-const loading = ref(false)  
 // 添加用户：提交表单
 const submitForm = (userForm) => {
     userFormRef.value.validate((valid)=>{
       if (valid) {
-        loading.value = true
         if (props.subMethod == 'create') {
           addUserHandler(userForm).then((Response)=>{
             ElMessage({
               message: response.data.message,
               type: 'success',
             })
-            loading.value = false   // 注意：axios是异步运行，必须写在请求里面；
-          })
-          // 写在这里的话，loading.value = false不会等addUserHandler执行完毕才运行           
+          })         
         }else{
           updateUserHandler(userForm).then((Response)=>{
             ElMessage({
               message: response.data.message,
               type: 'success',
             })
-            loading.value = false   // 注意：axios是异步运行，必须写在请求里面；
             emit('refresh')
-          })
-          // 写在这里的话，loading.value = false不会等addUserHandler执行完毕才运行           
+          })         
         }
       }else{
           ElMessage({
@@ -81,7 +74,6 @@ const emit = defineEmits(['refresh'])
     label-width="60px"
     center
     class="el-form"
-    v-loading="loading"
     :rules="rules"
   >
     <!-- 表单 -->

@@ -10,7 +10,6 @@ import ElCard from '../components/ElCard.vue'
 
 // 需要的数据变量
 const data = reactive({
-    loading: false,  // 默认关闭加载图标
     items: [],  // 后端返回的 list
     item: {}, // 后端返回的 obj
     search: "", // 接收 header 搜索框中数据
@@ -173,10 +172,8 @@ const filterTableData = computed(() =>
 
 // 获取当前集群Node列表
 const getList = () =>{
-    data.loading = true
     getListHandler(data.curClusterId).then((res)=>{
         data.items = res.data.data.items;
-        data.loading = false
     })
 }
 
@@ -201,7 +198,7 @@ const getSelectValue = (selectValue) => {
 <template>
     <ElCard title="节点列表" :op-cluster="true" :op-search="true" :default-cluster-id="data.defaultClusterId" @change="getSelectValue">
         <template #table>
-            <el-table :data="filterTableData" style="width: 100%;"  height="70vh" v-loading="data.loading">
+            <el-table :data="filterTableData" style="width: 100%;"  height="70vh">
             <el-table-column label="主机名" prop="hostName">
                 <template #default="scope">
                     <el-button link type="primary" @click="getItem(scope.row)">

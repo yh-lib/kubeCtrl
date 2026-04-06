@@ -120,7 +120,6 @@ const dashboardMap = {
   },
 }
 
-const loading = ref(false)
 const selectedClusterId = ref(clusterOptions[0].clusterId)
 const dashboard = ref(dashboardMap[selectedClusterId.value])
 
@@ -131,10 +130,8 @@ const clampPercent = (value) => Math.max(0, Math.min(100, Number(value || 0)))
 const clusterLabel = (item) => item?.clusterAlias || item?.clusterId || '未命名集群'
 
 const loadDashboard = async (clusterId) => {
-  loading.value = true
   window.setTimeout(() => {
     dashboard.value = dashboardMap[clusterId] || dashboardMap[clusterOptions[0].clusterId]
-    loading.value = false
   }, 180)
 }
 
@@ -146,7 +143,7 @@ const refreshDashboard = async () => {
 </script>
 
 <template>
-  <div class="dashboard-page" v-loading="loading">
+  <div class="dashboard-page">
     <!-- 获取集群信息 -->
     <section class="page-header">
       <div>

@@ -44,20 +44,14 @@ const data = reactive({
 
 // getList
 const getUserList = () =>{
-    loading.value = true
     getListHandler().then((response)=>{
         if (response.status === 200) {
             data.tableData = response.data.data; // 更新 tableData
-            loading.value = false
         } else {
             console.error('获取用户列表失败:', response.msg);
         }
     })
 }
-
-
-// 加载图标
-const loading = ref(false)
 
 // 删除用户
 const deleteUser = (row) => {
@@ -137,7 +131,7 @@ onBeforeMount(() => {
                 <el-button type="primary" @click="addUser">添加</el-button>
             </div>
         </template>
-        <el-table :data="filterTableData" style="width: 100%"  height="70vh" v-loading="loading">
+        <el-table :data="filterTableData" style="width: 100%"  height="70vh">
             <el-table-column label="用户名"  prop="username" />
             <el-table-column label="ID"   prop="id" />
             <el-table-column label="QQ号" prop="qq" />

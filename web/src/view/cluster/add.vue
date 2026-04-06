@@ -16,13 +16,12 @@ const data = reactive({
         kubeconfig:""
     }
 })
-const loading = ref(false)
+
 const itemFormRef = ref()
 const submitForm = (itemForm) => {
     // add_4 表单校验
     itemFormRef.value.validate((valid)=>{
       if (valid) {
-        loading.value = true
         // add_5 调用后端接口,添加集群
         if (props.subMethod == 'create') {
           addHandler(itemForm).then((response)=>{
@@ -31,13 +30,11 @@ const submitForm = (itemForm) => {
                     message: response.data.message,
                     type: 'success',
                 })
-                loading.value = false
                 emit('refresh')
             } 
         }).catch(() => {
                     // 处理网络错误或其他异常
                     ElMessage.error('添加集群失败,请核对集群配置后重试')
-                    loading.value = false;
         });          
         }else{
           // update_6 调用后端接口，更新集群 
@@ -46,14 +43,11 @@ const submitForm = (itemForm) => {
                     message: response.data.message,
                     type: 'success',
                 })
-                console.log('测试日志：','标识1')
-                loading.value = false
                 // update_7 刷新列表
                 emit('refresh')
             }).catch(() => {
                     // 处理网络错误或其他异常
                     ElMessage.error('更新集群失败,请核对集群配置后重试')
-                    loading.value = false;
         });        
         }
       }else{
@@ -104,7 +98,6 @@ const emit = defineEmits(['refresh'])
         label-width="160px"
         center
         class="el-form"
-        v-loading="loading"
         :rules="rules"
     >
         <!-- add_2:接受集群信息 -->

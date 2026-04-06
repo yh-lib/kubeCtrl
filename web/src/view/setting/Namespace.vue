@@ -9,7 +9,6 @@ import { API_CONFIG } from '../../config/index.js'
 
 // 需要的数据变量
 const data = reactive({
-    loading: false,  // 默认关闭加载图标
     items: [],  // 后端返回的 list
     item: {
         "kind": "Namespace",
@@ -258,7 +257,7 @@ const getclusterOptions = async ()=>{
             </div>
         </template>
         <!-- card middle -->
-        <el-table :data="filterTableData" style="width: 100%;"  height="70vh" v-loading="data.loading">
+        <el-table :data="filterTableData" style="width: 100%;"  height="70vh">
             <el-table-column label="名称" prop="metadata.name"/>            
             <el-table-column label="创建时间" prop="metadata.creationTimestamp"/>
             <el-table-column label="状态" prop="status.phase"/>

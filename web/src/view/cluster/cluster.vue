@@ -40,7 +40,6 @@ const getList = () =>{
         if (response.data.status === 200) {
             data.tableData = response.data.data.items; // 更新 tableData
             console.log('获取列表成功:', response.data.data.items);
-            loading.value = false
         } else {
             console.error('获取列表失败:', response.data.message);
         }
@@ -138,18 +137,12 @@ interface Cluster {
   clusterStatus: string
   clusterSize: number
 }
-// 加载图标默认关闭
-const loading = ref(false)
-
-
-
-
 </script>
 
 <template>
     <ElCard title="集群列表" :op-search="true" @change="handleHeaderChange">
         <template #table>
-        <el-table :data="filterTableData" style="width: 100%"  height="70vh" v-loading="loading">
+        <el-table :data="filterTableData" style="width: 100%"  height="70vh">
             <el-table-column :label="tableTtile.f1.label">
                 <template #default="scope">
                     <router-link :to="{path: '/', query: {'clusterId': scope.row.clusterId}}">
