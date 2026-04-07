@@ -7,7 +7,8 @@
 import axios from 'axios'
 import { API_CONFIG, CONFIG } from '../config/index.js'
 import router from '../router/index.js'
-import { ElMessage } from 'element-plus'
+import { ElMessage,ElLoading } from 'element-plus'
+import { ref } from 'vue'
 
 let lastErrorMessage = ''
 let lastErrorAt = 0
@@ -42,10 +43,16 @@ const getFullRequestUrl = (config) => {
     })
 }
 
+let loading = ref()
 // axios 拦截器
 // 添加请求拦截器
 axios.interceptors.request.use(
     (config) => {
+        loading = ElLoading.service({
+            lock: true,
+            text: '加载中。。。',
+            background: 'rgba(0, 0, 0, 0.7)',
+        })
         console.log("请求拦截器:::config:::", config, "URL:::", getFullRequestUrl(config))
         // 在发送请求之前做些什么
         // 添加请求时的时间戳，处理浏览器缓存问题
@@ -70,6 +77,7 @@ axios.interceptors.response.use(
         // 对响应数据做点什么
         console.log("响应拦截器:::Response:::", response, "URL:::", getFullRequestUrl(response?.config))
         if (response.data.status === 200) {
+            loading.close()
             return response;
         } else if (response.data.status === 400) {
             notifyError(response.data.message)
