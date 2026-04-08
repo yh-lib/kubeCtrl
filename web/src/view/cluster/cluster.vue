@@ -140,7 +140,7 @@ interface Cluster {
 </script>
 
 <template>
-    <ElCard title="集群列表" :op-search="true" @change="handleHeaderChange">
+    <ElCard title="集群列表" :op-search="true" @change="handleHeaderChange" @create-item="addItem">
         <template #table>
         <el-table :data="filterTableData" style="width: 100%"  height="70vh">
             <el-table-column :label="tableTtile.f1.label">
@@ -160,10 +160,7 @@ interface Cluster {
                 </template>
             </el-table-column>
             <el-table-column :label="tableTtile.f6.label" :prop="tableTtile.f6.prop" />
-            <el-table-column align="right">
-                <template #header>    
-                    <el-button type="primary" @click="addItem" style="width: 105px;margin-bottom: 10px;">添加集群</el-button> 
-                </template>                          
+            <el-table-column label="操作">                          
                 <template #default="scope">
                     <!-- update_1 触发编辑操作 -->
                     <el-button size="small" @click="updateItem(scope.row)">
@@ -180,7 +177,7 @@ interface Cluster {
                 </template>
             </el-table-column>
         </el-table>
-        <!-- add_3:动态渲染表单抬头/add_5:打开表单-->s
+        <!-- add_3:动态渲染表单抬头/add_5:打开表单-->
         <el-dialog 
             v-model="opDialog"
             :title="method == 'create' ? '添加集群' : '更新集群'"

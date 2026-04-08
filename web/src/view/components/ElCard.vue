@@ -5,7 +5,7 @@ import { onBeforeMount, reactive } from 'vue';
 import { getClusterListHandler} from '../../api/cluster.js'
 import { getNamespaceListHandler } from '../../api/namespace.js';
 
-const emit = defineEmits(['change','refresh'])
+const emit = defineEmits(['change','refresh','createItem'])
 
 const data = reactive({
     // 集群信息
@@ -110,6 +110,23 @@ const getclusterOptions = async ()=>{
       </div>
     </template>
     <slot name="table">table 数据</slot>
+    <!-- 创建或删除按钮 -->
+    <el-button
+        type="primary"
+        style="
+            margin-top: -100px;
+            z-index: 1;
+            position: absolute;
+            right: 60px;
+            font-size: 26px;
+            width: 60px;
+            height: 60px;
+        "
+        circle
+        @click="emit('createItem')"
+    >
+        +
+    </el-button>
   </el-card>
 </template>
 
