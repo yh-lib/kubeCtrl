@@ -3,13 +3,13 @@ import ElCard from '../components/ElCard.vue';
 import Table from './Table.vue';
 import { reactive } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { getPodListHandler,deletePodHandler } from '../../api/pod'
+import { getdeploymentListHandler,deletedeploymentHandler } from '../../api/deployment'
 
-// 删除 pod
+// 删除 deployment
 const deleteItem = (row) => {
     // 删除提醒
     ElMessageBox.confirm(
-        '确认删除 pod :  ' + row.metadata.name,
+        '确认删除 deployment :  ' + row.metadata.name,
         {
             confirmButtonText: '确认',
             cancelButtonText: '取消',
@@ -17,7 +17,7 @@ const deleteItem = (row) => {
         }
     )
     .then(() => {
-        deletePodHandler(data.curClusterId,data.curNsName,row.metadata.name).then((res)=>{
+        deletedeploymentHandler(data.curClusterId,data.curNsName,row.metadata.name).then((res)=>{
             if (res.data.status == 200) {
                 ElMessage({
                     type: 'success',
@@ -38,7 +38,7 @@ const getList = () => {
         data.items = []
         return
     }
-    getPodListHandler(data.curClusterId, data.curNsName).then((res) => {
+    getdeploymentListHandler(data.curClusterId, data.curNsName).then((res) => {
         data.items = res.data.data.items || []
     })
 }

@@ -17,6 +17,7 @@ const data = reactive({
     search: '',
 })
 
+// 选择组件元素
 const props = defineProps({
     title: String,
     opCluster: Boolean,

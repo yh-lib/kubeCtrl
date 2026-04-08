@@ -31,6 +31,10 @@ export const API_CONFIG = {
     podListApi: `${BASE_URL}/pod/list`,
     podGetApi: `${BASE_URL}/pod/get`,
     podDeleteApi: `${BASE_URL}/pod/delete`,
+    // deployment 管理
+    deploymentListApi: `${BASE_URL}/deployment/list`,
+    deploymentGetApi: `${BASE_URL}/deployment/get`,
+    deploymentDeleteApi: `${BASE_URL}/deployment/delete`,
 }
 
 export const CONFIG = {

@@ -69,11 +69,7 @@ const filterTableData = computed(() =>
     (props.tableData.items || []).filter(
         (item) =>
             !props.tableData.search ||
-            item.metadata.name.toLowerCase().includes(props.tableData.search.toLowerCase()) ||
-            item.status.podIP.toLowerCase().includes(props.tableData.search.toLowerCase()) || 
-            item.status.phase.toLowerCase().includes(props.tableData.search.toLowerCase()) || 
-            item.spec.nodeName.includes(props.tableData.search.toLowerCase()) ||
-            item.status.hostIP.toLowerCase().includes(props.tableData.search.toLowerCase())
+            item.metadata.name.toLowerCase().includes(props.tableData.search.toLowerCase())
     )
 )
 const curItem = ref('')
@@ -100,11 +96,15 @@ const getItem = (row) => {
             </template>
         </el-table-column>
         <el-table-column label="命名空间" prop="metadata.namespace" />
-        <el-table-column label="状态" prop="status.phase" />
-
+        <el-table-column label="状态" prop="status" >
+            <template #default="scope">
+                <span v-if="scope.row.status.conditions[0].status == 'True'" style="color: green;">Available</span>
+                <span v-else style="color: red;">UnAvailable</span>
+            </template>
+        </el-table-column>
         <el-table-column label="Pods" prop="containerStatus">
             <template #default="scope">
-                {{ getContainerStatus(scope.row) }}
+                {{ scope.row.status.availableReplicas || 0 }}/{{ scope.row.status.replicas }}
             </template>
         </el-table-column>
         <el-table-column label="操作" prop="operations">
@@ -125,7 +125,7 @@ const getItem = (row) => {
                 :cur-ns-name="curItem.metadata.namespace"
                 :cur-resource-name="curItem.metadata.name"
                 :cur-node-name="curItem.spec.nodeName"
-                cur-resource-kind="Pod"
+                cur-resource-kind="Deployment"
             />
         </template>
     </DialogByYaml>
