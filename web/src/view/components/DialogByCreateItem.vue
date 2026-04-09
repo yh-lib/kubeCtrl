@@ -1,6 +1,7 @@
 <script setup>
-import { onBeforeMount, reactive, ref } from 'vue'
+import { reactive, ref } from 'vue'
 import ElCard from './ElCard.vue';
+import { getSecretListHandler } from '../../api/secret';
 
 const props = defineProps(['openDialog'])
 const emit = defineEmits(['closeDialog'])
@@ -11,11 +12,27 @@ const data = reactive({
   privateRepoSecret:[],
 })
 
-onBeforeMount(()=>{
-  // 获取私有仓库密钥，并赋值给data.privateRepoSecret
-  
-})
+// 从子组件 ELCard 中获取所需数据
+const getSelectValue = (selectValue) =>{
+    Object.assign(data, selectValue)
+    getSecretListHandler(data.curClusterId,data.curNsName).then((res)=>{
+      if (res.data.status == 200) {
+          data.privateRepoSecret = []
+          privateRepoSecretValue.value = ''
+          res.data.data.items == null ||
+          res.data.data.items.forEach(item => {
+            item.data['.dockerconfigjson'] == null ||
+            data.privateRepoSecret.push({
+              label:item.metadata.name,
+              value:item.metadata.name,
+            })
+            console.log('获取到的数据有：',data.privateRepoSecret)
+          });                   
+      }
+  })
+}
 
+const privateRepoSecretValue = ref('')  // 存储当前选择的私有仓库secret
 </script>
 
 <template>
@@ -29,7 +46,7 @@ onBeforeMount(()=>{
     <el-tabs v-model="activeName" @tab-click="handleClick">
         <!-- 标签：基本配置 -->
         <el-tab-pane label="基本配置" name="Basic">
-            <ElCard :op-cluster="true" :op-ns="true" style="border-radius: 0px;width: 1560px;">
+            <ElCard :op-cluster="true" :op-ns="true" style="border-radius: 0px;width: 1560px;" @change="getSelectValue">
               <template #mainData>
                 <el-form label-width="150px" label-position="left" style="height: 450px;width: 1460px;">
                   <el-row :gutter="100">
@@ -46,9 +63,12 @@ onBeforeMount(()=>{
                     </el-col>
                     <el-col :span="8" class="form-item">
                       <el-form-item label="私有仓库密钥">
-                        <el-select placeholder="请选择私有仓库密钥">
-                          <el-options 
-                          
+                        <el-select placeholder="请选择私有仓库密钥" v-model="privateRepoSecretValue">
+                          <el-option 
+                            v-for="item in data.privateRepoSecret"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
                           />
                         </el-select>
                       </el-form-item>
@@ -57,7 +77,7 @@ onBeforeMount(()=>{
                     <el-col :span="8" class="form-item">
                       <el-form-item label="DNS 策略">
                         <el-select placeholder="请选择 DNS 策略">
-                          <el-options 
+                          <el-option 
                           
                           />
                         </el-select>
@@ -66,7 +86,7 @@ onBeforeMount(()=>{
                     <el-col :span="8" class="form-item">
                       <el-form-item label="更新策略">
                         <el-select placeholder="请选择更新策略">
-                          <el-options 
+                          <el-option 
                           
                           />
                         </el-select>

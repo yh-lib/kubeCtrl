@@ -52,6 +52,7 @@ const getSelectValue = (selectValue) =>{
 
 // 接受子组件table传递的参数
 const data = reactive({})
+const createItemData = reactive({})
 const createItemDialogVisible = ref(false)
 </script>
 
@@ -75,5 +76,9 @@ const createItemDialogVisible = ref(false)
      </ElCard>
 
          <!-- 创建 item 按钮 -->
-    <DialogByCreateItem :open-dialog="createItemDialogVisible" @close-dialog="createItemDialogVisible=false"></DialogByCreateItem>
+    <DialogByCreateItem 
+        :open-dialog="createItemDialogVisible" 
+        @close-dialog="createItemDialogVisible=false"
+    >
+    </DialogByCreateItem>
 </template>    
