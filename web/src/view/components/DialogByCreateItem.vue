@@ -6,10 +6,17 @@ import { getSecretListHandler } from '../../api/secret';
 const props = defineProps(['openDialog'])
 const emit = defineEmits(['closeDialog'])
 const activeName = ref('Basic')
-const switchHostNetwork = ref(false)
-const switchAddService = ref(false)
 const data = reactive({
-  privateRepoSecret:[],
+  privateRepoSecretList:[], // 存储私有仓库密钥列表
+  dnsPolicyList:[{value:'Default'},{value:'ClusterFirst'},{value:'ClusterFirstWithHostNet'}], // 存储dns策略列表
+  updatePlicyList:[{value:'RollingUpdate'},{value:'OnDelete'}],
+  privateRepoSecretValue : '',  // 存储当前选择的私有仓库secret
+  dnsPolicyValue : 'Default',  // 存储当前选择的DNS策略
+  updatePlicyValue : 'RollingUpdate',  // 存储当前选择的更新策略
+  maxUnavailable: '25%',
+  maxSurge: '25%',
+  switchHostNetwork: false,
+  switchAddService: false,
 })
 
 // 从子组件 ELCard 中获取所需数据
@@ -17,22 +24,24 @@ const getSelectValue = (selectValue) =>{
     Object.assign(data, selectValue)
     getSecretListHandler(data.curClusterId,data.curNsName).then((res)=>{
       if (res.data.status == 200) {
-          data.privateRepoSecret = []
-          privateRepoSecretValue.value = ''
+          data.privateRepoSecretList = []
+          data.privateRepoSecretValue = ''
           res.data.data.items == null ||
           res.data.data.items.forEach(item => {
             item.data['.dockerconfigjson'] == null ||
-            data.privateRepoSecret.push({
+            data.privateRepoSecretList.push({
               label:item.metadata.name,
               value:item.metadata.name,
             })
-            console.log('获取到的数据有：',data.privateRepoSecret)
+            console.log('获取到的数据有：',data.privateRepoSecretList)
           });                   
       }
   })
 }
 
-const privateRepoSecretValue = ref('')  // 存储当前选择的私有仓库secret
+const handleClick = () => {
+  console.log("点击创建deployment按钮")
+}
 </script>
 
 <template>
@@ -63,9 +72,9 @@ const privateRepoSecretValue = ref('')  // 存储当前选择的私有仓库secr
                     </el-col>
                     <el-col :span="8" class="form-item">
                       <el-form-item label="私有仓库密钥">
-                        <el-select placeholder="请选择私有仓库密钥" v-model="privateRepoSecretValue">
+                        <el-select placeholder="请选择私有仓库密钥" v-model="data.privateRepoSecretValue">
                           <el-option 
-                            v-for="item in data.privateRepoSecret"
+                            v-for="item in data.privateRepoSecretList"
                             :key="item.value"
                             :label="item.label"
                             :value="item.value"
@@ -76,18 +85,24 @@ const privateRepoSecretValue = ref('')  // 存储当前选择的私有仓库secr
                     <!-- 第二行 -->
                     <el-col :span="8" class="form-item">
                       <el-form-item label="DNS 策略">
-                        <el-select placeholder="请选择 DNS 策略">
+                        <el-select placeholder="请选择 DNS 策略" v-model="data.dnsPolicyValue">
                           <el-option 
-                          
+                            v-for="item in data.dnsPolicyList"
+                            :key="item.value"
+                            :label="item.value"
+                            :value="item.value"
                           />
                         </el-select>
                       </el-form-item>
                     </el-col>
                     <el-col :span="8" class="form-item">
                       <el-form-item label="更新策略">
-                        <el-select placeholder="请选择更新策略">
+                        <el-select placeholder="请选择更新策略" v-model="data.updatePlicyValue">
                           <el-option 
-                          
+                            v-for="item in data.updatePlicyList"
+                            :key="item.value"
+                            :label="item.value"
+                            :value="item.value"
                           />
                         </el-select>
                       </el-form-item>
@@ -95,10 +110,10 @@ const privateRepoSecretValue = ref('')  // 存储当前选择的私有仓库secr
                     <el-col :span="8" class="form-item">
                       <div style="display: flex;justify-content: space-between;">
                         <el-form-item label="最大不可用" label-width="100px">
-                          <el-input placeholder="" style="width: 100px"/>
+                          <el-input placeholder="" style="width: 100px" v-model="data.maxUnavailable"/>
                         </el-form-item>
                         <el-form-item label="可超出最大值" label-width="100px">
-                          <el-input placeholder="" style="width: 100px"/>
+                          <el-input placeholder="" style="width: 100px" v-model="data.maxUnavailable"/>
                         </el-form-item>
                       </div>
                       
@@ -107,7 +122,7 @@ const privateRepoSecretValue = ref('')  // 存储当前选择的私有仓库secr
                     <el-col :span="8" class="form-item">
                       <el-form-item label="使用宿主机网络">
                         <el-switch
-                          v-model="switchHostNetwork"
+                          v-model="data.switchHostNetwork"
                           style="--el-switch-on-color: #13ce66;"
                         />
                       </el-form-item>
@@ -115,7 +130,7 @@ const privateRepoSecretValue = ref('')  // 存储当前选择的私有仓库secr
                     <el-col :span="8" class="form-item">
                       <el-form-item label="自动添加 Servcie">
                         <el-switch
-                          v-model="switchAddService"
+                          v-model="data.switchAddService"
                         />
                       </el-form-item>
                     </el-col>
