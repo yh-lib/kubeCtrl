@@ -16,10 +16,10 @@ export const deletedeploymentHandler = (clusterId, nameSpace, name) => {
     return request(API_CONFIG.deploymentDeleteApi, { clusterId, nameSpace, name }, 'post')
 }
 
-// // 添加 deployment
-// export const createdeploymentHandler = (clusterId, item) => {
-//     return request(API_CONFIG.deploymentCreateApi, { clusterId, item }, 'post')
-// }
+// 创建 deployment
+export const createdeploymentHandler = (itemForm) => {
+    return request(API_CONFIG.deploymentCreateApi, itemForm, 'post')
+}
 
 
 // // 更新 deployment
