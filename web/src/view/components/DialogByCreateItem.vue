@@ -6,6 +6,7 @@ import { createdeploymentHandler } from '../../api/deployment';
 import { ElMessage } from 'element-plus';
 import { list2obj, obj2list } from '../../utils/typeConv/type.conv';
 import TableOfLabels from './tableOfLabels.vue';
+import TableOfAnnotations from './tableOfAnnotations.vue';
 
 const props = defineProps(['openDialog'])
 const emit = defineEmits(['closeDialog'])
@@ -332,56 +333,18 @@ const tolerationsEffectSelectOptions = [
                 <el-tabs tab-position="left" style="height: 260px" type="border-card" class="no-border-input" v-if="data.labelsAndAnnotationsSwtich=='manual'">
                     <!-- 标签 tab -->
                     <el-tab-pane label="标签">
-                      <!-- 标签表格 -->                      
-                      <!-- <el-table :data="data.itemLabelsList" style="width: 100%; height:100%">
-                          <el-table-column prop="key" label="Key">
-                              <template #default="scope">
-                                  <el-input v-model="scope.row.key" placeholder="请输入标签的 Key"></el-input>
-                              </template>                        
-                          </el-table-column>
-                          <el-table-column prop="value" label="Value">
-                              <template #default="scope">
-                                  <el-input v-model="scope.row.value" placeholder="请输入标签的 Value"></el-input>
-                              </template> 
-                          </el-table-column>
-                          <el-table-column width="200px" align="center">
-                              <template #header>
-                                  <el-button type="primary" link style="font-size: 16px;margin-bottom: 10px;" @click="addLabelItem">添加</el-button>
-                              </template>
-                              <template #default="scope">
-                                  <el-button type="danger" link style="font-size: 16px;margin-bottom: 10px;" @click="deleteLabelItem(scope.$index)">删除</el-button>
-                              </template>                      
-                          </el-table-column>
-                      </el-table>   -->
                       <TableOfLabels
                         :label-list="data.itemLabelsList"
                         @add-label="addLabelItem"
                         @delete-label="deleteLabelItem"
                       />
                     </el-tab-pane>
-                    <!-- 注释 -->
                     <el-tab-pane label="注释">
-                      <!-- 注释表格 -->
-                      <el-table :data="data.itemAnnotationsList" style="width: 100%; height:100%">
-                          <el-table-column prop="key" label="Key">
-                              <template #default="scope">
-                                  <el-input v-model="scope.row.key" placeholder="请输入注释的 Key"></el-input>
-                              </template>                        
-                          </el-table-column>
-                          <el-table-column prop="value" label="Value">
-                              <template #default="scope">
-                                  <el-input v-model="scope.row.value" placeholder="请输入注释的 Value"></el-input>
-                              </template> 
-                          </el-table-column>
-                          <el-table-column width="200px" align="center">
-                              <template #header>
-                                  <el-button type="primary" link style="font-size: 16px;margin-bottom: 10px;" @click="addAnnotationItem">添加</el-button>
-                              </template>
-                              <template #default="scope">
-                                  <el-button type="danger" link style="font-size: 16px;margin-bottom: 10px;" @click="deleteAnnotationItem(scope.$index)">删除</el-button>
-                              </template>                      
-                          </el-table-column>
-                      </el-table> 
+                      <TableOfAnnotations 
+                        :annotations-list="data.itemAnnotationsList"
+                        @add-annotation="addAnnotationItem"
+                        @delete-annotation="deleteAnnotationItem"
+                      />
                     </el-tab-pane>
                     <!-- 容忍 -->
                     <el-tab-pane label="容忍">
