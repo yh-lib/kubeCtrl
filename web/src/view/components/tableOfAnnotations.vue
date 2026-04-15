@@ -1,6 +1,9 @@
 <script setup>
 const props = defineProps({
-    annotationsList:[],
+    annotationsList:{
+        type: Array,
+        default: []
+    },
 })
 const emit = defineEmits([
     'addAnnotation',

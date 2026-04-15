@@ -7,6 +7,7 @@ import { ElMessage } from 'element-plus';
 import { list2obj, obj2list } from '../../utils/typeConv/type.conv';
 import TableOfLabels from './tableOfLabels.vue';
 import TableOfAnnotations from './tableOfAnnotations.vue';
+import TableOfTolerations from './TableOfTolerations.vue';
 
 const props = defineProps(['openDialog'])
 const emit = defineEmits(['closeDialog'])
@@ -26,9 +27,18 @@ const data = reactive({
   tolerationOperatorValue: 'Equal',
   tolerationEffectValue: 'NoSchedule',
   labelsAndAnnotationsSwtich: 'auto',
+  // 容忍操作选项
+  tolerationsOperatorSelectOptions : [
+    {value: 'Equal', label: '等值'},
+    {value: 'Exists',label: '存在'}
+  ],
+  // 容忍影响选项
+  tolerationsEffectSelectOptions : [
+    {label: "禁止调度", value: "NoSchedule"},
+    {label: "驱逐", value: "NoExecute"},
+    {label: "尽量不调度", value: "PreferNoSchedule"}
+  ]
 })
-
-
 
 // 从子组件 ELCard 中获取所需数据
 const getSelectValue = (selectValue) =>{
@@ -190,22 +200,10 @@ const deleteAnnotationItem = (index) => {
     data.itemAnnotationsList.splice(index,1)
 }
 // 容忍列表项
-const addTolerationsItem = () => {formData.item.spec.template.spec.tolerations.unshift({key:"",value:""})}
-const deleteTolerationsItem = (index) => {
+const addTolerationItem = () => {formData.item.spec.template.spec.tolerations.unshift({key:"",value:""})}
+const deleteTolerationItem = (index) => {
     formData.item.spec.template.spec.tolerations.splice(index,1)
 }
-
-// 容忍操作选项
-const tolerationsOperatorSelectOptions = [
-    {value: 'Equal', label: '等值'},
-    {value: 'Exists',label: '存在'}
-]
-// 容忍影响选项
-const tolerationsEffectSelectOptions = [
-    {label: "禁止调度", value: "NoSchedule"},
-    {label: "驱逐", value: "NoExecute"},
-    {label: "尽量不调度", value: "PreferNoSchedule"}
-]
 </script>
 
 <template>
@@ -224,21 +222,25 @@ const tolerationsEffectSelectOptions = [
                 <!-- 基础信息 -->
                 <el-form label-width="150px" label-position="left" style="height: 450px;width: 1490px;">
                   <el-row :gutter="100">
+                    <!-- 名称 -->
                     <el-col :span="8" class="form-item">
                       <el-form-item label="名称" required>
                         <el-input placeholder="请输入资源名称" v-model="data.curResourceName"/>
                       </el-form-item>
                     </el-col>
+                    <!-- 副本数 -->
                     <el-col :span="8" class="form-item">
                       <el-form-item label="副本数" >
                         <el-input placeholder="请输入副本数" v-model.number="formData.item.spec.replicas"/>
                       </el-form-item>
                     </el-col>
+                    <!-- 镜像地址 -->
                     <el-col :span="8" class="form-item">
                       <el-form-item label="镜像地址">
                         <el-input placeholder="请输入镜像地址" v-model="formData.item.spec.template.spec.containers[0].image" />
                       </el-form-item>
                     </el-col>
+                    <!-- 镜像拉取策略 -->
                     <el-col :span="8" class="form-item">
                       <el-form-item label="镜像拉取策略">
                         <el-select placeholder="请选择镜像拉取策略" v-model="formData.item.spec.template.spec.containers[0].imagePullPolicy">
@@ -250,157 +252,129 @@ const tolerationsEffectSelectOptions = [
                           />
                         </el-select>
                       </el-form-item>
-                    </el-col>                   
-                     <el-col :span="8" class="form-item">
-                      <el-form-item label="私有仓库密钥">
-                        <el-select
-                          v-if="formData.item.spec.template.spec.imagePullSecrets && formData.item.spec.template.spec.imagePullSecrets.length"
-                          placeholder="请选择私有仓库密钥"
-                          v-model="formData.item.spec.template.spec.imagePullSecrets[0].name"
-                        >
-                          <el-option 
-                            v-for="item in data.privateRepoSecretList"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                          />
-                        </el-select>
-                        <el-select v-else disabled placeholder="无可用密钥">
-                          <el-option :label="'无'" :value="''" />
-                        </el-select>
-                      </el-form-item>
-                    </el-col>
+                    </el-col>                 
+                      <!-- 私有仓库密钥 -->
                     <el-col :span="8" class="form-item">
-                      <el-form-item label="DNS 策略">
-                        <el-select placeholder="请选择 DNS 策略" v-model="formData.item.spec.template.spec.dnsPolicy">
-                          <el-option 
-                            v-for="item in data.dnsPolicyList"
-                            :key="item.value"
-                            :label="item.value"
-                            :value="item.value"
-                          />
-                        </el-select>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="8" class="form-item">
-                      <el-form-item label="更新策略">
-                        <el-select placeholder="请选择更新策略" v-model="formData.item.spec.strategy.type" @change="updatePoicySwitchFunc">
-                          <el-option 
-                            v-for="item in data.updatePlicyList"
-                            :key="item.value"
-                            :label="item.value"
-                            :value="item.value"
-                          />
-                        </el-select>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="8" class="form-item">
-                      <div style="display: flex;justify-content: space-between;" v-if="data.updatePoicySwitch">
-                        <el-form-item label="最大不可用" label-width="100px">
-                          <el-input placeholder="" style="width: 100px" v-model="formData.item.spec.strategy.rollingUpdate.maxUnavailable"/>
-                        </el-form-item>
-                        <el-form-item label="可超出最大值" label-width="100px">
-                          <el-input placeholder="" style="width: 100px" v-model="formData.item.spec.strategy.rollingUpdate.maxSurge"/>
-                        </el-form-item>
-                      </div>
-                    </el-col>              
-                    <el-col :span="8" class="form-item">
-                      <el-form-item label="使用宿主机网络">
-                        <el-switch
-                          v-model="formData.item.spec.template.spec.hostNetwork"
-                          style="--el-switch-on-color: #13ce66;"
-                          @change="hostNetworkSwitch"
+                    <el-form-item label="私有仓库密钥">
+                      <el-select
+                        v-if="formData.item.spec.template.spec.imagePullSecrets && formData.item.spec.template.spec.imagePullSecrets.length"
+                        placeholder="请选择私有仓库密钥"
+                        v-model="formData.item.spec.template.spec.imagePullSecrets[0].name"
+                      >
+                        <el-option 
+                          v-for="item in data.privateRepoSecretList"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value"
                         />
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="8" class="form-item">
-                      <el-form-item label="标签及注释">
-                        <el-radio-group v-model="data.labelsAndAnnotationsSwtich">
-                          <el-radio value="auto" size="large">自动生成</el-radio>
-                          <el-radio value="manual" size="large">手动配置</el-radio>
-                        </el-radio-group>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="8" class="form-item">
-                      <el-form-item label="自动添加 Servcie">
-                        <el-switch
-                          v-model="data.switchAddService"
+                      </el-select>
+                      <el-select v-else disabled placeholder="无可用密钥">
+                        <el-option :label="'无'" :value="''" />
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                  <!-- DNS 策略 -->
+                  <el-col :span="8" class="form-item">
+                    <el-form-item label="DNS 策略">
+                      <el-select placeholder="请选择 DNS 策略" v-model="formData.item.spec.template.spec.dnsPolicy">
+                        <el-option 
+                          v-for="item in data.dnsPolicyList"
+                          :key="item.value"
+                          :label="item.value"
+                          :value="item.value"
                         />
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                  <!-- 更新策略 -->
+                  <el-col :span="8" class="form-item">
+                    <el-form-item label="更新策略">
+                      <el-select placeholder="请选择更新策略" v-model="formData.item.spec.strategy.type" @change="updatePoicySwitchFunc">
+                        <el-option 
+                          v-for="item in data.updatePlicyList"
+                          :key="item.value"
+                          :label="item.value"
+                          :value="item.value"
+                        />
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                  <!-- 更新策略 参数 -->
+                  <el-col :span="8" class="form-item">
+                    <div style="display: flex;justify-content: space-between;" v-if="data.updatePoicySwitch">
+                      <el-form-item label="最大不可用" label-width="100px">
+                        <el-input placeholder="" style="width: 100px" v-model="formData.item.spec.strategy.rollingUpdate.maxUnavailable"/>
                       </el-form-item>
-                    </el-col>
-                  </el-row>
-                <!-- 标签|注释|容忍 -->
+                      <el-form-item label="可超出最大值" label-width="100px">
+                        <el-input placeholder="" style="width: 100px" v-model="formData.item.spec.strategy.rollingUpdate.maxSurge"/>
+                      </el-form-item>
+                    </div>
+                  </el-col>          
+                  <!-- 使用宿主机网络 -->
+                  <el-col :span="8" class="form-item">
+                    <el-form-item label="使用宿主机网络">
+                      <el-switch
+                        v-model="formData.item.spec.template.spec.hostNetwork"
+                        style="--el-switch-on-color: #13ce66;"
+                        @change="hostNetworkSwitch"
+                      />
+                    </el-form-item>
+                  </el-col>
+                  <!-- 标签及注释 -->
+                  <el-col :span="8" class="form-item">
+                    <el-form-item label="标签及注释">
+                      <el-radio-group v-model="data.labelsAndAnnotationsSwtich">
+                        <el-radio value="auto" size="large">自动生成</el-radio>
+                        <el-radio value="manual" size="large">手动配置</el-radio>
+                      </el-radio-group>
+                    </el-form-item>
+                  </el-col>
+                  <!-- 自动添加 Servcie -->
+                  <el-col :span="8" class="form-item">
+                    <el-form-item label="自动添加 Servcie">
+                      <el-switch
+                        v-model="data.switchAddService"
+                      />
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <!-- 标签|注释|容忍 tabs -->
                 <el-tabs tab-position="left" style="height: 260px" type="border-card" class="no-border-input" v-if="data.labelsAndAnnotationsSwtich=='manual'">
-                    <!-- 标签 tab -->
-                    <el-tab-pane label="标签">
-                      <TableOfLabels
-                        :label-list="data.itemLabelsList"
-                        @add-label="addLabelItem"
-                        @delete-label="deleteLabelItem"
-                      />
+                    <!-- 控制器标签标签 -->
+                    <el-tab-pane label="控制器标签">
+                        <TableOfLabels
+                          :label-list="data.itemLabelsList"
+                          @add-label="addLabelItem"
+                          @delete-label="deleteLabelItem"
+                        />
                     </el-tab-pane>
-                    <el-tab-pane label="注释">
-                      <TableOfAnnotations 
-                        :annotations-list="data.itemAnnotationsList"
-                        @add-annotation="addAnnotationItem"
-                        @delete-annotation="deleteAnnotationItem"
-                      />
+                    <!-- 控制器注释 -->
+                    <el-tab-pane label="控制器注释">
+                        <TableOfAnnotations 
+                          :annotations-list="data.itemAnnotationsList"
+                          @add-annotation="addAnnotationItem"
+                          @delete-annotation="deleteAnnotationItem"
+                        />
                     </el-tab-pane>
                     <!-- 容忍 -->
                     <el-tab-pane label="容忍">
-                      <!-- 容忍表格 -->
-                      <el-table :data="formData.item.spec.template.spec.tolerations" style="width: 100%; height:100%">
-                          <el-table-column prop="key" label="Key">
-                              <template #default="scope">
-                                  <el-input v-model="scope.row.key" placeholder="请输入容忍的Key"></el-input>
-                              </template>                        
-                          </el-table-column>
-                          <el-table-column prop="operator" label="Operator">
-                              <template #default="scope">
-                                <el-select v-model="scope.row.operator" placeholder="请选择容忍操作" style="width: 240px">
-                                  <el-option
-                                    v-for="item in tolerationsOperatorSelectOptions"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value"
-                                  />
-                                  </el-select>
-                              </template>                        
-                          </el-table-column>
-                          <el-table-column prop="value" label="Value">
-                              <template #default="scope">
-                                  <el-input v-model="scope.row.value" placeholder="请输入容忍的Value" v-if="scope.row.operator!='Exists'"></el-input>
-                              </template> 
-                          </el-table-column>
-                          <el-table-column prop="effect" label="Effect">
-                              <template #default="scope">
-                                <el-select v-model="scope.row.effect" placeholder="请选择容忍的影响" style="width: 240px">
-                                  <el-option
-                                    v-for="item in tolerationsEffectSelectOptions"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value"
-                                  />
-                                  </el-select>
-                              </template> 
-                          </el-table-column>
-                          <el-table-column width="200px" align="center">
-                              <template #header>
-                                  <el-button type="primary" link style="font-size: 16px;margin-bottom: 10px;" @click="addTolerationsItem">添加</el-button>
-                              </template>
-                              <template #default="scope">
-                                  <el-button type="danger" link style="font-size: 16px;margin-bottom: 10px;" @click="deleteTolerationsItem(scope.$index)">删除</el-button>
-                              </template>                      
-                          </el-table-column>
-                      </el-table>
+                        <TableOfTolerations 
+                          :tolerations-list="formData.item.spec.template.spec.tolerations"
+                          :tolerations-operator-select-options="data.tolerationsOperatorSelectOptions"
+                          :tolerations-effect-select-options="data.tolerationsEffectSelectOptions"
+                          @add-toleration="addTolerationItem"
+                          @delete-toleration="deleteTolerationItem"                      
+                        />
                     </el-tab-pane>
                 </el-tabs>
                 </el-form>
               </template>                
             </ElCard>
         </el-tab-pane>
-        <!-- <el-tab-pane label="调度配置" name="Schedule">调度配置</el-tab-pane>
-        <el-tab-pane label="存储卷配置" name="Volume">存储卷配置</el-tab-pane>        
+        <!-- <el-tab-pane label="调度配置" name="Schedule">
+          
+        </el-tab-pane> -->
+        <!-- <el-tab-pane label="存储卷配置" name="Volume">存储卷配置</el-tab-pane>        
         <el-tab-pane label="容器配置" name="Container">容器配置</el-tab-pane>
         <el-tab-pane label="初始化容器" name="InitContainer">初始化容器</el-tab-pane> -->
     </el-tabs>
