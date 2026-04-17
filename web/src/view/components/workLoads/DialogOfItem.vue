@@ -19,6 +19,7 @@ const activeName = ref('Basic')
 // 创建ref来获取子组件实例
 const basicRef = ref(null)
 const scheduleRef = ref(null)
+const volumeRef = ref(null)
 
 // store from pinia
 const store = useWorkLoadData()
@@ -97,8 +98,8 @@ const syncToWorkLoadItem = () => {
         <el-tab-pane label="调度配置" name="Schedule">
           <TabOfScheduleConfig ref="scheduleRef"/>
         </el-tab-pane>
-        <el-tab-pane label="存储卷配置" name="Volume">
-          <TabOfVolumeConfig ref="volumeRef" />
+        <el-tab-pane label="存储配置" name="Volume">
+          <TabOfVolumeConfig />
         </el-tab-pane>        
         <el-tab-pane label="容器配置" name="Container">
           容器配置

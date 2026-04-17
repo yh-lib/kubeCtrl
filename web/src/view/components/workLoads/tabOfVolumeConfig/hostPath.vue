@@ -51,18 +51,6 @@ onBeforeMount(()=>{
     }
 })
 
-// 表单校验：宿主机路径必须以 / 开头
-const validateHostPath = (rule, value, callback) => {
-        if (!value) {
-                callback(new Error('请输入宿主机路径'))
-                return
-        }
-        if (!value.startsWith('/')) {
-                callback(new Error('宿主机路径必须以 / 开头'))
-                return
-        }
-        callback()
-}
 // 表单校验：存储卷名称不能重复
 const validateVolumeName = (rule, value, callback) => {
     if (!value) {
@@ -88,7 +76,8 @@ const rules = reactive({
         { validator: validateVolumeName, trigger: 'blur' },
     ],
     'hostPath.path': [
-        { validator: validateHostPath, trigger: 'blur' },
+        { required: true, message: '请输入宿主机路径', trigger: 'blur' },
+        { pattern: '^(?=/)', message: '宿主机路径必须以 / 开头', trigger: 'blur' },
     ]
 })
 
@@ -96,7 +85,7 @@ const rules = reactive({
 
 <template>
     <el-form 
-        label-width="100px" 
+        label-width="120px" 
         label-position="left" 
         size="large"
         :rules="rules"

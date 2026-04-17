@@ -17,6 +17,11 @@ const data = reactive({
     dialogOfAddVolumeVisible: false,
     volumeType: '',
 })
+
+defineExpose({
+    data,
+})
+
 // 添加存储卷
 const addTableRow = () => {
     data.dialogOfAddVolumeVisible = true
@@ -39,7 +44,7 @@ const volumeTypeCommpents = {
     pvc,
     nfs,
 }
-// 添加Volume
+// 添加Volume至模板文件
 const addVolume = async () => {
     if (childDataRef.value?.validate) {
         const valid = await childDataRef.value.validate().catch(() => false)
@@ -108,12 +113,12 @@ const getVolumeType = (row) => {
         v-model="data.dialogOfAddVolumeVisible"
         width="800px"
         title="添加存储卷"
-        style="margin-top: 400px;"
+        style="margin-top: 350px;"
     >
         <div style="display: flex;justify-content: left;padding: 0 70px;margin-top: 10px;">
             <!-- Select 选择存储卷类型 -->
-            <span style="width: 100px;margin-top: 10px;">存储卷类型</span>
-            <el-select v-model="data.volumeType" placeholder="请选择存储卷类型" size="large" style="width: 490px;margin-left: 20px;">
+            <span style="width: 120px;margin-top: 10px;">存储卷类型</span>
+            <el-select v-model="data.volumeType" placeholder="请选择存储卷类型" size="large" style="width: 470px;margin-left: 20px;">
                 <el-option
                     v-for="item in volumeTypeOptions"
                     :key="item"
