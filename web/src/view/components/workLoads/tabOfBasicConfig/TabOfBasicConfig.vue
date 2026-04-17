@@ -81,7 +81,7 @@ defineExpose({
 </script>
 
 <template>
-    <ElCard :op-cluster="true" :op-ns="true" style="border-radius: 0px;width: 1560px;" @change="getSelectValue">
+    <ElCard :op-cluster="true" :op-ns="true" style="border-radius: 0px;width: 1560px;height: 560px;" @change="getSelectValue">
         <template #mainData>
             <!-- 基础信息 -->
             <el-form label-width="150px" label-position="left" style="height: 450px;width: 1490px;">
@@ -199,7 +199,7 @@ defineExpose({
             </el-col>
             </el-row>
             <!-- 标签|注释|容忍 tabs -->
-            <el-tabs tab-position="left" style="height: 260px" type="border-card" class="no-border-input" v-if="data.labelsAndAnnotationsSwtich=='manual'">
+            <el-tabs tab-position="left" style="height: 250px" type="border-card" class="no-border-input" v-if="data.labelsAndAnnotationsSwtich=='manual'">
                 <!-- 标签 -->
                 <el-tab-pane label="标签">
                     <TableOfKeyValue
