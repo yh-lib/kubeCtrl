@@ -40,6 +40,8 @@ export const API_CONFIG = {
     secretListApi: `${BASE_URL}/secret/list`,
     secretGetApi: `${BASE_URL}/secret/get`,
     secretDeleteApi: `${BASE_URL}/secret/delete`,
+    // pvc 管理
+    pvcListApi: `${BASE_URL}/pvc/list`,
 }
 
 export const CONFIG = {

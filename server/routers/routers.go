@@ -8,6 +8,7 @@ import (
 	"server/routers/namespace"
 	"server/routers/node"
 	"server/routers/pod"
+	"server/routers/pvc"
 	"server/routers/secret"
 
 	"github.com/gin-gonic/gin"
@@ -25,4 +26,5 @@ func RegistrerRouters(r *gin.Engine) {
 	pod.RegisterSubRouter(apiGroup)
 	deployment.RegisterSubRouter(apiGroup)
 	secret.RegisterSubRouter(apiGroup)
+	pvc.RegisterSubRouter(apiGroup)
 }
