@@ -79,6 +79,10 @@ const syncToWorkLoadItem = () => {
   }
   // 调度组件数据
   workLoadItem.value.item.spec.template.spec.nodeSelector = list2obj(scheduleRef.value.data.nodeLabelsList)
+  // 修正 emptyDir medium 数据
+  workLoadItem.value.item.spec.template.spec.volumes.forEach(item => {
+    item?.emptyDir?.medium == 'Disk' && delete item.emptyDir.medium
+  });
 }
 </script>
 

@@ -53,14 +53,18 @@ onBeforeMount(()=>{
 
 // 表单校验：存储卷名称不能重复
 const validateVolumeName = (rule, value, callback) => {
+    // 如果没有输入，视为必填不通过，返回对应错误信息
     if (!value) {
-        callback()
+        callback(new Error('请输入存储卷名称'))
         return
     }
 
+    // 从当前 workload 中取出 volumes 列表，未取到时用空数组兜底
     const volumeList = workLoadItem.value?.item?.spec?.template?.spec?.volumes || []
-    const duplicated = volumeList.some(item => item !== data.volumeItem && item?.name === value)
 
+    // 查找是否存在与当前输入同名且不是正在编辑对象的 volume
+    const duplicated = volumeList.some(item => item !== data.volumeItem && item?.name === value)
+    
     if (duplicated) {
         callback(new Error('存储卷名称不能重复'))
         return
@@ -72,7 +76,6 @@ const validateVolumeName = (rule, value, callback) => {
 const ruleFormRef = ref()
 const rules = reactive({
     name: [
-        { required: true, message: '请输入存储卷名称', trigger: 'blur' },
         { validator: validateVolumeName, trigger: 'blur' },
     ],
     'hostPath.path': [

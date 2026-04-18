@@ -114,6 +114,7 @@ const getVolumeType = (row) => {
         width="800px"
         title="添加存储卷"
         style="margin-top: 350px;"
+        destroy-on-close
     >
         <div style="display: flex;justify-content: left;padding: 0 70px;margin-top: 10px;">
             <!-- Select 选择存储卷类型 -->
