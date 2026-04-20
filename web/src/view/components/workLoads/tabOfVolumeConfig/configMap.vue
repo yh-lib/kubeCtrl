@@ -10,12 +10,12 @@ const { workLoadItem } = storeToRefs(store)
 
 const data = reactive({
     volumeItem:{
-        'name':'',
-        // 'optional': null,
-        'defaultMode': null,
+        'name':'',              
         'configMap':{
             'name': '',
-            'items': []
+            'defaultMode': null,
+            'optional': null,  
+            'items': [],        
         }
     },
     'Options':[
@@ -115,7 +115,7 @@ const deleteMountPath = (index) => {
 // 权限 number 转换成前后端都能识别的十进制
 const oct2Dec = (row) => {
     if (typeof(row) != 'object'){
-        data.volumeItem.defaultMode = parseInt(data.volumeItem.defaultMode,8)
+        data.volumeItem.configMap.defaultMode = parseInt(data.volumeItem.configMap.defaultMode,8)
     }else{
         row.mode = parseInt(row.mode,8)
     }
@@ -146,11 +146,11 @@ const oct2Dec = (row) => {
                         />
                     </el-select>                    
                 </el-form-item>
-                <el-form-item label="默认挂载权限" prop="defaultMode">
-                    <el-input v-model.number="data.volumeItem.defaultMode" placeholder="请输入默认挂载权限" @change="oct2Dec"/>                    
+                <el-form-item label="默认挂载权限" prop="configMap.defaultMode">
+                    <el-input v-model.number="data.volumeItem.configMap.defaultMode" placeholder="请输入默认挂载权限" @change="oct2Dec"/>                    
                 </el-form-item>
-                <el-form-item label="可选" prop="optional">
-                    <el-select v-model="data.volumeItem.optional" placeholder="ConfigMap 缺失时是否允许 Pod 启动">
+                <el-form-item label="可选" prop="configMap.optional">
+                    <el-select v-model="data.volumeItem.configMap.optional" placeholder="ConfigMap 缺失时是否允许 Pod 启动">
                         <el-option
                             v-for="item in data.Options"
                             :key="item.value"
