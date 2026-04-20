@@ -4,6 +4,7 @@ package routers
 import (
 	"server/routers/auth"
 	"server/routers/cluster"
+	"server/routers/configMap"
 	"server/routers/deployment"
 	"server/routers/namespace"
 	"server/routers/node"
@@ -26,5 +27,6 @@ func RegistrerRouters(r *gin.Engine) {
 	pod.RegisterSubRouter(apiGroup)
 	deployment.RegisterSubRouter(apiGroup)
 	secret.RegisterSubRouter(apiGroup)
+	configMap.RegisterSubRouter(apiGroup)
 	pvc.RegisterSubRouter(apiGroup)
 }

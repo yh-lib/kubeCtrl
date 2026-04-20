@@ -134,9 +134,10 @@ func KubectlFunc(c *gin.Context, resourceType string, opMethod string) {
 		namespace  corev1.Namespace
 		pod        corev1.Pod
 		deployment appsv1.Deployment
-		secret     corev1.Secret
 		// 存储资源
-		pvc corev1.PersistentVolumeClaim
+		configMap corev1.ConfigMap
+		secret    corev1.Secret
+		pvc       corev1.PersistentVolumeClaim
 	)
 	returndata.Data = map[string]any{}
 	// 初始化 Item 类型
@@ -149,6 +150,9 @@ func KubectlFunc(c *gin.Context, resourceType string, opMethod string) {
 		info.Item = &pod
 	case "deployment":
 		info.Item = &deployment
+	// 存储资源
+	case "configMap":
+		info.Item = &configMap
 	case "secret":
 		info.Item = &secret
 	case "pvc":
@@ -169,6 +173,9 @@ func KubectlFunc(c *gin.Context, resourceType string, opMethod string) {
 		kubeUtilser = kubeutils.NewPod(kubeconfig, &pod)
 	case "deployment":
 		kubeUtilser = kubeutils.NewDeployment(kubeconfig, &deployment)
+	// 存储资源
+	case "configMap":
+		kubeUtilser = kubeutils.NewConfigMap(kubeconfig, &configMap)
 	case "secret":
 		kubeUtilser = kubeutils.NewSecret(kubeconfig, &secret)
 	case "pvc":
