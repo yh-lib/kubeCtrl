@@ -31,9 +31,20 @@ const defaultWorkLoadItem = () => ({
           containers: [
             {
               name: 'Container-0',
+              ports: [],
+              env: [],
+              envFrom: [],
+              volumeMounts: [],
+              livenessProbe: {},
               resources: {
                 requests: {},
                 limits: {},
+              },
+              readinessProbe: {},
+              startupProbe: {},
+              lifecycle: {
+                postStart: {},
+                preStop: {},
               },
             },
           ],
