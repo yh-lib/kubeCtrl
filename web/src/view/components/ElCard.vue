@@ -25,6 +25,7 @@
     opSearch: Boolean,
     opRefresh: Boolean,
     opCreate: Boolean,
+    actionMethod: String,
   })
 
   const syncToParent = () => {
@@ -96,6 +97,7 @@
             v-show="props.opCluster"
             filterable
             @change="handleClusterChange"
+            :disabled="props.actionMethod == 'update'"
           >
             <el-option
               v-for="item in data.clusterOptions"
@@ -111,6 +113,7 @@
             v-show="props.opNs"
             filterable
             @change="handleNsChange"
+            :disabled="props.actionMethod == 'update'"
           >
             <el-option
               v-for="item in data.nsOptions"

@@ -169,7 +169,7 @@
   >
     <el-tabs v-model="activeName" @tab-click="getItemOfYaml">
       <el-tab-pane label="基本配置" name="Basic">
-        <TabOfBasicConfig ref="basicRef" />
+        <TabOfBasicConfig ref="basicRef" :actionMethod="props.actionMethod" />
       </el-tab-pane>
       <el-tab-pane label="调度配置" name="Schedule">
         <TabOfScheduleConfig ref="scheduleRef" />

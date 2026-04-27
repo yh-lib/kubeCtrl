@@ -10,6 +10,8 @@
   // store from pinia
   const store = useWorkLoadData()
   const { workLoadItem } = storeToRefs(store)
+
+  const props = defineProps(['actionMethod'])
   // 当前页面所需数据
   const data = reactive({
     // table 数据
@@ -98,6 +100,7 @@
     :op-ns="true"
     style="border-radius: 0px; width: 1560px; height: 550px"
     @change="getSelectValue"
+    :actionMethod="props.actionMethod"
   >
     <template #mainData>
       <!-- 基础信息 -->
@@ -110,6 +113,7 @@
                 placeholder="请输入资源名称"
                 v-model="workLoadItem.item.metadata.name"
                 @change="syncToWorkLoadItemName"
+                :disabled="props.actionMethod == 'update'"
               />
             </el-form-item>
           </el-col>
