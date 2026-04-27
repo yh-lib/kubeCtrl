@@ -46,7 +46,7 @@
       delete workLoadItem.value.item.spec.template.spec.imagePullSecrets
     }
     // 调用后端接口 创建 Deployment
-    createdeploymentHandler(workLoadItem.value).then((res) => {
+    createdeploymentHandler(getPostData(workLoadItem.value)).then((res) => {
       if (res.data.status === 200) {
         ElMessage({
           message: res.data.message,
@@ -56,13 +56,65 @@
     })
   }
   // Yaml
+  const removeEmptyFieldsDeep = (obj) => {
+    Object.keys(obj).forEach((key) => {
+      const value = obj[key]
+
+      if (Array.isArray(value)) {
+        if (value.length === 0) {
+          delete obj[key]
+          return
+        }
+
+        value.forEach((item) => {
+          if (item && typeof item === 'object') {
+            removeEmptyFieldsDeep(item)
+          }
+        })
+
+        obj[key] = value.filter((item) => {
+          if (!item || typeof item !== 'object' || Array.isArray(item)) {
+            return true
+          }
+
+          return Object.keys(item).length > 0
+        })
+
+        if (obj[key].length === 0) {
+          delete obj[key]
+        }
+
+        return
+      }
+
+      if (value && typeof value === 'object') {
+        removeEmptyFieldsDeep(value)
+
+        if (Object.keys(value).length === 0) {
+          delete obj[key]
+        }
+        return
+      }
+
+      if (value === '' || value === null || value === undefined) {
+        delete obj[key]
+      }
+    })
+
+    return obj
+  }
+  const getPostData = (obj) => {
+    const postData = JSON.parse(JSON.stringify(obj))
+    removeEmptyFieldsDeep(postData)
+    return postData
+  }
   const itemOfYaml = ref('')
   const getItemOfYaml = (tab) => {
     if (tab.paneName !== 'Yaml') return
     // 同步数据至模板
     syncToWorkLoadItem()
     // 转换模板数据为yaml
-    itemOfYaml.value = obj2yaml(workLoadItem.value.item)
+    itemOfYaml.value = obj2yaml(getPostData(workLoadItem.value.item))
   }
   // 同步子组件数据至模板
   const syncToWorkLoadItem = () => {
