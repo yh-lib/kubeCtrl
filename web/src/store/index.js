@@ -34,6 +34,7 @@ const defaultWorkLoadItem = () => ({
             {
               name: 'container-0',
               image: '',
+              imagePullPolicy: '',
               ports: [],
               env: [],
               envFrom: [],

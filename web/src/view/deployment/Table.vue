@@ -54,14 +54,6 @@
         item.metadata.name.toLowerCase().includes(props.tableData.search.toLowerCase())
     )
   )
-  // const curItem = ref('')
-  // const itemByYaml = ref('')
-  // const itemDetailDialog = ref(false)
-  // const getItem = (row) => {
-  //   curItem.value = row
-  //   itemByYaml.value = obj2yaml(row)
-  //   itemDetailDialog.value = true
-  // }
 
   const mergeIfExists = (target, source) => {
     Object.keys(source || {}).forEach((key) => {
@@ -188,25 +180,11 @@
     </el-table-column>
   </el-table>
 
-  <!-- <DialogByYaml
-    :dialogVisible="itemDetailDialog"
-    @closeDialog="itemDetailDialog = false"
-    :item-by-yaml="itemByYaml"
-  >
-    <template #header>
-      <DialogHeaderLabel
-        :cur-cluster-id="props.tableData.curClusterId"
-        :cur-ns-name="curItem.metadata.namespace"
-        :cur-resource-name="curItem.metadata.name"
-        :cur-node-name="curItem.spec.nodeName"
-        cur-resource-kind="Deployment"
-      />
-    </template>
-  </DialogByYaml> -->
   <DialogOfItem
     :open-dialog="data.updateItemDialogVisible"
     @close-dialog="closeDialogOfItem"
     :actionMethod="data.actionMethod"
+    resource-type="Deployment"
     @get-list="emit('getList')"
   />
 </template>

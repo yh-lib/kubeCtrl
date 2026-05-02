@@ -7,6 +7,7 @@
   import { getdeploymentHandler } from '../../api/deployment.js'
   import { useWorkLoadData } from '../../store/index.js'
   import { storeToRefs } from 'pinia'
+  import { getStatefulSetHandler } from '../../api/statefuleSet.js'
 
   // store from pinia
   const store = useWorkLoadData()
@@ -54,14 +55,6 @@
         item.metadata.name.toLowerCase().includes(props.tableData.search.toLowerCase())
     )
   )
-  // const curItem = ref('')
-  // const itemByYaml = ref('')
-  // const itemDetailDialog = ref(false)
-  // const getItem = (row) => {
-  //   curItem.value = row
-  //   itemByYaml.value = obj2yaml(row)
-  //   itemDetailDialog.value = true
-  // }
 
   const mergeIfExists = (target, source) => {
     Object.keys(source || {}).forEach((key) => {
@@ -125,9 +118,10 @@
   }
 
   const updateItem = (row) => {
+    // 重置模板
     store.resetWorkLoadItem()
-    // 数据赋值
-    getdeploymentHandler(
+    // 模板赋值
+    getStatefulSetHandler(
       props.tableData.clusterId,
       props.tableData.nameSpace,
       row.metadata.name
@@ -189,26 +183,11 @@
       </template>
     </el-table-column>
   </el-table>
-
-  <!-- <DialogByYaml
-    :dialogVisible="itemDetailDialog"
-    @closeDialog="itemDetailDialog = false"
-    :item-by-yaml="itemByYaml"
-  >
-    <template #header>
-      <DialogHeaderLabel
-        :cur-cluster-id="props.tableData.curClusterId"
-        :cur-ns-name="curItem.metadata.namespace"
-        :cur-resource-name="curItem.metadata.name"
-        :cur-node-name="curItem.spec.nodeName"
-        cur-resource-kind="Deployment"
-      />
-    </template>
-  </DialogByYaml> -->
   <DialogOfItem
     :open-dialog="data.updateItemDialogVisible"
     @close-dialog="closeDialogOfItem"
-    :actionMethod="data.actionMethod"
     @get-list="emit('getList')"
+    :actionMethod="data.actionMethod"
+    resource-type="StatefulSet"
   />
 </template>
