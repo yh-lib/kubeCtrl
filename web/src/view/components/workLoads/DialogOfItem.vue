@@ -12,6 +12,8 @@
   import YamlEdit from '../YamlEdit.vue'
   import TabOfVolumeConfig from './tabOfVolumeConfig/tabOfVolumeConfig.vue'
   import TabOfContainer from './tabOfContainer/TabOfContainer.vue'
+  import Deployment from '../../deployment/Deployment.vue'
+  import { createStatefulSetHandler } from '../../../api/statefuleSet'
 
   const props = defineProps(['openDialog', 'actionMethod', 'resourceType'])
   const emit = defineEmits(['closeDialog', 'getList'])
@@ -37,18 +39,37 @@
   const createItem = () => {
     // 同步子组件数据至模板
     syncToWorkLoadItem()
-
-    // 调用后端接口 创建 Deployment
-    createdeploymentHandler(getPostData(workLoadItem.value)).then((res) => {
-      if (res.data.status === 200) {
-        ElMessage({
-          message: res.data.message,
-          type: 'success',
+    switch (props.resourceType) {
+      case 'Deployment':
+        // 调用后端接口 创建 Deployment
+        createdeploymentHandler(getPostData(workLoadItem.value)).then((res) => {
+          if (res.data.status === 200) {
+            ElMessage({
+              message: res.data.message,
+              type: 'success',
+            })
+            emit('getList')
+            handleClose()
+          }
         })
-        emit('getList')
-        handleClose()
-      }
-    })
+        break
+      case 'StatefulSet':
+        // 调用后端接口 创建 statefulSet
+        createStatefulSetHandler(getPostData(workLoadItem.value)).then((res) => {
+          if (res.data.status === 200) {
+            ElMessage({
+              message: res.data.message,
+              type: 'success',
+            })
+            emit('getList')
+            handleClose()
+          }
+        })
+        break
+      default:
+        ElMessage.error('暂不支持该资源类型')
+        break
+    }
   }
   const updateItem = () => {
     syncToWorkLoadItem()
