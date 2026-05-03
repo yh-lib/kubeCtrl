@@ -8,6 +8,7 @@
   import { ElMessage } from 'element-plus'
   import Deployment from '../../../deployment/Deployment.vue'
   import { getServiceListHandler } from '../../../../api/service'
+  import Daemonset from '../../../daemonset/Daemonset.vue'
 
   // store from pinia
   const store = useWorkLoadData()
@@ -65,7 +66,17 @@
       if (isRolling) {
         workLoadItem.value.item.spec.updateStrategy.rollingUpdate = {
           partition: 0,
-          maxUnavailable: '1',
+          maxUnavailable: '25%',
+        }
+      } else {
+        delete workLoadItem.value.item.spec.updateStrategy.rollingUpdate
+      }
+    }
+    if (props.resourceType == 'DaemonSet') {
+      const isRolling = workLoadItem.value.item.spec.updateStrategy.type === 'RollingUpdate'
+      if (isRolling) {
+        workLoadItem.value.item.spec.updateStrategy.rollingUpdate = {
+          maxUnavailable: '25%',
         }
       } else {
         delete workLoadItem.value.item.spec.updateStrategy.rollingUpdate
@@ -174,7 +185,11 @@
             </el-form-item>
           </el-col>
           <!-- 副本数 -->
-          <el-col :span="8" class="form-item">
+          <el-col
+            :span="8"
+            class="form-item"
+            v-if="props.resourceType == 'Deployment' || props.resourceType == 'StatefulSet'"
+          >
             <el-form-item label="副本数">
               <el-input
                 placeholder="请输入副本数"
@@ -256,12 +271,12 @@
                   :value="item"
                 />
               </el-select>
-              <!-- 资源类型为statefulset时 -->
+              <!-- 资源类型为statefulset、daemonSet时 -->
               <el-select
                 placeholder="请选择更新策略"
                 v-model="workLoadItem.item.spec.updateStrategy.type"
                 @change="updatePoicySwitchFunc"
-                v-if="props.resourceType == 'StatefulSet'"
+                v-if="props.resourceType == 'StatefulSet' || props.resourceType == 'DaemonSet'"
               >
                 <el-option
                   v-for="item in ['RollingUpdate', 'OnDelete']"
@@ -273,11 +288,18 @@
             </el-form-item>
           </el-col>
           <!-- 更新策略 参数 -->
-          <el-col :span="8" class="form-item">
+          <el-col
+            :span="8"
+            class="form-item"
+            v-if="
+              workLoadItem.item.spec.strategy.type == 'RollingUpdate' ||
+              workLoadItem.item.spec.updateStrategy.type == 'RollingUpdate'
+            "
+          >
             <!-- deployment -->
             <div
               style="display: flex; justify-content: space-between"
-              v-if="workLoadItem.item.spec.strategy.type == 'RollingUpdate'"
+              v-if="props.resourceType == 'Deployment'"
             >
               <el-form-item label="最大不可用" label-width="100px">
                 <el-input
@@ -297,7 +319,7 @@
             <!-- statefulSet -->
             <div
               style="display: flex; justify-content: space-between"
-              v-if="workLoadItem.item.spec.updateStrategy.type == 'RollingUpdate'"
+              v-if="props.resourceType == 'StatefulSet'"
             >
               <el-form-item label="分区序号" label-width="100px">
                 <el-input
@@ -310,6 +332,19 @@
                 <el-input
                   placeholder=""
                   style="width: 100px"
+                  v-model="workLoadItem.item.spec.updateStrategy.rollingUpdate.maxUnavailable"
+                />
+              </el-form-item>
+            </div>
+            <!-- DaemonSet -->
+            <div
+              style="display: flex; justify-content: space-between"
+              v-if="props.resourceType == 'DaemonSet'"
+            >
+              <el-form-item label="最大不可用" label-width="150px">
+                <el-input
+                  placeholder="请输入最大不可用百分比"
+                  style="width: 280px"
                   v-model="workLoadItem.item.spec.updateStrategy.rollingUpdate.maxUnavailable"
                 />
               </el-form-item>
