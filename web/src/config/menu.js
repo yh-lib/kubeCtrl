@@ -197,16 +197,11 @@ export const MENU_CONFIG = [
         index: '/setting/user',
         icon: 'User',
       },
-      {
-        title: '角色与权限 (RBAC)',
-        index: '/setting/rbac',
-        icon: 'UserFilled',
-      },
-      {
-        title: '测试页',
-        index: '/setting/test',
-        icon: 'Document',
-      },
+      // {
+      //   title: '角色与权限 (RBAC)',
+      //   index: '/setting/rbac',
+      //   icon: 'UserFilled',
+      // },
     ],
   },
 ]

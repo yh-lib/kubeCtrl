@@ -11,9 +11,5 @@ export const settingRoutes = {
       path: 'rbac',
       component: () => import('../view/setting/Rbac.vue'),
     },
-    {
-      path: 'test',
-      component: () => import('../view/components/workLoads/tabOfBasicConfig/TabOfBasicConfig.vue'),
-    },
   ],
 }
