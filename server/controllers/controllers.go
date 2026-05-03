@@ -135,7 +135,7 @@ func KubectlFunc(c *gin.Context, resourceType string, opMethod string) {
 		pod         corev1.Pod
 		deployment  appsv1.Deployment
 		statefulSet appsv1.StatefulSet
-		daemonset   appsv1.DaemonSet
+		daemonSet   appsv1.DaemonSet
 		// 存储资源
 		configMap corev1.ConfigMap
 		secret    corev1.Secret
@@ -156,8 +156,8 @@ func KubectlFunc(c *gin.Context, resourceType string, opMethod string) {
 		info.Item = &deployment
 	case "statefulSet":
 		info.Item = &statefulSet
-	case "daemonset":
-		info.Item = &daemonset
+	case "daemonSet":
+		info.Item = &daemonSet
 	// 存储资源
 	case "configMap":
 		info.Item = &configMap
@@ -186,8 +186,8 @@ func KubectlFunc(c *gin.Context, resourceType string, opMethod string) {
 		kubeUtilser = kubeutils.NewDeployment(kubeconfig, &deployment)
 	case "statefulSet":
 		kubeUtilser = kubeutils.NewStatefulSet(kubeconfig, &statefulSet)
-	case "daemonset":
-		kubeUtilser = kubeutils.NewDaemonSet(kubeconfig, &daemonset)
+	case "daemonSet":
+		kubeUtilser = kubeutils.NewDaemonSet(kubeconfig, &daemonSet)
 	// 存储资源
 	case "configMap":
 		kubeUtilser = kubeutils.NewConfigMap(kubeconfig, &configMap)

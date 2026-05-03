@@ -43,6 +43,12 @@ export const API_CONFIG = {
   statefulSetDeleteApi: `${BASE_URL}/statefulSet/delete`,
   statefulSetCreateApi: `${BASE_URL}/statefulSet/create`,
   statefulSetUpdateApi: `${BASE_URL}/statefulSet/update`,
+  // daemonSet 管理
+  daemonSetListApi: `${BASE_URL}/daemonSet/list`,
+  daemonSetGetApi: `${BASE_URL}/daemonSet/get`,
+  daemonSetDeleteApi: `${BASE_URL}/daemonSet/delete`,
+  daemonSetCreateApi: `${BASE_URL}/daemonSet/create`,
+  daemonSetUpdateApi: `${BASE_URL}/daemonSet/update`,
   // secret 管理
   secretListApi: `${BASE_URL}/secret/list`,
   secretGetApi: `${BASE_URL}/secret/get`,
