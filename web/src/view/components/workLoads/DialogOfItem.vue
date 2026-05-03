@@ -14,6 +14,7 @@
   import TabOfContainer from './tabOfContainer/TabOfContainer.vue'
   import Deployment from '../../deployment/Deployment.vue'
   import { createStatefulSetHandler } from '../../../api/statefuleSet'
+  import { createDaemonSetHandler } from '../../../api/daemonSet'
 
   const props = defineProps(['openDialog', 'actionMethod', 'resourceType'])
   const emit = defineEmits(['closeDialog', 'getList'])
@@ -56,6 +57,19 @@
       case 'StatefulSet':
         // 调用后端接口 创建 statefulSet
         createStatefulSetHandler(getPostData(workLoadItem.value)).then((res) => {
+          if (res.data.status === 200) {
+            ElMessage({
+              message: res.data.message,
+              type: 'success',
+            })
+            emit('getList')
+            handleClose()
+          }
+        })
+        break
+      case 'DaemonSet':
+        // 调用后端接口 创建 statefulSet
+        createDaemonSetHandler(getPostData(workLoadItem.value)).then((res) => {
           if (res.data.status === 200) {
             ElMessage({
               message: res.data.message,
@@ -176,12 +190,6 @@
     workLoadItem.value.item.spec.template.spec.volumes.forEach((item) => {
       item?.emptyDir?.medium == 'Disk' && delete item.emptyDir.medium
     })
-    // 基本配置组件： 绑定 service
-    if (basicRef.value.data.bindSvcValue == 'autoCreateSvc') {
-      console.log('autoCreateSvc')
-    } else {
-      console.log('manualCreateSvc')
-    }
   }
 </script>
 

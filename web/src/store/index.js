@@ -17,7 +17,7 @@ const defaultWorkLoadItem = () => ({
       annotations: {},
     },
     spec: {
-      replicas: 3,
+      replicas: null,
       selector: {
         matchLabels: {},
       },

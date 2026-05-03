@@ -58,6 +58,7 @@
 
   const mergeIfExists = (target, source) => {
     Object.keys(source || {}).forEach((key) => {
+      // console.log('遍历source_key:::', key)
       if (!(key in target)) {
         return
       }
@@ -65,6 +66,10 @@
       const sourceValue = source[key]
       const targetValue = target[key]
 
+      if (key === 'labels' || key === 'annotations') {
+        target[key] = sourceValue
+        return
+      }
       if (sourceValue === undefined) {
         return
       }
@@ -99,14 +104,7 @@
         return
       }
 
-      if (
-        sourceValue &&
-        typeof sourceValue === 'object' &&
-        !Array.isArray(sourceValue) &&
-        targetValue &&
-        typeof targetValue === 'object' &&
-        !Array.isArray(targetValue)
-      ) {
+      if (typeof sourceValue === 'object' && typeof targetValue === 'object') {
         mergeIfExists(targetValue, sourceValue)
         return
       }
@@ -164,7 +162,7 @@
     <el-table-column label="状态" prop="status">
       <template #default="scope">
         <span
-          v-if="scope.row.status.availableReplicas == scope.row.status.replicas"
+          v-if="scope.row.status.numberAvailable == scope.row.status.desiredNumberScheduled"
           style="color: green"
           >Available</span
         >
@@ -173,7 +171,7 @@
     </el-table-column>
     <el-table-column label="Pods" prop="containerStatus">
       <template #default="scope">
-        {{ scope.row.status.availableReplicas || 0 }}/{{ scope.row.status.replicas }}
+        {{ scope.row.status.numberAvailable || 0 }}/{{ scope.row.status.desiredNumberScheduled }}
       </template>
     </el-table-column>
     <el-table-column label="操作" prop="operations">

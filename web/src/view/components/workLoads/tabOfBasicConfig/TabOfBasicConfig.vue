@@ -9,6 +9,7 @@
   import Deployment from '../../../deployment/Deployment.vue'
   import { getServiceListHandler } from '../../../../api/service'
   import Daemonset from '../../../daemonset/Daemonset.vue'
+  import { obj2list } from '../../../../utils/typeConv/type.conv'
 
   // store from pinia
   const store = useWorkLoadData()
@@ -22,7 +23,7 @@
     controllerAnnotationsList: [],
     // switch 状态
     switchAddService: false,
-    labelsAndAnnotationsSwtich: 'auto',
+    labelsAndAnnotationsSwtich: '',
     // 选项
     dnsPolicyList: [
       { value: 'Default' },
@@ -158,6 +159,15 @@
 
   onBeforeMount(() => {
     workLoadItem.value.item.kind = props.resourceType
+    data.labelsAndAnnotationsSwtich = ''
+    if (props.actionMethod == 'create') {
+      data.labelsAndAnnotationsSwtich = 'auto'
+    }
+    if (props.actionMethod == 'update') {
+      data.labelsAndAnnotationsSwtich = 'manual'
+      data.controllerLabelsList = obj2list(workLoadItem.value.item.metadata.labels)
+      data.controllerAnnotationsList = obj2list(workLoadItem.value.item.metadata.annotations)
+    }
   })
 </script>
 
