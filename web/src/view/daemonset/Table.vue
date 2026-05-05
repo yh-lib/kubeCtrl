@@ -4,7 +4,6 @@
   import { obj2yaml } from '../../utils/typeConv/type.conv.js'
   import DialogHeaderLabel from '../components/DialogHeaderLabel.vue'
   import DialogOfItem from '../components/workLoads/DialogOfItem.vue'
-  import { getdeploymentHandler } from '../../api/deployment.js'
   import { useWorkLoadData } from '../../store/index.js'
   import { storeToRefs } from 'pinia'
   import { getHandler, getListHandler } from '../../api/generic.js'

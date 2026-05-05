@@ -4,9 +4,9 @@
   import { obj2yaml } from '../../utils/typeConv/type.conv.js'
   import DialogHeaderLabel from '../components/DialogHeaderLabel.vue'
   import DialogOfItem from '../components/workLoads/DialogOfItem.vue'
-  import { getdeploymentHandler } from '../../api/deployment.js'
   import { useWorkLoadData } from '../../store/index.js'
   import { storeToRefs } from 'pinia'
+  import { getHandler } from '../../api/generic.js'
 
   // store from pinia
   const store = useWorkLoadData()
@@ -57,6 +57,7 @@
 
   const mergeIfExists = (target, source) => {
     Object.keys(source || {}).forEach((key) => {
+      // console.log('遍历source_key:::', key)
       if (!(key in target)) {
         return
       }
@@ -64,6 +65,10 @@
       const sourceValue = source[key]
       const targetValue = target[key]
 
+      if (key === 'labels' || key === 'annotations') {
+        target[key] = sourceValue
+        return
+      }
       if (sourceValue === undefined) {
         return
       }
@@ -98,14 +103,7 @@
         return
       }
 
-      if (
-        sourceValue &&
-        typeof sourceValue === 'object' &&
-        !Array.isArray(sourceValue) &&
-        targetValue &&
-        typeof targetValue === 'object' &&
-        !Array.isArray(targetValue)
-      ) {
+      if (typeof sourceValue === 'object' && typeof targetValue === 'object') {
         mergeIfExists(targetValue, sourceValue)
         return
       }
@@ -116,17 +114,19 @@
     return target
   }
 
-  const updateItem = (row) => {
+  const getItem = (row) => {
     store.resetWorkLoadItem()
     // 数据赋值
-    getdeploymentHandler(
+    getHandler(
       props.tableData.clusterId,
       props.tableData.nameSpace,
+      'deployment',
       row.metadata.name
     ).then((res) => {
       if (res.data.status == 200) {
         workLoadItem.value.name = row.metadata.name
         mergeIfExists(workLoadItem.value.item, res.data.data.items)
+        console.log('getItem:::', res.data.data.items, workLoadItem.value.item)
         data.actionMethod = 'update'
         data.updateItemDialogVisible = true
       }
@@ -147,7 +147,7 @@
   <el-table :data="filterTableData" height="1010px">
     <el-table-column label="名称" prop="metadata.name" width="300px">
       <template #default="scope">
-        <el-button type="primary" link @click="updateItem(scope.row)">{{
+        <el-button type="primary" link @click="getItem(scope.row)">{{
           scope.row.metadata.name
         }}</el-button>
       </template>
@@ -174,7 +174,7 @@
     </el-table-column>
     <el-table-column label="操作" prop="operations">
       <template #default="scope">
-        <el-button link type="warning" @click="updateItem(scope.row)">编辑</el-button>
+        <el-button link type="warning" @click="getItem(scope.row)">编辑</el-button>
         <el-button link type="danger" @click="emit('deleteItem', scope.row)">删除</el-button>
       </template>
     </el-table-column>
@@ -184,7 +184,7 @@
     :open-dialog="data.updateItemDialogVisible"
     @close-dialog="closeDialogOfItem"
     :actionMethod="data.actionMethod"
-    resource-type="Deployment"
+    resource-type="deployment"
     @get-list="emit('getList')"
   />
 </template>

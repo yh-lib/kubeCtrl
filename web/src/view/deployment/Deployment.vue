@@ -3,9 +3,8 @@
   import Table from './Table.vue'
   import { reactive, ref } from 'vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
-  import { getdeploymentListHandler, deletedeploymentHandler } from '../../api/deployment'
   import DialogOfItem from '../components/workLoads/DialogOfItem.vue'
-
+  import { deleteHandler, getListHandler } from '../../api/generic.js'
   // 删除 deployment
   const deleteItem = (row) => {
     // 删除提醒
@@ -15,15 +14,17 @@
       type: 'warning',
     })
       .then(() => {
-        deletedeploymentHandler(data.clusterId, data.nameSpace, row.metadata.name).then((res) => {
-          if (res.data.status == 200) {
-            ElMessage({
-              type: 'success',
-              message: res.data.message,
-            })
-            getList()
+        deleteHandler(data.clusterId, data.nameSpace, 'deployment', row.metadata.name).then(
+          (res) => {
+            if (res.data.status == 200) {
+              ElMessage({
+                type: 'success',
+                message: res.data.message,
+              })
+              getList()
+            }
           }
-        })
+        )
       })
       .catch(() => {
         return
@@ -36,7 +37,7 @@
       data.items = []
       return
     }
-    getdeploymentListHandler(data.clusterId, data.nameSpace).then((res) => {
+    getListHandler(data.clusterId, data.nameSpace, 'deployment').then((res) => {
       data.items = res.data.data.items || []
     })
   }
@@ -79,7 +80,7 @@
   <DialogOfItem
     v-if="createItemDialogVisible"
     :open-dialog="createItemDialogVisible"
-    resource-type="Deployment"
+    resource-type="deployment"
     @close-dialog="closeDialogOfItem"
     @get-list="getList"
     action-method="create"
