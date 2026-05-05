@@ -54,67 +54,6 @@
         handleClose()
       }
     })
-
-    // switch (props.resourceType) {
-    //   case 'Deployment':
-    //     // 调用后端接口 创建 Deployment
-    //     createdeploymentHandler(getPostData(workLoadItem.value)).then((res) => {
-    //       if (res.data.status === 200) {
-    //         ElMessage({
-    //           message: res.data.message,
-    //           type: 'success',
-    //         })
-    //         emit('getList')
-    //         handleClose()
-    //       }
-    //     })
-    //     break
-    //   case 'StatefulSet':
-    //     // 调用后端接口 创建 statefulSet
-    //     createStatefulSetHandler(getPostData(workLoadItem.value)).then((res) => {
-    //       if (res.data.status === 200) {
-    //         ElMessage({
-    //           message: res.data.message,
-    //           type: 'success',
-    //         })
-    //         emit('getList')
-    //         handleClose()
-    //       }
-    //     })
-    //     break
-    //   case 'DaemonSet':
-    //     // 调用后端接口 创建 DaemonSet
-    //     createDaemonSetHandler(getPostData(workLoadItem.value)).then((res) => {
-    //       if (res.data.status === 200) {
-    //         ElMessage({
-    //           message: res.data.message,
-    //           type: 'success',
-    //         })
-    //         emit('getList')
-    //         handleClose()
-    //       }
-    //     })
-    //     break
-    //   case 'CronJob':
-    //     // 调用后端接口 创建 CronJob
-    //     const sourceData = JSON.parse(JSON.stringify(workLoadItem.value))
-    //     delete sourceData.item.spec.template
-
-    //     createHandler(props.resourceType, sourceData).then((res) => {
-    //       if (res.data.status === 200) {
-    //         ElMessage({
-    //           message: res.data.message,
-    //           type: 'success',
-    //         })
-    //         emit('getList')
-    //         handleClose()
-    //       }
-    //     })
-    //     break
-    //   default:
-    //     ElMessage.error('暂不支持该资源类型')
-    //     break
-    // }
   }
   // 更新调度管理资源
   const updateItem = () => {

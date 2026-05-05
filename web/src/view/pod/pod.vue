@@ -3,7 +3,7 @@
   import Elcard from '../components/ELCard.vue'
   import Table from './Table.vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
-  import { getPodListHandler, deletePodHandler } from '../../api/pod'
+  import { deleteHandler, getHandler, getListHandler } from '../../api/generic.js'
 
   // 删除 pod
   const deleteItem = (row) => {
@@ -14,7 +14,7 @@
       type: 'warning',
     })
       .then(() => {
-        deletePodHandler(data.clusterId, data.nameSpace, row.metadata.name).then((res) => {
+        deleteHandler(data.clusterId, data.nameSpace, 'pod', row.metadata.name).then((res) => {
           if (res.data.status == 200) {
             ElMessage({
               type: 'success',
@@ -35,7 +35,7 @@
       data.items = []
       return
     }
-    getPodListHandler(data.clusterId, data.nameSpace).then((res) => {
+    getListHandler(data.clusterId, data.nameSpace, 'pod').then((res) => {
       data.items = res.data.data.items || []
     })
   }

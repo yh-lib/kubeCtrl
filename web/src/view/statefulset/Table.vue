@@ -1,7 +1,5 @@
 <script setup>
   import { computed, reactive, ref } from 'vue'
-  import DialogByYaml from '../components/DialogByYaml.vue'
-  import { obj2yaml } from '../../utils/typeConv/type.conv.js'
   import DialogHeaderLabel from '../components/DialogHeaderLabel.vue'
   import DialogOfItem from '../components/workLoads/DialogOfItem.vue'
   import { useWorkLoadData } from '../../store/index.js'

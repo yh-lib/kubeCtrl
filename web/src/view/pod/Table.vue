@@ -3,6 +3,7 @@
   import DialogByYaml from '../components/DialogByYaml.vue'
   import { obj2yaml } from '../../utils/typeConv/type.conv.js'
   import DialogHeaderLabel from '../components/DialogHeaderLabel.vue'
+  import { getHandler } from '../../api/generic.js'
 
   const emit = defineEmits(['deleteItem'])
 
@@ -64,6 +65,53 @@
     },
   })
 
+  const removeEmptyFieldsDeep = (obj) => {
+    Object.keys(obj).forEach((key) => {
+      const value = obj[key]
+
+      if (Array.isArray(value)) {
+        if (value.length === 0) {
+          delete obj[key]
+          return
+        }
+
+        value.forEach((item) => {
+          if (item && typeof item === 'object') {
+            removeEmptyFieldsDeep(item)
+          }
+        })
+
+        obj[key] = value.filter((item) => {
+          if (!item || typeof item !== 'object' || Array.isArray(item)) {
+            return true
+          }
+
+          return Object.keys(item).length > 0
+        })
+
+        if (obj[key].length === 0) {
+          delete obj[key]
+        }
+
+        return
+      }
+
+      if (value && typeof value === 'object') {
+        removeEmptyFieldsDeep(value)
+
+        if (Object.keys(value).length === 0) {
+          delete obj[key]
+        }
+        return
+      }
+
+      if (value === '' || value === null || value === undefined) {
+        delete obj[key]
+      }
+    })
+
+    return obj
+  }
   // 搜索后的 pod 列表数据
   const filterTableData = computed(() =>
     (props.tableData.items || []).filter(
@@ -80,9 +128,15 @@
   const itemByYaml = ref('')
   const itemDetailDialog = ref(false)
   const getItem = (row) => {
-    curItem.value = row
-    itemByYaml.value = obj2yaml(row)
-    itemDetailDialog.value = true
+    getHandler(props.tableData.clusterId, props.tableData.nameSpace, 'pod', row.metadata.name).then(
+      (res) => {
+        if (res.data.status == 200) {
+          curItem.value = removeEmptyFieldsDeep(res.data.data.items)
+          itemByYaml.value = obj2yaml(curItem.value)
+          itemDetailDialog.value = true
+        }
+      }
+    )
   }
 </script>
 
