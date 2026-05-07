@@ -21,7 +21,9 @@ func get(nodeGroup *gin.RouterGroup) {
 func list(nodeGroup *gin.RouterGroup) {
 	nodeGroup.GET("/list", node.List)
 }
-
+func metrics(nodeGroup *gin.RouterGroup) {
+	nodeGroup.GET("/metrics", node.Metrics)
+}
 func RegisterSubRouter(g *gin.RouterGroup) {
 	// 配置登录功能的路由策略
 	nodeGroup := g.Group("node")
@@ -30,4 +32,5 @@ func RegisterSubRouter(g *gin.RouterGroup) {
 	update(nodeGroup)
 	get(nodeGroup)
 	list(nodeGroup)
+	metrics(nodeGroup)
 }
