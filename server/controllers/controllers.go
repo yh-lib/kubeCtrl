@@ -5,6 +5,7 @@ import (
 	"errors"
 	"server/config"
 	"server/utils/logs"
+	"server/utils/metrics"
 
 	"github.com/dotbalo/kubeutils/kubeutils"
 	"github.com/gin-gonic/gin"
@@ -127,6 +128,7 @@ func KubectlFunc(c *gin.Context, resourceType string, opMethod string) {
 	// 定义变量
 	var (
 		kubeUtilser        kubeutils.KubeUtilser
+		metricUtilser      metrics.MetricsUtilser
 		returndata         config.ReturnData
 		info               Info
 		gracePeriodSeconds int64
@@ -180,10 +182,11 @@ func KubectlFunc(c *gin.Context, resourceType string, opMethod string) {
 	}
 	// 绑定前端传递的数据到后端info变量中
 	kubeconfig := NewInfo(c, &info)
-	// 匹配资源类型
+	// 匹配资源类型 构建接口需要得结构体
 	switch resourceType {
 	case "node":
 		kubeUtilser = kubeutils.NewNode(kubeconfig, &node)
+		metricUtilser = metrics.NewNode(kubeconfig, &node)
 	case "namespace":
 		kubeUtilser = kubeutils.NewNamespace(kubeconfig, &namespace)
 	case "pod":
@@ -257,6 +260,13 @@ func KubectlFunc(c *gin.Context, resourceType string, opMethod string) {
 			errorReturnData(c, returndata, err, info, resourceType, "更新失败")
 			return
 		}
+	case "metrics":
+		items, err := metricUtilser.Metrics(info.NameSpace)
+		if err != nil {
+			errorReturnData(c, returndata, err, info, resourceType, "获取资源使用指标失败")
+			return
+		}
+		returndata.Data["items"] = items
 	default:
 		logs.Error(nil, "不支持该操作方法")
 		return

@@ -17,5 +17,5 @@ func List(c *gin.Context) {
 
 func Metrics(c *gin.Context) {
 	logs.Info(nil, "metrics路由实现")
-	// controllers.KubectlFunc(c, "node", "list")
+	controllers.KubectlFunc(c, "node", "metrics")
 }
