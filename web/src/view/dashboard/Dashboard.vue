@@ -1,7 +1,7 @@
 <script setup>
   import { computed, ref, onBeforeMount, reactive } from 'vue'
   import { Refresh, CircleCheckFilled, WarningFilled } from '@element-plus/icons-vue'
-  import { getHandler, getListHandler } from '../../api/generic'
+  import { getHandler, getListHandler, getMetricsHandler } from '../../api/generic'
   import ClusterSelect from './ClusterSelect.vue'
   import ClusterInfo from './ClusterInfo.vue'
   import NodeInfo from './NodeInfo.vue'
@@ -16,8 +16,8 @@
     await getClusterList()
     itemForm.clusterId = itemForm.clusterItems[0].clusterId
     itemForm.clusterItem = itemForm.clusterItems[0]
-    await getNodeList()
-    console.log('获取Node列表:::', itemForm.nodeItems)
+    await getNodesMetrics()
+    console.log('获取Node metircs:::', itemForm.nodeItems)
   })
 
   const itemForm = reactive({
@@ -54,11 +54,12 @@
     })
   }
 
-  const getNodeList = () => {
+  const getNodesMetrics = () => {
     return new Promise((resolve, reject) => {
-      getListHandler(itemForm.clusterId, '', 'node').then((res) => {
+      getMetricsHandler(itemForm.clusterId, '', 'node').then((res) => {
         if (res.data.status === 200) {
           itemForm.nodeItems = res.data.data.items
+          console.log('获取集群metrics原始诗句:::', itemForm.nodeItems)
           resolve() // 成功时调用 resolve
         } else {
           reject(new Error('请求失败')) // 失败时调用 reject
