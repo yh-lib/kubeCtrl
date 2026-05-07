@@ -18,8 +18,8 @@
     <!-- 左半区域 -->
     <div>
       <div style="font-size: 12px; letter-spacing: 0.28em; color: #7c8798">CLUSTER DASHBOARD</div>
-      <h1 style="margin: 0px">{{ props.itemForm.clusterItem.clusterAlias }}</h1>
-      <p style="margin: 0px">
+      <h2 style="margin: 6px">{{ props.itemForm.clusterItem.clusterAlias }}</h2>
+      <p style="margin: 6px">
         集群概览
         <span style="margin: 0 10px">·</span>
         {{ props.itemForm.clusterItem.clusterVersion }}

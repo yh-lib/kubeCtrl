@@ -4,6 +4,8 @@
   import { getHandler, getListHandler } from '../../api/generic'
   import ClusterSelect from './ClusterSelect.vue'
   import ClusterInfo from './ClusterInfo.vue'
+  import NodeInfo from './NodeInfo.vue'
+  import PodInfo from './PodInfo.vue'
 
   const refresh = () => {
     console.log('执行刷新逻辑')
@@ -14,13 +16,19 @@
     await getClusterList()
     itemForm.clusterId = itemForm.clusterItems[0].clusterId
     itemForm.clusterItem = itemForm.clusterItems[0]
+    await getNodeList()
+    console.log('获取Node列表:::', itemForm.nodeItems)
   })
 
   const itemForm = reactive({
-    // annotaions 获取集群状态
+    // annotaions 中获取集群状态
     clusterItem: {},
     clusterItems: [],
     clusterId: '',
+    // Node 状态
+    nodeItems: [],
+    // Pod 状态
+    podItems: [],
   })
 
   const getClusterList = () => {
@@ -43,6 +51,19 @@
         itemForm.clusterItem = res.data.data.item
         console.log('getClusterItem', itemForm.clusterItem)
       }
+    })
+  }
+
+  const getNodeList = () => {
+    return new Promise((resolve, reject) => {
+      getListHandler(itemForm.clusterId, '', 'node').then((res) => {
+        if (res.data.status === 200) {
+          itemForm.nodeItems = res.data.data.items
+          resolve() // 成功时调用 resolve
+        } else {
+          reject(new Error('请求失败')) // 失败时调用 reject
+        }
+      })
     })
   }
 
@@ -195,6 +216,17 @@
     />
 
     <cluster-info :item-form="itemForm" />
+    <section
+      style="
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+        margin-top: 14px;
+      "
+    >
+      <node-info :table-data="itemForm.nodeItems" />
+      <!-- <pod-info :dashboard="dashboard" /> -->
+    </section>
 
     <section class="content-grid">
       <article class="section-card">
