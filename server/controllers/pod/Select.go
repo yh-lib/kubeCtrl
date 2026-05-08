@@ -13,3 +13,7 @@ func Get(c *gin.Context) {
 func List(c *gin.Context) {
 	controllers.KubectlFunc(c, "pod", "list")
 }
+
+func Status(c *gin.Context) {
+	controllers.KubectlFunc(c, "pod", "status")
+}

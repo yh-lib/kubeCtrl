@@ -34,6 +34,14 @@ type Info struct {
 	Force bool `json:"force" form:"force"`
 }
 
+// PodStatus 统计结构体
+type PodStatus struct {
+	Running   int `json:"running"`
+	Failed    int `json:"failed"`
+	Pending   int `json:"pending"`
+	Succeeded int `json:"succeeded"`
+}
+
 func NewInfo(c *gin.Context, info *Info) (kubeconfig string) {
 	var (
 		err        error
@@ -267,6 +275,30 @@ func KubectlFunc(c *gin.Context, resourceType string, opMethod string) {
 			return
 		}
 		returndata.Data["items"] = items
+	case "status":
+		status := PodStatus{}
+		pods, err := kubeUtilser.List(info.NameSpace, info.LabelSelector, info.FieldSelector)
+		if err != nil {
+			errorReturnData(c, returndata, err, info, resourceType, "获取列表失败")
+			return
+		}
+		// 显式断言为 []corev1.Pod
+		if podSlice, ok := pods.([]corev1.Pod); ok {
+			for _, pod := range podSlice {
+				switch pod.Status.Phase {
+				case corev1.PodRunning:
+					status.Running++
+				case corev1.PodFailed:
+					status.Failed++
+				case corev1.PodPending:
+					status.Pending++
+				case corev1.PodSucceeded:
+					status.Succeeded++
+				}
+			}
+		}
+		// 返回取值
+		returndata.Data["items"] = status
 	default:
 		logs.Error(nil, "不支持该操作方法")
 		return

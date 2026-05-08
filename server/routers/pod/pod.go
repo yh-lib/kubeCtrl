@@ -24,6 +24,9 @@ func get(podGroup *gin.RouterGroup) {
 func list(podGroup *gin.RouterGroup) {
 	podGroup.GET("/list", pod.List)
 }
+func status(podGroup *gin.RouterGroup) {
+	podGroup.GET("/status", pod.Status)
+}
 
 func RegisterSubRouter(g *gin.RouterGroup) {
 	// 配置登录功能的路由策略
@@ -34,4 +37,5 @@ func RegisterSubRouter(g *gin.RouterGroup) {
 	update(podGroup)
 	get(podGroup)
 	list(podGroup)
+	status(podGroup)
 }
