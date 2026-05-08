@@ -1,7 +1,12 @@
 <script setup>
   import { computed, ref, onBeforeMount, reactive } from 'vue'
   import { Refresh, CircleCheckFilled, WarningFilled } from '@element-plus/icons-vue'
-  import { getHandler, getListHandler, getMetricsHandler } from '../../api/generic'
+  import {
+    getHandler,
+    getListHandler,
+    getMetricsHandler,
+    getStatusHandler,
+  } from '../../api/generic'
   import ClusterSelect from './ClusterSelect.vue'
   import ClusterInfo from './ClusterInfo.vue'
   import NodeInfo from './NodeInfo.vue'
@@ -9,17 +14,17 @@
 
   const refresh = async () => {
     data.nodeInfoMount = false
-    await getClusterItem() // 集群状态
-    await getNodesMetrics() // 节点状态
-    data.nodeInfoMount = true
+    getClusterItem() // 集群状态
+    getNodesMetrics() // 节点状态
+    getPodStatus() // Pod 状态
   }
 
   onBeforeMount(async () => {
     await getClusterList()
     itemForm.clusterId = itemForm.clusterItems[0].clusterId
     itemForm.clusterItem = itemForm.clusterItems[0]
-    await getNodesMetrics()
-    data.nodeInfoMount = true
+    getNodesMetrics()
+    getPodStatus()
   })
 
   const itemForm = reactive({
@@ -28,11 +33,18 @@
     clusterItems: [],
     clusterId: '',
     // Node 状态
-    nodeItems: [],
+    nodeStatus: [],
     // Pod 状态
-    podItems: [],
+    podStatus: [],
   })
 
+  const getPodStatus = () => {
+    getStatusHandler(itemForm.clusterId, '', 'pod').then((res) => {
+      if (res.data.status === 200) {
+        itemForm.podStatus = res.data.data.items
+      }
+    })
+  }
   const getClusterList = () => {
     return new Promise((resolve, reject) => {
       getListHandler('', '', 'cluster').then((res) => {
@@ -47,11 +59,9 @@
   }
 
   const getClusterItem = () => {
-    // console.log('当前clusterId:::', itemForm.clusterId)
     getHandler(itemForm.clusterId, '', 'cluster', itemForm.clusterId).then((res) => {
       if (res.data.status === 200) {
         itemForm.clusterItem = res.data.data.item
-        console.log('getClusterItem', itemForm.clusterItem)
       }
     })
   }
@@ -60,7 +70,7 @@
     return new Promise((resolve, reject) => {
       getMetricsHandler(itemForm.clusterId, '', 'node').then((res) => {
         if (res.data.status === 200) {
-          itemForm.nodeItems = res.data.data.items
+          itemForm.nodeStatus = res.data.data.items
           resolve() // 成功时调用 resolve
           console.log('父组件：：：', itemForm.clusterId, itemForm.nodeItems)
         } else {
@@ -212,7 +222,7 @@
     <cluster-select
       :item-form="itemForm"
       @get-cluster-list="getClusterList"
-      @get-cluster-item="getClusterItem"
+      @cluster-change="refresh"
       @refresh="refresh"
     />
 
@@ -225,8 +235,8 @@
         margin-top: 14px;
       "
     >
-      <node-info :item-form="itemForm" v-if="data.nodeInfoMount" />
-      <!-- <pod-info :dashboard="dashboard" /> -->
+      <node-info :item-form="itemForm" />
+      <pod-info :item-form="itemForm" />
     </section>
 
     <section class="content-grid">

@@ -4,9 +4,9 @@
   const props = defineProps(['itemForm'])
 
   const tableData = ref([])
-  // 监听 itemForm.nodeItems 的变化
+  // 监听 itemForm.nodeStatus 的变化
   watch(
-    () => props.itemForm.nodeItems,
+    () => props.itemForm.nodeStatus,
     async (newNodeItems) => {
       if (!newNodeItems || newNodeItems.length === 0) {
         tableData.value = []

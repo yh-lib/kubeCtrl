@@ -1,7 +1,13 @@
 <script setup>
   import { Refresh } from '@element-plus/icons-vue'
   const props = defineProps(['itemForm'])
-  const emit = defineEmits(['clusterChange', 'getClusterList', 'getClusterItem', 'refresh'])
+  const emit = defineEmits([
+    'clusterChange',
+    'getClusterList',
+    'getClusterItem',
+    'refresh',
+    'clusterChange',
+  ])
 </script>
 
 <template>
@@ -43,7 +49,7 @@
         filterable
         placeholder="选择集群"
         @visible-change="emit('getClusterList')"
-        @change="emit('getClusterItem')"
+        @change="emit('clusterChange')"
         style="width: 280px"
       >
         <el-option

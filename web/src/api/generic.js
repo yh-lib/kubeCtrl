@@ -31,3 +31,7 @@ export const getMetricsHandler = (clusterId, nameSpace, resourceType) => {
   const fullUrl = BASE_URL + '/' + resourceType + '/' + 'metrics'
   return request(fullUrl, { clusterId, nameSpace }, 'get')
 }
+export const getStatusHandler = (clusterId, nameSpace, resourceType) => {
+  const fullUrl = BASE_URL + '/' + resourceType + '/' + 'status'
+  return request(fullUrl, { clusterId, nameSpace }, 'get')
+}
