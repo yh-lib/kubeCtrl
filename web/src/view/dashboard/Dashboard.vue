@@ -219,79 +219,29 @@
 
 <template>
   <div class="dashboard-page">
+    <!-- dashboard main 第1行 -->
     <cluster-select
       :item-form="itemForm"
       @get-cluster-list="getClusterList"
       @cluster-change="refresh"
       @refresh="refresh"
+      style="height: 130px"
     />
-
-    <cluster-info :item-form="itemForm" />
+    <!-- dashboard main 第2行 -->
+    <cluster-info :item-form="itemForm" style="height: 100px" />
+    <!-- dashboard main 第3行 -->
     <section
       style="
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: 1.4fr 1fr;
         gap: 16px;
-        margin-top: 14px;
+        margin-top: 26px;
+        height: 260px;
       "
     >
       <node-info :item-form="itemForm" />
       <pod-info :item-form="itemForm" />
     </section>
-
-    <section class="content-grid">
-      <article class="section-card">
-        <h2>节点状态</h2>
-        <el-table :data="dashboard.nodeStatus" style="width: 100%">
-          <el-table-column prop="name" label="节点名称" min-width="180" />
-          <el-table-column prop="cpuUsage" label="CPU 使用率" min-width="200">
-            <template #default="scope">
-              <div class="table-progress">
-                <el-progress :percentage="clampPercent(scope.row.cpuUsage)" />
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column prop="memoryUsage" label="内存使用率" min-width="220">
-            <template #default="scope">
-              <div class="table-progress">
-                <el-progress :percentage="clampPercent(scope.row.memoryUsage)" color="#d97706" />
-              </div>
-            </template>
-          </el-table-column>
-        </el-table>
-      </article>
-
-      <article class="section-card">
-        <h2>Pod 状态</h2>
-        <el-row :gutter="16">
-          <el-col :span="6">
-            <el-card shadow="never" class="status-card">
-              <div class="label">运行中</div>
-              <div class="value">{{ dashboard.podStatus.running }}</div>
-            </el-card>
-          </el-col>
-          <el-col :span="6">
-            <el-card shadow="never" class="status-card">
-              <div class="label">失败</div>
-              <div class="value">{{ dashboard.podStatus.failed }}</div>
-            </el-card>
-          </el-col>
-          <el-col :span="6">
-            <el-card shadow="never" class="status-card">
-              <div class="label">Pending</div>
-              <div class="value">{{ dashboard.podStatus.pending }}</div>
-            </el-card>
-          </el-col>
-          <el-col :span="6">
-            <el-card shadow="never" class="status-card">
-              <div class="label">Succeeded</div>
-              <div class="value">{{ dashboard.podStatus.succeeded }}</div>
-            </el-card>
-          </el-col>
-        </el-row>
-      </article>
-    </section>
-
     <section class="events-section">
       <el-card shadow="never" class="section-card events-card">
         <div class="events-title">当前集群事件</div>
@@ -320,13 +270,6 @@
 </template>
 
 <style scoped>
-  .dashboard-page {
-    height: 100%;
-    padding: 18px 0 20px;
-    box-sizing: border-box;
-    overflow: hidden;
-  }
-
   .page-header h1 {
     margin: 8px 0 8px;
     font-size: 28px;
@@ -369,26 +312,6 @@
     padding-right: 8px;
   }
 
-  .label {
-    font-size: 14px;
-    color: #6b7280;
-  }
-
-  .value {
-    margin-top: 10px;
-    font-size: 28px;
-    font-weight: 700;
-    color: #111827;
-  }
-
-  .content-grid {
-    display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: 16px;
-    margin-top: 14px;
-    width: 100%;
-  }
-
   .events-section {
     margin-top: 14px;
     width: 100%;
@@ -399,12 +322,6 @@
     height: 580px;
     min-width: 0;
     box-sizing: border-box;
-  }
-
-  .section-card h2 {
-    margin: 0 0 14px;
-    font-size: 18px;
-    color: #111827;
   }
 
   .events-title {
@@ -437,34 +354,5 @@
     margin-top: 8px;
     font-size: 13px;
     color: #6b7280;
-  }
-
-  :deep(.el-progress__text) {
-    min-width: 44px;
-  }
-
-  @media (max-width: 1200px) {
-    .content-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  @media (max-width: 960px) {
-    .dashboard-page {
-      height: auto;
-      overflow: auto;
-    }
-
-    .page-header {
-      flex-direction: column;
-      align-items: stretch;
-    }
-    .stats-grid {
-      grid-template-columns: 1fr 1fr;
-    }
-
-    .content-grid {
-      grid-template-columns: 1fr;
-    }
   }
 </style>
