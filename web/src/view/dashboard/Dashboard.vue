@@ -7,9 +7,11 @@
   import NodeInfo from './NodeInfo.vue'
   import PodInfo from './PodInfo.vue'
 
-  const refresh = () => {
-    console.log('执行刷新逻辑')
-    getClusterItem()
+  const refresh = async () => {
+    data.nodeInfoMount = false
+    await getClusterItem() // 集群状态
+    await getNodesMetrics() // 节点状态
+    data.nodeInfoMount = true
   }
 
   onBeforeMount(async () => {
@@ -17,7 +19,7 @@
     itemForm.clusterId = itemForm.clusterItems[0].clusterId
     itemForm.clusterItem = itemForm.clusterItems[0]
     await getNodesMetrics()
-    console.log('获取Node metircs:::', itemForm.nodeItems)
+    data.nodeInfoMount = true
   })
 
   const itemForm = reactive({
@@ -59,8 +61,8 @@
       getMetricsHandler(itemForm.clusterId, '', 'node').then((res) => {
         if (res.data.status === 200) {
           itemForm.nodeItems = res.data.data.items
-          console.log('获取集群metrics原始诗句:::', itemForm.nodeItems)
           resolve() // 成功时调用 resolve
+          console.log('父组件：：：', itemForm.clusterId, itemForm.nodeItems)
         } else {
           reject(new Error('请求失败')) // 失败时调用 reject
         }
@@ -68,13 +70,11 @@
     })
   }
 
+  const data = reactive({
+    nodeInfoMount: false,
+  })
   // +++++++++++++++++++++++++++++++++++
 
-  const data = reactive({
-    clusterItems: [],
-    curClusterItem: {},
-    curClusterId: '',
-  })
   const clusterOptions = [
     { clusterId: 'cluster-01', clusterAlias: '生产集群 A' },
     { clusterId: 'cluster-02', clusterAlias: '测试集群 B' },
@@ -225,7 +225,7 @@
         margin-top: 14px;
       "
     >
-      <node-info :table-data="itemForm.nodeItems" />
+      <node-info :item-form="itemForm" v-if="data.nodeInfoMount" />
       <!-- <pod-info :dashboard="dashboard" /> -->
     </section>
 
