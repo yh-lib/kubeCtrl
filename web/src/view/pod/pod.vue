@@ -31,7 +31,7 @@
 
   // 渲染表格数据
   const getList = () => {
-    if (!data.clusterId || !data.nameSpace) {
+    if (!data.clusterId) {
       data.items = []
       return
     }

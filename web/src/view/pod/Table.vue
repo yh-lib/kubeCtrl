@@ -128,7 +128,7 @@
   const itemByYaml = ref('')
   const itemDetailDialog = ref(false)
   const getItem = (row) => {
-    getHandler(props.tableData.clusterId, props.tableData.nameSpace, 'pod', row.metadata.name).then(
+    getHandler(props.tableData.clusterId, row.metadata.namespace, 'pod', row.metadata.name).then(
       (res) => {
         if (res.data.status == 200) {
           curItem.value = removeEmptyFieldsDeep(res.data.data.items)

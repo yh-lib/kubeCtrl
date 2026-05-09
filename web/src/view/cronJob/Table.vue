@@ -123,7 +123,7 @@
     // 模板赋值
     getHandler(
       props.tableData.clusterId,
-      props.tableData.nameSpace,
+      row.metadata.namespace,
       'cronJob',
       row.metadata.name
     ).then((res) => {

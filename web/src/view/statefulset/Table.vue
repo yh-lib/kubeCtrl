@@ -179,7 +179,7 @@
     // 模板赋值
     getHandler(
       props.tableData.clusterId,
-      props.tableData.nameSpace,
+      row.metadata.namespace,
       'statefulSet',
       row.metadata.name
     ).then((res) => {

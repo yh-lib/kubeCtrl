@@ -120,7 +120,7 @@
     // 模板赋值
     getHandler(
       props.tableData.clusterId,
-      props.tableData.nameSpace,
+      row.metadata.namespace,
       'daemonSet',
       row.metadata.name
     ).then((res) => {

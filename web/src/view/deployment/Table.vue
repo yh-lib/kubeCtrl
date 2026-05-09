@@ -119,7 +119,7 @@
     // 数据赋值
     getHandler(
       props.tableData.clusterId,
-      props.tableData.nameSpace,
+      row.metadata.namespace,
       'deployment',
       row.metadata.name
     ).then((res) => {

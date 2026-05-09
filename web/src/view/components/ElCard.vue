@@ -34,7 +34,7 @@
     actionMethod: String,
   })
 
-  const syncToParent = () => {    
+  const syncToParent = () => {
     emit('change', data)
   }
 
@@ -49,7 +49,7 @@
     await getNsOptions()
     // 获取 namespace 默认选择 namespace
     if (data.nsOptions.length > 0) {
-      data.nameSpace = data.nsOptions[0].metadata.name
+      data.nameSpace = ''
     }
     syncToParent()
   })
@@ -57,7 +57,7 @@
   const handleClusterChange = async () => {
     await getNsOptions()
     if (data.nsOptions.length > 0) {
-      data.nameSpace = data.nsOptions[0].metadata.name
+      data.nameSpace = ''
     }
     syncToParent()
   }
@@ -114,13 +114,14 @@
           </el-select>
           <el-select
             v-model="data.nameSpace"
-            placeholder="选择命名空间"
+            placeholder="All namespaces"
             class="control-select"
             v-show="props.opNs"
             filterable
             @change="handleNsChange"
             :disabled="props.actionMethod == 'update'"
           >
+            <el-option key="All namespaces" label="All namespaces" value="" />
             <el-option
               v-for="item in data.nsOptions"
               :key="item.metadata.name"
