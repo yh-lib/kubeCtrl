@@ -34,7 +34,7 @@
     actionMethod: String,
   })
 
-  const syncToParent = () => {
+  const syncToParent = () => {    
     emit('change', data)
   }
 

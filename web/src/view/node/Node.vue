@@ -204,7 +204,6 @@
     :op-cluster="true"
     :op-search="true"
     :op-refresh="true"
-    :default-cluster-id="data.defaultClusterId"
     @change="getSelectValue"
     @refresh="getList"
   >

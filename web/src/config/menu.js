@@ -20,11 +20,11 @@ export const MENU_CONFIG = [
         index: '/node/list',
         icon: 'Grid',
       },
-      // {
-      //   title: '事件中心',
-      //   index: '/cluster/events',
-      //   icon: 'Bell',
-      // },
+      {
+        title: '事件中心',
+        index: '/cluster/events',
+        icon: 'Bell',
+      },
     ],
   },
   // 2. 工作负载

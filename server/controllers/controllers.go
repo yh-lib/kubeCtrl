@@ -155,6 +155,8 @@ func KubectlFunc(c *gin.Context, resourceType string, opMethod string) {
 		service corev1.Service
 		// 任务
 		cronJob batchv1.CronJob
+		// 事件
+		event corev1.Event
 	)
 	returndata.Data = map[string]any{}
 	// 初始化 Item 类型
@@ -184,6 +186,9 @@ func KubectlFunc(c *gin.Context, resourceType string, opMethod string) {
 	// 任务
 	case "cronJob":
 		info.Item = &cronJob
+	// 事件
+	case "event":
+		info.Item = &event
 	default:
 		logs.Error(nil, "不支持该资源类型")
 		return
@@ -218,6 +223,9 @@ func KubectlFunc(c *gin.Context, resourceType string, opMethod string) {
 	// 任务
 	case "cronJob":
 		kubeUtilser = kubeutils.NewCronJob(kubeconfig, &cronJob)
+		// 事件
+	case "event":
+		kubeUtilser = kubeutils.NewEvent(kubeconfig, &event)
 	default:
 		logs.Error(nil, "不支持该资源类型")
 		return

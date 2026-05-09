@@ -8,6 +8,7 @@ import (
 	"server/routers/cronJob"
 	"server/routers/daemonSet"
 	"server/routers/deployment"
+	"server/routers/event"
 	"server/routers/namespace"
 	"server/routers/node"
 	"server/routers/pod"
@@ -43,4 +44,6 @@ func RegistrerRouters(r *gin.Engine) {
 	pvc.RegisterSubRouter(apiGroup)
 	// 网络
 	service.RegisterSubRouter(apiGroup)
+	// 事件
+	event.RegisterSubRouter(apiGroup)
 }
