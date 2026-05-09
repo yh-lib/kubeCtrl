@@ -3,7 +3,8 @@ package kubeutils
 import (
 	"context"
 
-	"github.com/dotbalo/kubeutils/utils/logs"
+	"server/utils/logs"
+
 	storagev1 "k8s.io/api/storage/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	typedv1 "k8s.io/client-go/kubernetes/typed/storage/v1"

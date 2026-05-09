@@ -2,8 +2,8 @@ package kubeutils
 
 import (
 	"context"
+	"server/utils/logs"
 
-	"github.com/dotbalo/kubeutils/utils/logs"
 	rbacv1 "k8s.io/api/rbac/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	typedv1 "k8s.io/client-go/kubernetes/typed/rbac/v1"

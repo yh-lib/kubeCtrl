@@ -3,7 +3,8 @@ package kubeutils
 import (
 	"context"
 
-	"github.com/dotbalo/kubeutils/utils/logs"
+	"server/utils/logs"
+
 	networkingv1 "k8s.io/api/networking/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	typedv1 "k8s.io/client-go/kubernetes/typed/networking/v1"

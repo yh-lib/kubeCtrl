@@ -3,7 +3,6 @@ module server
 go 1.26.0
 
 require (
-	github.com/dotbalo/kubeutils v0.1.13
 	github.com/gin-gonic/gin v1.11.0
 	github.com/golang-jwt/jwt/v5 v5.3.1
 	github.com/sirupsen/logrus v1.9.4

@@ -6,7 +6,8 @@ import (
 	"server/controllers"
 	"strconv"
 
-	"github.com/dotbalo/kubeutils/kubeutils"
+	"server/utils/kubeutils"
+
 	"github.com/gin-gonic/gin"
 	corev1 "k8s.io/api/core/v1"
 )
