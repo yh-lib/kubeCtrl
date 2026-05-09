@@ -490,8 +490,7 @@
       height: auto;
       overflow: auto;
     }
-
-    .page-header {
+    event-reason .page-header {
       flex-direction: column;
       align-items: stretch;
     }

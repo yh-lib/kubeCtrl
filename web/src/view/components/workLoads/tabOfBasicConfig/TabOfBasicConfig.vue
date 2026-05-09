@@ -124,7 +124,8 @@
       if (res.data.status == 200) {
         res.data.data.items == null ||
           res.data.data.items.forEach((item) => {
-            item.data['.dockerconfigjson'] == null ||
+            item.data == undefined ||
+              item.data['.dockerconfigjson'] == null ||
               data.privateRepoSecretList.push({
                 label: item.metadata.name,
                 value: item.metadata.name,

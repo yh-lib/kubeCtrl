@@ -19,7 +19,7 @@
   })
   // 渲染表格数据
   const getList = () => {
-    if (!itemForm.clusterId || !itemForm.nameSpace) {
+    if (!itemForm.clusterId) {
       data.items = []
       return
     }

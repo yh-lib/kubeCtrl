@@ -1,12 +1,12 @@
 <script setup>
   import { ref, watch } from 'vue'
   import { getHandler } from '../../api/generic'
-  const props = defineProps(['itemForm'])
+  const props = defineProps(['dashboardData'])
 
   const tableData = ref([])
-  // 监听 itemForm.nodeStatus 的变化
+  // 监听 dashboardData.nodeStatus 的变化
   watch(
-    () => props.itemForm.nodeStatus,
+    () => props.dashboardData.nodeStatus,
     async (newNodeItems) => {
       if (!newNodeItems || newNodeItems.length === 0) {
         tableData.value = []
@@ -27,7 +27,7 @@
         }
         const useageMem = item.usage.memory.replace('Ki', '') / 1024 // mem 使用量
         // 异步获取节点容量信息
-        const res = await getHandler(props.itemForm.clusterId, '', 'node', hostName)
+        const res = await getHandler(props.dashboardData.clusterId, '', 'node', hostName)
         if (res.data.status === 200) {
           const totalCpu = res.data.data.items.status.capacity.cpu * 1000
           const totalMem = res.data.data.items.status.capacity.memory.replace('Ki', '') / 1024

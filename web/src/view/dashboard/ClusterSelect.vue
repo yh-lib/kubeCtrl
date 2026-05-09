@@ -1,6 +1,6 @@
 <script setup>
   import { Refresh } from '@element-plus/icons-vue'
-  const props = defineProps(['itemForm'])
+  const props = defineProps(['dashboardData'])
   const emit = defineEmits([
     'clusterChange',
     'getClusterList',
@@ -24,11 +24,11 @@
     <!-- 左半区域 -->
     <div>
       <div style="font-size: 12px; letter-spacing: 0.28em; color: #7c8798">CLUSTER DASHBOARD</div>
-      <h2 style="margin: 6px">{{ props.itemForm.clusterItem.clusterAlias }}</h2>
+      <h2 style="margin: 6px">{{ props.dashboardData.clusterItem.clusterAlias }}</h2>
       <p style="margin: 6px">
         集群概览
         <span style="margin: 0 10px">·</span>
-        {{ props.itemForm.clusterItem.clusterVersion }}
+        {{ props.dashboardData.clusterItem.clusterVersion }}
         <span style="margin: 0 10px">·</span>
         白色主题
       </p>
@@ -45,7 +45,7 @@
       "
     >
       <el-select
-        v-model="props.itemForm.clusterId"
+        v-model="props.dashboardData.clusterId"
         filterable
         placeholder="选择集群"
         @visible-change="emit('getClusterList')"
@@ -53,7 +53,7 @@
         style="width: 280px"
       >
         <el-option
-          v-for="item in props.itemForm.clusterItems"
+          v-for="item in props.dashboardData.clusterItems"
           :key="item.clusterId"
           :label="item.clusterAlias"
           :value="item.clusterId"

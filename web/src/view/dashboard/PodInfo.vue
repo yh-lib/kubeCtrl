@@ -1,5 +1,5 @@
 <script setup>
-  const props = defineProps(['itemForm'])
+  const props = defineProps(['dashboardData'])
 </script>
 
 <template>
@@ -9,25 +9,25 @@
       <el-col :span="6">
         <el-card shadow="never" class="status-card">
           <div class="label">运行中</div>
-          <div class="value">{{ itemForm.podStatus.running }}</div>
+          <div class="value">{{ dashboardData.podStatus.running }}</div>
         </el-card>
       </el-col>
       <el-col :span="6">
         <el-card shadow="never" class="status-card">
           <div class="label">失败</div>
-          <div class="value">{{ itemForm.podStatus.failed }}</div>
+          <div class="value">{{ dashboardData.podStatus.failed }}</div>
         </el-card>
       </el-col>
       <el-col :span="6">
         <el-card shadow="never" class="status-card">
           <div class="label">创建中</div>
-          <div class="value">{{ itemForm.podStatus.pending }}</div>
+          <div class="value">{{ dashboardData.podStatus.pending }}</div>
         </el-card>
       </el-col>
       <el-col :span="6">
         <el-card shadow="never" class="status-card">
           <div class="label">已成功</div>
-          <div class="value">{{ itemForm.podStatus.succeeded }}</div>
+          <div class="value">{{ dashboardData.podStatus.succeeded }}</div>
         </el-card>
       </el-col>
     </el-row>

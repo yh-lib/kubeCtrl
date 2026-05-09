@@ -11,23 +11,25 @@
   import ClusterInfo from './ClusterInfo.vue'
   import NodeInfo from './NodeInfo.vue'
   import PodInfo from './PodInfo.vue'
+  import Event from './Event.vue'
 
   const refresh = async () => {
-    data.nodeInfoMount = false
     getClusterItem() // 集群状态
     getNodesMetrics() // 节点状态
     getPodStatus() // Pod 状态
+    getEventList() // 事件状态
   }
 
   onBeforeMount(async () => {
     await getClusterList()
-    itemForm.clusterId = itemForm.clusterItems[0].clusterId
-    itemForm.clusterItem = itemForm.clusterItems[0]
+    dashboardData.clusterId = dashboardData.clusterItems[0].clusterId
+    dashboardData.clusterItem = dashboardData.clusterItems[0]
     getNodesMetrics()
     getPodStatus()
+    getEventList()
   })
 
-  const itemForm = reactive({
+  const dashboardData = reactive({
     // annotaions 中获取集群状态
     clusterItem: {},
     clusterItems: [],
@@ -36,12 +38,23 @@
     nodeStatus: [],
     // Pod 状态
     podStatus: [],
+    // 事件 list
+    eventItems: [],
   })
 
-  const getPodStatus = () => {
-    getStatusHandler(itemForm.clusterId, '', 'pod').then((res) => {
+  const getEventList = () => {
+    dashboardData.eventItems = []
+    getListHandler(dashboardData.clusterId, '', 'event').then((res) => {
       if (res.data.status === 200) {
-        itemForm.podStatus = res.data.data.items
+        dashboardData.eventItems = res.data.data.items
+      }
+    })
+  }
+
+  const getPodStatus = () => {
+    getStatusHandler(dashboardData.clusterId, '', 'pod').then((res) => {
+      if (res.data.status === 200) {
+        dashboardData.podStatus = res.data.data.items
       }
     })
   }
@@ -49,7 +62,7 @@
     return new Promise((resolve, reject) => {
       getListHandler('', '', 'cluster').then((res) => {
         if (res.data.status === 200) {
-          itemForm.clusterItems = res.data.data.items
+          dashboardData.clusterItems = res.data.data.items
           resolve() // 成功时调用 resolve
         } else {
           reject(new Error('请求失败')) // 失败时调用 reject
@@ -57,163 +70,25 @@
       })
     })
   }
-
   const getClusterItem = () => {
-    getHandler(itemForm.clusterId, '', 'cluster', itemForm.clusterId).then((res) => {
+    getHandler(dashboardData.clusterId, '', 'cluster', dashboardData.clusterId).then((res) => {
       if (res.data.status === 200) {
-        itemForm.clusterItem = res.data.data.item
+        dashboardData.clusterItem = res.data.data.item
       }
     })
   }
-
   const getNodesMetrics = () => {
     return new Promise((resolve, reject) => {
-      getMetricsHandler(itemForm.clusterId, '', 'node').then((res) => {
+      getMetricsHandler(dashboardData.clusterId, '', 'node').then((res) => {
         if (res.data.status === 200) {
-          itemForm.nodeStatus = res.data.data.items
+          dashboardData.nodeStatus = res.data.data.items
           resolve() // 成功时调用 resolve
-          console.log('父组件：：：', itemForm.clusterId, itemForm.nodeItems)
+          console.log('父组件：：：', dashboardData.clusterId, dashboardData.nodeItems)
         } else {
           reject(new Error('请求失败')) // 失败时调用 reject
         }
       })
     })
-  }
-
-  const data = reactive({
-    nodeInfoMount: false,
-  })
-  // +++++++++++++++++++++++++++++++++++
-
-  const clusterOptions = [
-    { clusterId: 'cluster-01', clusterAlias: '生产集群 A' },
-    { clusterId: 'cluster-02', clusterAlias: '测试集群 B' },
-    { clusterId: 'cluster-03', clusterAlias: '开发集群 C' },
-  ]
-
-  const dashboardMap = {
-    'cluster-01': {
-      clusterInfo: {
-        nodeCount: 6,
-        podCount: 84,
-        namespaceCount: 12,
-        version: 'v1.28.3',
-      },
-      nodeStatus: [
-        { name: 'prod-node-01', cpuUsage: 48, memoryUsage: 62 },
-        { name: 'prod-node-02', cpuUsage: 39, memoryUsage: 53 },
-        { name: 'prod-node-03', cpuUsage: 45, memoryUsage: 58 },
-        { name: 'prod-node-04', cpuUsage: 29, memoryUsage: 42 },
-      ],
-      podStatus: {
-        running: 78,
-        failed: 1,
-        pending: 4,
-        succeeded: 1,
-      },
-      events: [
-        { time: '10:32', type: 'Normal', reason: 'NodeReady', message: 'prod-node-02 已恢复就绪' },
-        {
-          time: '10:18',
-          type: 'Warning',
-          reason: 'Unhealthy',
-          message: 'prod-node-04 存在短暂网络抖动',
-        },
-        {
-          time: '09:50',
-          type: 'Normal',
-          reason: 'ScalingReplicaSet',
-          message: '前端工作负载完成扩容',
-        },
-      ],
-    },
-    'cluster-02': {
-      clusterInfo: {
-        nodeCount: 4,
-        podCount: 41,
-        namespaceCount: 8,
-        version: 'v1.27.7',
-      },
-      nodeStatus: [
-        { name: 'stage-node-01', cpuUsage: 31, memoryUsage: 39 },
-        { name: 'stage-node-02', cpuUsage: 29, memoryUsage: 35 },
-        { name: 'stage-node-03', cpuUsage: 38, memoryUsage: 49 },
-        { name: 'stage-node-04', cpuUsage: 19, memoryUsage: 28 },
-      ],
-      podStatus: {
-        running: 38,
-        failed: 1,
-        pending: 2,
-        succeeded: 0,
-      },
-      events: [
-        {
-          time: '11:05',
-          type: 'Normal',
-          reason: 'NodeReady',
-          message: 'stage-node-03 完成维护后恢复',
-        },
-        {
-          time: '10:41',
-          type: 'Warning',
-          reason: 'BackOff',
-          message: 'qa 命名空间中的某个 Pod 拉起失败',
-        },
-        { time: '10:11', type: 'Normal', reason: 'Pulled', message: '镜像拉取完成，任务开始运行' },
-      ],
-    },
-    'cluster-03': {
-      clusterInfo: {
-        nodeCount: 3,
-        podCount: 26,
-        namespaceCount: 6,
-        version: 'v1.29.1',
-      },
-      nodeStatus: [
-        { name: 'dev-node-01', cpuUsage: 24, memoryUsage: 31 },
-        { name: 'dev-node-02', cpuUsage: 19, memoryUsage: 27 },
-        { name: 'dev-node-03', cpuUsage: 22, memoryUsage: 34 },
-      ],
-      podStatus: {
-        running: 24,
-        failed: 1,
-        pending: 1,
-        succeeded: 0,
-      },
-      events: [
-        {
-          time: '09:58',
-          type: 'Normal',
-          reason: 'NodeReady',
-          message: '开发节点完成重启并恢复正常',
-        },
-        { time: '09:34', type: 'Normal', reason: 'Created', message: '新版本服务已部署到开发集群' },
-        {
-          time: '08:59',
-          type: 'Warning',
-          reason: 'Evicted',
-          message: '一个临时 Pod 因资源不足被驱逐',
-        },
-      ],
-    },
-  }
-
-  const selectedClusterId = ref(clusterOptions[0].clusterId)
-  const dashboard = ref(dashboardMap[selectedClusterId.value])
-
-  const dashboardEvents = computed(() => dashboard.value.events || [])
-
-  const clampPercent = (value) => Math.max(0, Math.min(100, Number(value || 0)))
-  const clusterLabel = (item) => item?.clusterAlias || item?.clusterId || '未命名集群'
-
-  const loadDashboard = async (clusterId) => {
-    window.setTimeout(() => {
-      dashboard.value = dashboardMap[clusterId] || dashboardMap[clusterOptions[0].clusterId]
-    }, 180)
-  }
-
-  const refreshDashboard = async () => {
-    await loadDashboard(selectedClusterId.value)
   }
 </script>
 
@@ -221,14 +96,14 @@
   <div class="dashboard-page">
     <!-- dashboard main 第1行 -->
     <cluster-select
-      :item-form="itemForm"
+      :dashboard-data="dashboardData"
       @get-cluster-list="getClusterList"
       @cluster-change="refresh"
       @refresh="refresh"
       style="height: 130px"
     />
     <!-- dashboard main 第2行 -->
-    <cluster-info :item-form="itemForm" style="height: 100px" />
+    <cluster-info :dashboard-data="dashboardData" style="height: 100px" />
     <!-- dashboard main 第3行 -->
     <section
       style="
@@ -239,32 +114,12 @@
         height: 260px;
       "
     >
-      <node-info :item-form="itemForm" />
-      <pod-info :item-form="itemForm" />
+      <node-info :dashboard-data="dashboardData" />
+      <pod-info :dashboard-data="dashboardData" />
     </section>
-    <section class="events-section">
-      <el-card shadow="never" class="section-card events-card">
-        <div class="events-title">当前集群事件</div>
-        <el-timeline>
-          <el-timeline-item
-            v-for="event in dashboardEvents"
-            :key="`${event.time}-${event.reason}`"
-            :type="event.type === 'Warning' ? 'warning' : 'primary'"
-            :timestamp="event.time"
-            placement="top"
-          >
-            <el-card shadow="never" class="event-card">
-              <div class="event-head">
-                <span class="event-reason">{{ event.reason }}</span>
-                <el-tag :type="event.type === 'Warning' ? 'warning' : 'success'" effect="light">
-                  {{ event.type }}
-                </el-tag>
-              </div>
-              <div class="event-message">{{ event.message }}</div>
-            </el-card>
-          </el-timeline-item>
-        </el-timeline>
-      </el-card>
+    <!-- dashboard main 第4行 -->
+    <section style="margin-top: 14px; width: 100%">
+      <event :dashboard-data="dashboardData"></event>
     </section>
   </div>
 </template>
@@ -310,49 +165,5 @@
 
   .table-progress {
     padding-right: 8px;
-  }
-
-  .events-section {
-    margin-top: 14px;
-    width: 100%;
-  }
-
-  .events-card {
-    width: 100%;
-    height: 580px;
-    min-width: 0;
-    box-sizing: border-box;
-  }
-
-  .events-title {
-    margin-bottom: 12px;
-    font-size: 14px;
-    font-weight: 700;
-    color: #111827;
-  }
-
-  .event-card {
-    border-radius: 16px;
-    border: 1px solid #e6eaf0;
-    background: #ffffff;
-  }
-
-  .event-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .event-reason {
-    font-size: 14px;
-    font-weight: 700;
-    color: #111827;
-  }
-
-  .event-message {
-    margin-top: 8px;
-    font-size: 13px;
-    color: #6b7280;
   }
 </style>

@@ -1,26 +1,26 @@
 <script setup>
-  const props = defineProps(['itemForm'])
+  const props = defineProps(['dashboardData'])
 </script>
 <template>
   <section class="stats-grid">
     <article class="info-card">
       <div class="label">节点数</div>
-      <div class="value">{{ props.itemForm.clusterItem.clusterNodeNum }}</div>
+      <div class="value">{{ props.dashboardData.clusterItem.clusterNodeNum }}</div>
     </article>
 
     <article class="info-card">
       <div class="label">Pod 数</div>
-      <div class="value">{{ props.itemForm.clusterItem.clusterPodNum }}</div>
+      <div class="value">{{ props.dashboardData.clusterItem.clusterPodNum }}</div>
     </article>
 
     <article class="info-card">
       <div class="label">命名空间数</div>
-      <div class="value">{{ props.itemForm.clusterItem.clusterNsNum }}</div>
+      <div class="value">{{ props.dashboardData.clusterItem.clusterNsNum }}</div>
     </article>
 
     <article class="info-card">
       <div class="label">版本</div>
-      <div class="value">{{ props.itemForm.clusterItem.clusterVersion }}</div>
+      <div class="value">{{ props.dashboardData.clusterItem.clusterVersion }}</div>
     </article>
   </section>
 </template>
