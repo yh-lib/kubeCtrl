@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { reactive, onBeforeMount } from 'vue'
+  import { reactive, onBeforeMount, computed } from 'vue'
   import ElCard from '../components/ElCard.vue'
   import { getListHandler } from '../../api/generic.js'
   import Table from './Table.vue'
@@ -17,7 +17,6 @@
       }
     })
   }
-  // <!-- +++++++++++++++++++++++++++++++++++++++++ -->
 
   // 需要的数据变量
   const data = reactive({
@@ -38,24 +37,26 @@
     getEventItems()
   })
 
-  // // 搜索后的 node 列表数据
-  // const filterTableData = computed(() =>
-  //   data.items.filter(
-  //     (item) =>
-  //       !data.search ||
-  //       item.metadata.name.toLowerCase().includes(data.search.toLowerCase()) ||
-  //       item.status.addresses[0].address.toLowerCase().includes(data.search.toLowerCase())
-  //   )
-  // )
+  // 事件过滤
+  const filterTableData = computed(() =>
+    data.items.filter(
+      (item) =>
+        !data.search ||
+        item.type.toLowerCase().includes(data.search.toLowerCase()) ||
+        item.message.toLowerCase().includes(data.search.toLowerCase()) ||
+        item.metadata.namespace.toLowerCase().includes(data.search.toLowerCase()) ||
+        item.involvedObject.kind.toLowerCase().includes(data.search.toLowerCase()) ||
+        item.involvedObject.name.toLowerCase().includes(data.search.toLowerCase()) ||
+        item.source.component.toLowerCase().includes(data.search.toLowerCase()) ||
+        (item.source.host && item.source.host.toLowerCase().includes(data.search.toLowerCase()))
+    )
+  )
 
   // 获取集群列表
   const getclusterOptions = async () => {
     await getListHandler('', '', 'cluster').then((res) => {
       if (res.data.status === 200) {
         data.clusterOptions = res.data.data.items
-        console.log('获取集群列表:::', data.clusterOptions)
-      } else {
-        console.error('获取集群列表失败:', res.data.message)
       }
     })
   }
@@ -72,7 +73,7 @@
     @refresh="getEventItems"
   >
     <template #mainData>
-      <Table :table-data="data.items"></Table>
+      <Table :table-data="filterTableData" v-if="data.items != null"></Table>
     </template>
   </ElCard>
 </template>

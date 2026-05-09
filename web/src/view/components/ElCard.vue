@@ -146,7 +146,7 @@
         </div>
       </div>
     </template>
-    <slot name="mainData">数据主体</slot>
+    <slot name="mainData">无数据</slot>
     <!-- 创建或删除按钮 -->
     <el-button
       type="primary"
