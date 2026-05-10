@@ -1,0 +1,16 @@
+# 使用基础镜像
+FROM crpi-o5e9g8vha41iltg8.cn-hangzhou.personal.cr.aliyuncs.com/ks_required/alpine:3.20
+# 配置登录用户名、密码、程序启动端口号
+ENV KUBECONFIGPATH=/app/kubeconfig
+ENV USERNAME=Admin
+ENV PASSWORD=Admin123
+ENV PORT=:8080
+# 设置工作目录
+WORKDIR /app
+# 将二进制包复制到容器中
+COPY ks-backend-linux-x86 /app/ks-backend
+COPY ./config/baseKubeConfig /app/kubeconfig
+# 设置可执行权限
+RUN chmod +x /app/ks-backend
+# 设置默认入口点（启动时执行 ./ks-backend）
+ENTRYPOINT [ "./ks-backend" ]
