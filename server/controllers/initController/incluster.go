@@ -8,6 +8,7 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 )
 
@@ -18,13 +19,24 @@ var (
 func metaDataInit() {
 	logs.Info(nil, "初始化程序配置...")
 	// step1 初始化 kubeConfig 实例
-	kubeConfig, err := clientcmd.BuildConfigFromFlags("", "config/baseKubeConfig")
+	var (
+		restConfig *rest.Config
+		err        error
+	)
+	// 初始化kubeconfig
+	if config.InCluster {
+		// in-cluster
+		restConfig, err = rest.InClusterConfig()
+	} else {
+		// out-cluster
+		restConfig, err = clientcmd.BuildConfigFromFlags("", "config/baseKubeConfig")
+	}
 	if err != nil {
 		logs.Error(map[string]any{"Error": err.Error()}, "初始化 kubeconfig 实例失败")
 		panic(err.Error())
 	}
 	// step2 创建客户端工具 clientSet
-	clientset, err := kubernetes.NewForConfig(kubeConfig)
+	clientset, err := kubernetes.NewForConfig(restConfig)
 	if err != nil {
 		logs.Error(map[string]any{"Error": err.Error()}, "客户端工具 clientSet 创建失败")
 		panic(err.Error())

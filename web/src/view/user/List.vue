@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { computed, reactive, ref, onMounted, onBeforeMount } from 'vue'
+  import { computed, reactive, ref, onBeforeMount } from 'vue'
   import {
     getUserListHandler as getListHandler,
     deleteUserHandler as deleteHandler,

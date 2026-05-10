@@ -31,6 +31,7 @@ var (
 	ClusterKubeconfig  map[string]string
 	ProtectNameSpace   map[string]bool
 	ProtectCluster     map[string]bool
+	InCluster          bool // 是否使用 in-cluster 初始 resetConfig
 )
 
 // 规范返回给前端的数据
@@ -87,6 +88,7 @@ func init() {
 	viper.SetDefault("USERNAME", "Admin")          // 默认用户名：Admin	通过MD5加密
 	viper.SetDefault("PASSWORD", "Admin123")       // 默认密码：Admin123	通过MD5加密
 	viper.SetDefault("METADATA_NAMESPACE", "kc")
+	viper.SetDefault("INCLUSTER", false)
 	// 绑定环境变量到配置
 	viper.AutomaticEnv()
 	// 获取环境变量值并绑定到程序变量
@@ -97,6 +99,7 @@ func init() {
 	Username = viper.GetString("USERNAME")                    // 获取用户名
 	Password = viper.GetString("PASSWORD")                    // 获取密码
 	MetadataNamespace = viper.GetString("METADATA_NAMESPACE") // 获取元数据存储的namespace
+	InCluster = viper.GetBool("INCLUSTER")
 	// 加载日志输出级别
 	initLogConfig(logLevel)
 	// 日志格式加载完成提示

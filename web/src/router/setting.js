@@ -13,7 +13,7 @@ export const settingRoutes = {
     },
     {
       path: 'user',
-      component: () => import('../view/dashboard/dss.vue'),
+      component: () => import('../view/user/List.vue'),
     },
   ],
 }
