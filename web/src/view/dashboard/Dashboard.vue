@@ -103,7 +103,16 @@
       style="height: 130px"
     />
     <!-- dashboard main 第2行 -->
-    <cluster-info :dashboard-data="dashboardData" style="height: 100px" />
+    <cluster-info
+      :dashboard-data="dashboardData"
+      style="
+        height: 100px;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 16px;
+        margin-top: 14px;
+      "
+    />
     <!-- dashboard main 第3行 -->
     <section
       style="
@@ -123,47 +132,3 @@
     </section>
   </div>
 </template>
-
-<style scoped>
-  .page-header h1 {
-    margin: 8px 0 8px;
-    font-size: 28px;
-    line-height: 1.1;
-    color: #111827;
-  }
-
-  .page-header p {
-    margin: 0;
-    color: #6b7280;
-    font-size: 14px;
-  }
-
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 16px;
-    margin-top: 14px;
-  }
-
-  .info-card,
-  .status-card,
-  .section-card {
-    border: 1px solid #e6eaf0;
-    border-radius: 22px;
-    background: #ffffff;
-    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.035);
-  }
-
-  .info-card,
-  .status-card {
-    padding: 16px;
-  }
-
-  .section-card {
-    padding: 18px;
-  }
-
-  .table-progress {
-    padding-right: 8px;
-  }
-</style>

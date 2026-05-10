@@ -15,7 +15,7 @@
       <el-timeline-item
         v-for="event in dashboardData.eventItems"
         :key="event.metadata.name"
-        :type="event.type"
+        :type="event.type == 'Warning' ? 'warning' : 'success'"
         :timestamp="utcTime2BjTime(event.metadata.creationTimestamp)"
         placement="top"
       >
@@ -26,7 +26,7 @@
               {{ event.type }}
             </el-tag>
           </div>
-          <div style="margin-top: 8px; font-size: 13px; color: #6b7280">{{ event.message }}</div>
+          <div style="margin-top: 0px; font-size: 13px; color: #6b7280">{{ event.message }}</div>
         </el-card>
       </el-timeline-item>
     </el-timeline>

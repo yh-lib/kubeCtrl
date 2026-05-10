@@ -49,6 +49,7 @@
     border: 1px solid #e6eaf0;
     border-radius: 22px;
     background: #ffffff;
+    padding: 18px;
   }
 
   .label {
