@@ -29,7 +29,7 @@ func metaDataInit() {
 		restConfig, err = rest.InClusterConfig()
 	} else {
 		// out-cluster
-		restConfig, err = clientcmd.BuildConfigFromFlags("", "config/baseKubeConfig")
+		restConfig, err = clientcmd.BuildConfigFromFlags("", config.KubeConfigPath)
 	}
 	if err != nil {
 		logs.Error(map[string]any{"Error": err.Error()}, "初始化 kubeconfig 实例失败")
