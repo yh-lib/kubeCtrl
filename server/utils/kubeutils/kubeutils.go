@@ -44,7 +44,7 @@ func (c *ResourceInstance) Init(kubeconfig string) {
 		panic(msg)
 	}
 	// 设置超时时间
-	restConfig.Timeout = 3 * time.Second
+	restConfig.Timeout = 1 * time.Second
 	clientset, err := kubernetes.NewForConfig(restConfig)
 	if err != nil {
 		msg := "创建clientset失败:" + err.Error()

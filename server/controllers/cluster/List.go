@@ -23,7 +23,7 @@ func updateClusterStatus(clusterInfo corev1.Secret) {
 		clusterInfo.Annotations["clusterStatus"] = "Inactive"
 		return
 	}
-	restConfig.Timeout = 3 * time.Second
+	restConfig.Timeout = 1 * time.Second
 	clientSet, err := kubernetes.NewForConfig(restConfig)
 	if err != nil {
 		logs.Error(map[string]any{"Error": err.Error()}, "clientSet 初始化失败")

@@ -105,7 +105,7 @@ axios.interceptors.response.use((response) => {
   }
 })
 
-const request = (url = '', data = {}, method = 'get', timeout = 5000) => {
+const request = (url = '', data = {}, method = 'get', timeout = 3000) => {
   return new Promise((resolve, reject) => {
     // GET POST
     const methodLower = method.toLowerCase()
