@@ -4,7 +4,7 @@ import request from './axiosEncap.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 export const login = (username, password) => {
-  request(API_CONFIG.loginApi, { username, password }, 'post', 5000).then((response) => {
+  request(API_CONFIG.loginApi, { username, password }, 'post').then((response) => {
     console.log('response:', response)
     if (response.data.status === 200) {
       // 将后端返回的token保存到本地
@@ -29,7 +29,7 @@ export const logout = () => {
   })
     .then(() => {
       // 退出逻辑
-      request(API_CONFIG.logoutApi, {}, 'get', 5000).then((response) => {
+      request(API_CONFIG.logoutApi, {}, 'get').then((response) => {
         if (response.data.status === 200) {
           // 后端已经完成退出逻辑
           // 移除本地token

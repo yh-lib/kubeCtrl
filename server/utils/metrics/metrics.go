@@ -56,7 +56,7 @@ func (c *ResourceInstance) Init(kubeconfig string) {
 		panic(msg)
 	}
 	// 设置超时时间
-	restConfig.Timeout = 15 * time.Second
+	restConfig.Timeout = 3 * time.Second
 	clientset, err := versioned.NewForConfig(restConfig)
 	if err != nil {
 		msg := "创建metrics clientset失败:" + err.Error()
