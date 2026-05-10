@@ -15,13 +15,13 @@ cd server
 # Windows 运行环境
 set GOOS=windows
 # 构建
-go build -o ks-backend-windows-x86.exe main.go
+go build -o ks-server-windows-x86.exe main.go
 ```
 ```bash
 # Linux 运行环境
 set GOOS=linux
 # 构建
-go build -o ks-backend-linux-x86 main.go
+go build -o ks-server-linux-x86 main.go
 ```
 
 3. 测试
@@ -29,7 +29,7 @@ go build -o ks-backend-linux-x86 main.go
 # Windows 运行环境
 setx KUBECONFIGPATH YourKubeConfig # 指定存放集群元数据的集群kubeconfig(持久化变量)
 set KUBECONFIGPATH=YourKubeConfig # 当前会话变量
- .\ks-backend.exe # 启动后端服务
+ .\ks-server.exe # 启动后端服务
 echo %USERNAME%   # 获取用户名
 echo %PASSWORD%   # 获取密码  默认为Admin123
 # 接口调用测试
@@ -46,7 +46,7 @@ echo 'export KUBECONFIGPATH="YourKubeConfig"' >> /etc/profile # 配置 kubeconfi
 echo 'export USERNAME="YourUserName"' >> /etc/profile  # 配置后端服务用户名
 echo 'export PASSWORD="YourPassword"' >> /etc/profile  # 配置后端服务密码
 source /etc/profile
-chmod +x ks-backend
+chmod +x ks-server
 # 接口调用测试
 curl -X POST \
 -H "Content-Type: application/json" \
@@ -66,20 +66,20 @@ vim ./dockerfile
 ```
 2. 制作镜像
 ```bash
-docker build -t crpi-o5e9g8vha41iltg8.cn-hangzhou.personal.cr.aliyuncs.com/ks_required/ks-backend:v1.0 .
+docker build -t crpi-o5e9g8vha41iltg8.cn-hangzhou.personal.cr.aliyuncs.com/ks_required/ks-server:v1.0 .
 ```
 3. 推送至镜像仓库
 ```bash
-docker push crpi-o5e9g8vha41iltg8.cn-hangzhou.personal.cr.aliyuncs.com/ks_required/ks-backend:v1.0
+docker push crpi-o5e9g8vha41iltg8.cn-hangzhou.personal.cr.aliyuncs.com/ks_required/ks-server:v1.0
 ```
 4. 启动服务
 ```bash
 docker run \
---name ks-backend \
+--name ks-server \
 -e  "USERNAME=Admin" \      # 配置登录用户名
 -e  "PASSWORD=Admin123" \   # 配置登录密码
 -p  "10001:8080"        \   # 端口映射
-crpi-o5e9g8vha41iltg8.cn-hangzhou.personal.cr.aliyuncs.com/ks_required/ks-backend:v1.0  # 构建的镜像
+crpi-o5e9g8vha41iltg8.cn-hangzhou.personal.cr.aliyuncs.com/ks_required/ks-server:v1.0  # 构建的镜像
 ```
 5. 测试
 ```bash
@@ -97,14 +97,14 @@ curl -X POST ^
 1. 部署
 ```bash
 kubectl create ns ks
-kubectl create sa ks-backend -n ks
-kubectl create rolebinding ks-backend \
+kubectl create sa ks-server -n ks
+kubectl create rolebinding ks-server \
 --clusterrole=edit \
---serviceaccount=ks:ks-backend \
+--serviceaccount=ks:ks-server \
 --namespace=ks
-# 根据需求配置 backend.yaml
-vim ./backend.yaml
-kubectl apply -f ks-backend.yaml -n ks
+# 根据需求配置 server.yaml
+vim ./server.yaml
+kubectl apply -f server.yaml -n ks
 ```
 2. 测试
 ```bash
