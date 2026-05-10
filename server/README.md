@@ -89,10 +89,32 @@ curl -X POST ^
 -d "{\"username\":\"Admin\",\"password\":\"Admin123\"}" ^
 "127.0.0.1:10001/api/auth/login"
 # 接口调用成功时的数据返回
-curl -X POST ^
--H "Content-Type: application/json" ^
--d "{\"username\":\"Admin\",\"password\":\"Admin123\"}" ^
-"127.0.0.1:10001/api/auth/login"
+{"status":200,"message":"登录成功","data":{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFkbWluIiwiaXNzIjoiWUgiLCJzdWIiOiJZSCIsImV4cCI6MjQ5ODQzMDg4NCwibmJmIjoxNzc4NDMwODg0LCJpYXQiOjE3Nzg0MzA4ODR9.O1p5IlSGB1sEqOcr62opIJtPl_aIlW-wKmZan6B0pz8"}}
 ```
 
+## K8s 部署
+### Yaml部署
+1. 部署
+```bash
+kubectl create ns ks
+kubectl create sa ks-backend -n ks
+kubectl create rolebinding ks-backend \
+--clusterrole=edit \
+--serviceaccount=ks:ks-backend \
+--namespace=ks
+# 根据需求配置 backend.yaml
+vim ./backend.yaml
+kubectl apply -f ks-backend.yaml -n ks
+```
+2. 测试
+```bash
+# 接口调用测试
+curl -X POST \
+-H "Content-Type: application/json" \
+-d "{\"username\":\"Admin\",\"password\":\"Admin123\"}" \
+"10.101.36.107:8080/api/auth/login"
+# 接口调用成功时的数据返回
+{"status":200,"message":"登录成功","data":{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFkbWluIiwiaXNzIjoiWUgiLCJzdWIiOiJZSCIsImV4cCI6MjQ5ODQzMDg4NCwibmJmIjoxNzc4NDMwODg0LCJpYXQiOjE3Nzg0MzA4ODR9.O1p5IlSGB1sEqOcr62opIJtPl_aIlW-wKmZan6B0pz8"}}
+```
 
+### Helm部署

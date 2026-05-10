@@ -88,7 +88,7 @@ func init() {
 	viper.SetDefault("JWT_EXPIRE_TIME", 12000000)  // 获取jwt过期时间
 	viper.SetDefault("USERNAME", "Admin")          // 默认用户名：Admin	通过MD5加密
 	viper.SetDefault("PASSWORD", "Admin123")       // 默认密码：Admin123	通过MD5加密
-	viper.SetDefault("METADATA_NAMESPACE", "kc")
+	viper.SetDefault("METADATA_NAMESPACE", "ks")
 	viper.SetDefault("INCLUSTER", false)
 	viper.SetDefault("KUBECONFIGPATH", "config/baseKubeConfig")
 	// 绑定环境变量到配置
@@ -110,7 +110,7 @@ func init() {
 	// namespace保护清单
 	ProtectNameSpace = map[string]bool{
 		"kube-system": true,
-		"kc":          true,
+		"ks":          true,
 		"test":        true,
 	}
 	// cluster 保护清单
