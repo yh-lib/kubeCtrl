@@ -10,10 +10,6 @@ export const settingRoutes = {
     {
       path: 'user',
       component: () => import('../view/user/List.vue'),
-    },
-    {
-      path: 'events',
-      component: () => import('../view/event/Events.vue'),
-    },
+    },    
   ],
 }
