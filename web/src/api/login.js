@@ -4,20 +4,25 @@ import request from './axiosEncap.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 export const login = (username, password) => {
-  request(API_CONFIG.loginApi, { username, password }, 'post').then((response) => {
-    console.log('response:', response)
-    if (response.data.status === 200) {
-      // 将后端返回的token保存到本地
-      const token = response.data.data.token
-      window.localStorage.setItem(CONFIG.TOKEN_NAME, token)
-      // // 提示登录成功
-      ElMessage({
-        message: response.data.message,
-        type: 'success',
-      })
-      router.replace('/cluster/dashboard')
-    }
-  })
+  request(API_CONFIG.loginApi, { username, password }, 'post')
+    .then((response) => {
+      if (response.data.status === 200) {
+        // 将后端返回的token保存到本地
+        const token = response.data.data.token
+        window.localStorage.setItem(CONFIG.TOKEN_NAME, token)
+        // // 提示登录成功
+        ElMessage({
+          message: response.data.message,
+          type: 'success',
+        })
+        router.replace('/cluster/dashboard')
+      }
+    })
+    .catch((err) => {
+      if (err.message.includes('timeout')) {
+        ElMessage.error('后端服务超时未响应')
+      }
+    })
 }
 
 export const logout = () => {
