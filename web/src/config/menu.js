@@ -39,27 +39,27 @@ export const MENU_CONFIG = [
     icon: 'Box', // 盒子代表容器/负载
     items: [
       {
-        title: '容器集 (Pod)',
+        title: '容器集',
         index: '/workloads/pod',
         icon: 'Aim',
       },
       {
-        title: '无状态集 (Deployment)',
+        title: '无状态集',
         index: '/workloads/deployment',
         icon: 'Suitcase', // 火箭代表发布/部署
       },
       {
-        title: '有状态集 (StatefulSet)',
+        title: '有状态集',
         index: '/workloads/statefulset',
         icon: 'Coin', // 数据库代表有状态
       },
       {
-        title: '守护进程集 (DaemonSet)',
+        title: '守护进程集',
         index: '/workloads/daemonset',
         icon: 'Lock', // 盾牌代表守护/安全
       },
       {
-        title: '定时任务 (cronJob)',
+        title: '定时任务',
         index: '/workloads/cronJob',
         icon: 'Timer', // 定时器代表任务
       },
