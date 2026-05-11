@@ -1,5 +1,5 @@
 # 使用基础镜像
-FROM crpi-o5e9g8vha41iltg8.cn-hangzhou.personal.cr.aliyuncs.com/ks_required/alpine:3.20
+FROM crpi-o5e9g8vha41iltg8.cn-hangzhou.personal.cr.aliyuncs.com/ks_img/alpine:3.20
 # 配置登录用户名、密码、程序启动端口号
 ENV KUBECONFIGPATH=/app/kubeconfig
 ENV USERNAME=Admin

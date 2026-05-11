@@ -66,4 +66,31 @@ crpi-o5e9g8vha41iltg8.cn-hangzhou.personal.cr.aliyuncs.com/ks_img/ks-web:v1.0  #
 5. 测试
    打开浏览器访问：http://127.0.0.1:10002/#/login
    通过后端环境变量中配置的用户名 Admin 密码 Admin123，进行登录
-   ![alt text](image.png)
+   ![](./assets/image.png)
+
+## k8s 部署
+
+### yaml 部署
+```bash
+# 前端、后端部署 只需要执行一遍
+kubectl create ns ks
+kubectl create sa ks-server -n ks
+kubectl create rolebinding ks-server \
+--clusterrole=edit \
+--serviceaccount=ks:ks-server \
+--namespace=ks
+```
+
+```bash
+kubectl create ns ks
+kubectl create sa ks-server -n ks
+kubectl create rolebinding ks-server \
+--clusterrole=edit \
+--serviceaccount=ks:ks-server \
+--namespace=ks
+# 根据需求配置 server.yaml
+vim ./server.yaml
+kubectl apply -f server.yaml -n ks
+```
+
+### helm 部署

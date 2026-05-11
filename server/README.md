@@ -66,11 +66,11 @@ vim ./dockerfile
 ```
 2. 制作镜像
 ```bash
-docker build -t crpi-o5e9g8vha41iltg8.cn-hangzhou.personal.cr.aliyuncs.com/ks_required/ks-server:v1.0 .
+docker build -t crpi-o5e9g8vha41iltg8.cn-hangzhou.personal.cr.aliyuncs.com/ks_img/ks-server:v1.0 .
 ```
 3. 推送至镜像仓库
 ```bash
-docker push crpi-o5e9g8vha41iltg8.cn-hangzhou.personal.cr.aliyuncs.com/ks_required/ks-server:v1.0
+docker push crpi-o5e9g8vha41iltg8.cn-hangzhou.personal.cr.aliyuncs.com/ks_img/ks-server:v1.0
 ```
 4. 启动服务
 ```bash
@@ -79,7 +79,7 @@ docker run \
 -e  "USERNAME=Admin" \      # 配置登录用户名
 -e  "PASSWORD=Admin123" \   # 配置登录密码
 -p  "10001:8080"        \   # 端口映射
-crpi-o5e9g8vha41iltg8.cn-hangzhou.personal.cr.aliyuncs.com/ks_required/ks-server:v1.0  # 构建的镜像
+crpi-o5e9g8vha41iltg8.cn-hangzhou.personal.cr.aliyuncs.com/ks_img/ks-server:v1.0  # 构建的镜像
 ```
 5. 测试
 ```bash
