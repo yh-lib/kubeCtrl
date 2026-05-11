@@ -190,6 +190,7 @@
     style="height: 740px"
     @close="handleClose"
     destroy-on-close
+    :close-on-click-modal="false"
   >
     <el-tabs v-model="activeName" @tab-click="getItemOfYaml">
       <el-tab-pane label="基本配置" name="Basic">

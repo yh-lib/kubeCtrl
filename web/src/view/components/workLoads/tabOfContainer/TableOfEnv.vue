@@ -181,6 +181,7 @@
     width="600px"
     style="margin-top: 460px; height: 300px"
     destroy-on-close
+    :close-on-click-modal="false"
   >
     <!-- 单选按钮 -->
     <el-radio-group

@@ -128,6 +128,7 @@
         width="1000px"
         @close="closeDialog"
         destroy-on-close
+        :close-on-click-modal="false"
       >
         <Create :subMethod="method" :subRow="data.itemForm" @refresh="refreshList" />
       </el-dialog>

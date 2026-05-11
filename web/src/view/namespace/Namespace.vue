@@ -107,6 +107,7 @@
     style="height: 210px"
     @close="closeDialog"
     destroy-on-close
+    :close-on-click-modal="false"
   >
     <!-- dialog header -->
     <template #header>

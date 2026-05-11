@@ -118,6 +118,7 @@
       width="500px"
       @close="closeDialog"
       destroy-on-close
+      :close-on-click-modal="false"
     >
       <!-- 添加用户的表单组件 -->
       <Add :subMethod="method" :subRow="data.userForm" @refresh="updateUserOperation" />

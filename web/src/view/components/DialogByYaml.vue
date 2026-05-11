@@ -17,6 +17,7 @@
     style="height: 840px"
     @close="emit('closeDialog')"
     destroy-on-close
+    :close-on-click-modal="false"
   >
     <slot name="header"></slot>
     <yaml-edit :code="props.itemByYaml"></yaml-edit>
