@@ -9,6 +9,7 @@ import { API_CONFIG, CONFIG } from '../config/index.js'
 import router from '../router/index.js'
 import { ElMessage, ElLoading } from 'element-plus'
 import { ref } from 'vue'
+import { load } from 'js-yaml'
 
 let lastErrorMessage = ''
 let lastErrorAt = 0
@@ -78,11 +79,9 @@ axios.interceptors.response.use((response) => {
   // 对响应数据做点什么
   console.log('响应拦截器:::Response:::', response, 'URL:::', getFullRequestUrl(response?.config))
   if (response.data.status === 200) {
-    loading.close()
     return response
   } else if (response.data.status === 400) {
     notifyError(response.data.message)
-    loading.close()
     return Promise.reject(new Error(response.data.message))
   } else if (response.data.status === 401) {
     // 提示信息
@@ -94,13 +93,11 @@ axios.interceptors.response.use((response) => {
     window.localStorage.removeItem(CONFIG.TOKEN_NAME)
     // 跳转到登录页
     router.currentRoute.value.path != '/login' && router.push('/login')
-    loading.close()
     return Promise.reject(new Error(response.data.message))
   } else if (response.data.status === 403) {
     // 提示信息
     console.log('响应拦截器403:::Response:::', response.data.status)
     notifyError(response.data.message)
-    loading.close()
     return Promise.reject(new Error(response.data.message))
   }
 })
@@ -132,9 +129,11 @@ const request = (url = '', data = {}, method = 'get', timeout = 3000) => {
       })
         .then((response) => {
           // 能正常拿到数据
+          loading.close()
           resolve(response)
         })
         .catch((error) => {
+          loading.close()
           reject(error)
         })
     }
