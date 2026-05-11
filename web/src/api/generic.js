@@ -19,9 +19,9 @@ export const updateHandler = (resourceType, itemForm) => {
   return request(fullUrl, itemForm, 'post')
 }
 // select
-export const getListHandler = (clusterId, nameSpace, resourceType) => {
+export const getListHandler = (clusterId, nameSpace, resourceType, getStatus) => {
   const fullUrl = BASE_URL + '/' + resourceType + '/' + 'list'
-  return request(fullUrl, { clusterId, nameSpace }, 'get')
+  return request(fullUrl, { clusterId, nameSpace, getStatus }, 'get')
 }
 export const getHandler = (clusterId, nameSpace, resourceType, name) => {
   const fullUrl = BASE_URL + '/' + resourceType + '/' + 'get'

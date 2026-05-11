@@ -24,6 +24,7 @@
     await getClusterList()
     dashboardData.clusterId = dashboardData.clusterItems[0].clusterId
     dashboardData.clusterItem = dashboardData.clusterItems[0]
+    getClusterItem()
     getNodesMetrics()
     getPodStatus()
     getEventList()
@@ -61,7 +62,7 @@
   }
   const getClusterList = () => {
     return new Promise((resolve, reject) => {
-      getListHandler('', '', 'cluster').then((res) => {
+      getListHandler('', '', 'cluster','',true).then((res) => {
         if (res.data.status === 200) {
           dashboardData.clusterItems = res.data.data.items
           resolve() // 成功时调用 resolve
