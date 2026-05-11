@@ -114,10 +114,16 @@ const request = (url = '', data = {}, method = 'get', timeout = 3000) => {
         url: url,
       })
         .then((response) => {
-          // 能正常拿到数据
+          // 正常拿到响应数据后
+          loading.close()
           resolve(response)
         })
         .catch((error) => {
+          // 响应失败或错误后
+          loading.close()
+          if (err.message.includes('timeout')) {
+            ElMessage.error('后端服务超时未响应')
+          }
           reject(error)
         })
     } else if (methodLower === 'post') {
@@ -128,11 +134,12 @@ const request = (url = '', data = {}, method = 'get', timeout = 3000) => {
         url: url,
       })
         .then((response) => {
-          // 能正常拿到数据
+          // 正常拿到响应数据后
           loading.close()
           resolve(response)
         })
         .catch((error) => {
+          // 响应失败或错误后
           loading.close()
           reject(error)
         })
