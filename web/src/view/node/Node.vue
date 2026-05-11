@@ -16,7 +16,7 @@
     // 集群选择器
     clusterOptions: [], // 集群选择 options
     curClusterId: '', // 当前选择的集群id
-    defaultClusterId: 'in-cluster', // 默认选择的集群id
+    defaultClusterId: '', // 默认选择的集群id
     // 表格
     opDialog: false, // 配置、主机名 对话框
     nodeLabels: [], // 后端返回的label
@@ -138,7 +138,7 @@
     data.curHostName = row.metadata.name
     data.nodeTaints = Array.isArray(row.spec?.taints) ? [...row.spec.taints] : []
     // 获取节点详情
-    getHandler(data.curClusterId, '', 'node', data.curHostName).then((res) => {
+    getHandler(data.clusterId, '', 'node', data.curHostName).then((res) => {
       data.item = res.data.data.items
       // console.log("获取节点污点：：：:",data.nodeTaints)
       data.opDialog = true
@@ -194,7 +194,6 @@
   }
 
   const getSelectValue = (selectValue) => {
-    console.log('selectValue:::', selectValue)
     Object.assign(data, selectValue)
     getList()
   }

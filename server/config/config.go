@@ -30,7 +30,6 @@ var (
 	InClusterClientSet *kubernetes.Clientset
 	ClusterKubeconfig  map[string]string
 	ProtectNameSpace   map[string]bool
-	ProtectCluster     map[string]bool
 	InCluster          bool // 是否使用 in-cluster 初始 resetConfig
 	KubeConfigPath     string
 )
@@ -112,9 +111,5 @@ func init() {
 		"kube-system": true,
 		"ks":          true,
 		"test":        true,
-	}
-	// cluster 保护清单
-	ProtectCluster = map[string]bool{
-		"in-cluster": true,
 	}
 }

@@ -27,13 +27,6 @@ func Delete(c *gin.Context) {
 		return
 	}
 	clusterId := clusterConfig.ClusterId
-	// 禁止删除基础设施集群
-	if config.ProtectCluster[clusterId] {
-		returnData.Status = 403
-		returnData.Message = "删除集群 " + clusterId + " 权限不足"
-		c.JSON(200, returnData)
-		return
-	}
 	logs.Info(nil, "开始运行集群 "+clusterId+" 删除逻辑")
 	err := config.InClusterClientSet.CoreV1().Secrets(config.MetadataNamespace).Delete(context.TODO(), clusterId, metav1.DeleteOptions{})
 	if err != nil {
