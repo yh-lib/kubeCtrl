@@ -25,6 +25,11 @@ export const MENU_CONFIG = [
         index: '/cluster/namespace',
         icon: 'Box',
       },
+      {
+        title: '事件中心',
+        index: '/cluster/event',
+        icon: 'Bell',
+      },
     ],
   },
   // 2. 工作负载
@@ -191,11 +196,6 @@ export const MENU_CONFIG = [
         title: '用户管理',
         index: '/setting/user',
         icon: 'User',
-      },
-      {
-        title: '事件中心',
-        index: '/cluster/events',
-        icon: 'Bell',
       },
       // {
       //   title: '角色与权限 (RBAC)',

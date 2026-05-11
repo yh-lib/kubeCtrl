@@ -19,5 +19,9 @@ export const clusterRoutes = {
       path: 'node',
       component: () => import('../view/node/Node.vue'),
     },
+    {
+      path: 'event',
+      component: () => import('../view/event/Event.vue'),
+    },
   ],
 }
