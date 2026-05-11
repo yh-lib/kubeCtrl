@@ -17,13 +17,13 @@ export const MENU_CONFIG = [
       },
       {
         title: '节点列表',
-        index: '/node/list',
+        index: '/cluster/node',
         icon: 'Grid',
       },
       {
-        title: '事件中心',
-        index: '/cluster/events',
-        icon: 'Bell',
+        title: '命名空间',
+        index: '/cluster/namespace',
+        icon: 'Box',
       },
     ],
   },
@@ -188,14 +188,14 @@ export const MENU_CONFIG = [
     icon: 'Setting', // 工具代表系统级设置
     items: [
       {
-        title: '命名空间',
-        index: '/setting/namespaces',
-        icon: 'Box',
-      },
-      {
         title: '用户管理',
         index: '/setting/user',
         icon: 'User',
+      },
+      {
+        title: '事件中心',
+        index: '/cluster/events',
+        icon: 'Bell',
       },
       // {
       //   title: '角色与权限 (RBAC)',

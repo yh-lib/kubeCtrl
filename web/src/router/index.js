@@ -3,7 +3,6 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import { CONFIG } from '../config'
 import { userRoutes } from './user'
 import { clusterRoutes } from './cluster.js'
-import { nodeRoutes } from './node.js'
 import { settingRoutes } from './setting.js'
 import { workloadsRoutes } from './workloads.js'
 
@@ -13,7 +12,6 @@ const routes = [
   { path: '/login', component: () => import('../view/Login.vue') },
   userRoutes,
   clusterRoutes,
-  nodeRoutes,
   settingRoutes,
   workloadsRoutes,
 ]

@@ -34,7 +34,7 @@
   }
 
   const getList = () => {
-    getListHandler('', '', 'cluster').then((response) => {
+    getListHandler('', '', 'cluster', true).then((response) => {
       if (response.data.status === 200) {
         data.tableData = response.data.data.items
       }
