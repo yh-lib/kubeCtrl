@@ -52,6 +52,7 @@
   }
 
   const getPodStatus = () => {
+    dashboardData.podStatus = []
     getStatusHandler(dashboardData.clusterId, '', 'pod').then((res) => {
       if (res.data.status === 200) {
         dashboardData.podStatus = res.data.data.items
@@ -71,6 +72,7 @@
     })
   }
   const getClusterItem = () => {
+    dashboardData.clusterItem = {}
     getHandler(dashboardData.clusterId, '', 'cluster', dashboardData.clusterId).then((res) => {
       if (res.data.status === 200) {
         dashboardData.clusterItem = res.data.data.item
@@ -78,6 +80,7 @@
     })
   }
   const getNodesMetrics = () => {
+    dashboardData.nodeStatus = []
     return new Promise((resolve, reject) => {
       getMetricsHandler(dashboardData.clusterId, '', 'node').then((res) => {
         if (res.data.status === 200) {

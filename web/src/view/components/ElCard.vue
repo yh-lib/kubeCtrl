@@ -54,11 +54,7 @@
     syncToParent()
   })
 
-  const handleClusterChange = async () => {
-    await getNsOptions()
-    if (data.nsOptions.length > 0) {
-      data.nameSpace = ''
-    }
+  const handleClusterChange = () => {
     syncToParent()
   }
 
@@ -71,6 +67,7 @@
   }
   // 获取 namespace 列表
   const getNsOptions = async () => {
+    data.nameSpace = ''
     await getListHandler(data.clusterId, '', 'namespace').then((res) => {
       if (res.data.status === 200) {
         data.nsOptions = res.data.data.items || []

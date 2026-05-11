@@ -25,8 +25,8 @@ const notifyError = (message) => {
   ElMessage.error(text)
 }
 
-const getErrorMessage = (error, fallback = '请求失败') => {
-  return error?.response?.data?.message || error?.message || fallback
+const getErrorMessage = (err, fallback = '请求失败') => {
+  return error?.response?.data?.message || err?.message || fallback
 }
 
 // axios 全局配置
@@ -67,9 +67,9 @@ axios.interceptors.request.use(
     config.headers.Authorization = window.localStorage.getItem(CONFIG.TOKEN_NAME)
     return config
   },
-  (error) => {
+  (err) => {
     // 对请求错误做些什么
-    return Promise.reject(error)
+    return Promise.reject(err)
   }
 )
 
@@ -118,13 +118,13 @@ const request = (url = '', data = {}, method = 'get', timeout = 3000) => {
           loading.close()
           resolve(response)
         })
-        .catch((error) => {
+        .catch((err) => {
           // 响应失败或错误后
           loading.close()
           if (err.message.includes('timeout')) {
             ElMessage.error('后端服务超时未响应')
           }
-          reject(error)
+          reject(err)
         })
     } else if (methodLower === 'post') {
       axios({
@@ -138,10 +138,10 @@ const request = (url = '', data = {}, method = 'get', timeout = 3000) => {
           loading.close()
           resolve(response)
         })
-        .catch((error) => {
+        .catch((err) => {
           // 响应失败或错误后
           loading.close()
-          reject(error)
+          reject(err)
         })
     }
   })

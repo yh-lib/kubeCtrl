@@ -171,8 +171,9 @@
 
   // 获取当前集群Node列表
   const getList = () => {
+    console.log(data.curClusterId)
+    data.items = []
     if (!data.clusterId) {
-      data.items = []
       return
     }
     getListHandler(data.clusterId, '', 'node').then((res) => {
@@ -193,6 +194,7 @@
   }
 
   const getSelectValue = (selectValue) => {
+    console.log('selectValue:::', selectValue)
     Object.assign(data, selectValue)
     getList()
   }
