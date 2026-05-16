@@ -49,3 +49,7 @@ helm install ks -n ks .
 
 1. 前端服务依赖后端服务（否则无法正常登录验证）
 2. 后端服务依赖k8s集群状态（否则无法获取METADATA_NAMSPACE中集群的kubeconfig，后端服务将无法启动）
+
+### 效果图：
+
+![image-20260516212712339](./assets/image-20260516212712339.png)

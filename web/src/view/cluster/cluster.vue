@@ -34,11 +34,13 @@
   }
 
   const getList = () => {
-    getListHandler('', '', 'cluster', true).then((response) => {
+    getListHandler('', '', 'cluster', true)
+    .then((response) => {
       if (response.data.status === 200) {
         data.tableData = response.data.data.items
       }
     })
+
   }
 
   const closeDialog = () => {
@@ -88,7 +90,7 @@
   // 搜索功能
   const search = ref('')
   const tableData = computed(() =>
-    data.tableData.filter(
+    (data.tableData || []).filter(
       (data) => !search.value || data.clusterId.toLowerCase().includes(search.value.toLowerCase())
     )
   )

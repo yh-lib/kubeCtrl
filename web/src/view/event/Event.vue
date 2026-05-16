@@ -10,6 +10,9 @@
     getEventItems()
   }
   const getEventItems = () => {
+    if(!data.clusterId){
+      return
+    }
     data.items = []
     getListHandler(data.clusterId, data.nameSpace, 'event').then((res) => {
       if (res.data.status == 200) {
@@ -33,6 +36,9 @@
   // // // 子组件加载前自动获取数据
   onBeforeMount(async () => {
     await getclusterOptions() // 获取集群列表
+    if (!data.clusterOptions){
+      return
+    }
     data.clusterId = data.clusterOptions[0].clusterId
     getEventItems()
   })

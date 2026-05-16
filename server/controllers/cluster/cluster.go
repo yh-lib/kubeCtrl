@@ -95,6 +95,7 @@ func createOrUpdate(c *gin.Context, method string) {
 	clusterConfigSectet.Name = clusterConfig.Id
 	clusterConfigSectet.Labels = make(map[string]string)
 	clusterConfigSectet.Labels["author"] = "yaohui.li"
+	clusterConfigSectet.Labels["type"] = "clusterDetail"
 	// 添加注释，保存集群的配置信息
 	clusterConfigSectet.Annotations = make(map[string]string)
 	clusterConfigSectet.Annotations = utils.Struct2Map(ClusterStatus)

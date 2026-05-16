@@ -45,13 +45,13 @@ vim ./dockerfile
 2. 制作镜像
 
 ```bash
-docker build -t crpi-o5e9g8vha41iltg8.cn-hangzhou.personal.cr.aliyuncs.com/ks_img/ks-web:v1.0 .
+docker build -t crpi-o5e9g8vha41iltg8.cn-hangzhou.personal.cr.aliyuncs.com/ks_img/ks-web:latest .
 ```
 
 3. 推送镜像至仓库
 
 ```bash
-docker push crpi-o5e9g8vha41iltg8.cn-hangzhou.personal.cr.aliyuncs.com/ks_img/ks-web:v1.0
+docker push crpi-o5e9g8vha41iltg8.cn-hangzhou.personal.cr.aliyuncs.com/ks_img/ks-web:latest
 ```
 
 4. 启动服务
@@ -60,7 +60,7 @@ docker push crpi-o5e9g8vha41iltg8.cn-hangzhou.personal.cr.aliyuncs.com/ks_img/ks
 docker run \
 --name ks-web \
 -p  "10002:80" \   # 端口映射
-crpi-o5e9g8vha41iltg8.cn-hangzhou.personal.cr.aliyuncs.com/ks_img/ks-web:v1.0  # 构建的镜像
+crpi-o5e9g8vha41iltg8.cn-hangzhou.personal.cr.aliyuncs.com/ks_img/ks-web:latest  # 构建的镜像
 ```
 
 5. 测试

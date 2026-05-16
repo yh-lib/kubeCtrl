@@ -77,7 +77,7 @@ func List(c *gin.Context) {
 	// 定义存放返回前端数据的变量
 	returnData := config.NewRetrunData()
 	// 更新集群状态
-	clusterList, err := config.InClusterClientSet.CoreV1().Secrets(config.MetadataNamespace).List(context.TODO(), metav1.ListOptions{})
+	clusterList, err := config.InClusterClientSet.CoreV1().Secrets(config.MetadataNamespace).List(context.TODO(), metav1.ListOptions{LabelSelector: "type=clusterDetail"})
 	if err != nil {
 		logs.Error(map[string]any{"Error": err.Error()}, "获取集群列表失败")
 		returnData.Status = 400

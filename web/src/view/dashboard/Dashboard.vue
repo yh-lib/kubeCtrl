@@ -22,6 +22,9 @@
 
   onBeforeMount(async () => {
     await getClusterList()
+    if (!dashboardData.clusterItems[0]){
+      return
+    }
     dashboardData.clusterId = dashboardData.clusterItems[0].clusterId
     dashboardData.clusterItem = dashboardData.clusterItems[0]
     getClusterItem()
@@ -64,7 +67,7 @@
     return new Promise((resolve, reject) => {
       getListHandler('', '', 'cluster','',true).then((res) => {
         if (res.data.status === 200) {
-          dashboardData.clusterItems = res.data.data.items
+          dashboardData.clusterItems = res.data.data.items || []
           resolve() // 成功时调用 resolve
         } else {
           reject(new Error('请求失败')) // 失败时调用 reject

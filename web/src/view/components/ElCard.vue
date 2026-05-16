@@ -41,6 +41,9 @@
   onBeforeMount(async () => {
     // 获取集群列表
     await getclusterOptions()
+    if (!data.clusterOptions){
+      return
+    }
     // 获取select默认选择集群ID
     if (data.clusterOptions.length > 0) {
       data.clusterId = data.clusterOptions[0].clusterId
@@ -67,6 +70,9 @@
   }
   // 获取 namespace 列表
   const getNsOptions = async () => {
+    if(!data.clusterId){
+      return
+    }
     data.nameSpace = ''
     await getListHandler(data.clusterId, '', 'namespace').then((res) => {
       if (res.data.status === 200) {
