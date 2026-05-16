@@ -104,12 +104,11 @@ func init() {
 	KubeConfigPath = viper.GetString("KUBECONFIGPATH")
 	// 加载日志输出级别
 	initLogConfig(logLevel)
-	// 日志格式加载完成提示
-	logs.Info(nil, "The log configuration loading is complete.")
 	// namespace保护清单
 	ProtectNameSpace = map[string]bool{
 		"kube-system": true,
 		"ks":          true,
-		"test":        true,
 	}
+	// 程序配置加载完成提示
+	logs.Info(nil, "程序配置已加载完成。")
 }

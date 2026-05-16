@@ -51,20 +51,20 @@ spec:
           image: crpi-o5e9g8vha41iltg8.cn-hangzhou.personal.cr.aliyuncs.com/ks_img/ks-web:v1.3
           lifecycle: {}
           livenessProbe:
+            tcpSocket:
+              port: 80
             failureThreshold: 2
             initialDelaySeconds: 10
             periodSeconds: 10
             successThreshold: 1
-            tcpSocket:
-              port: 80
             timeoutSeconds: 2
           readinessProbe:
+            tcpSocket:
+              port: 80
             failureThreshold: 2
             initialDelaySeconds: 10
             periodSeconds: 10
             successThreshold: 1
-            tcpSocket:
-              port: 80
             timeoutSeconds: 2
           resources:
             limits:

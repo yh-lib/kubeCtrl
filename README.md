@@ -6,6 +6,8 @@ web/README.md   前端部署文档
 server  后端代码
 server/README.md   后端部署文档
 
+chart   ks项目chart包文件
+
 ### 兼容性
 
 kubernetes 1.23
@@ -15,7 +17,10 @@ kubernetes 1.35
 ### 一键安装
 
 ```bash
-helm install ks -n ks
+# 根据需求  编辑 values.yaml
+vim chart/values.yaml
+# 安装 release
+helm install ks -n ks .
 ```
 
 ### 依赖关系

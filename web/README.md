@@ -79,18 +79,7 @@ kubectl create rolebinding ks-server \
 --clusterrole=edit \
 --serviceaccount=ks:ks-server \
 --namespace=ks
-```
-
-```bash
-kubectl create ns ks
-kubectl create sa ks-server -n ks
-kubectl create rolebinding ks-server \
---clusterrole=edit \
---serviceaccount=ks:ks-server \
---namespace=ks
 # 根据需求配置 server.yaml
 vim ./server.yaml
 kubectl apply -f server.yaml -n ks
 ```
-
-### helm 部署

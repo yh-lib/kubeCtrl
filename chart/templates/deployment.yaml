@@ -1,0 +1,46 @@
+{{- range .Values.app}}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ printf "dp-%s" .name }}
+  labels:
+    dpName: {{.name}}
+    {{- include "ks.labels" $ | nindent 4 }}
+spec:
+  replicas: {{ $.Values.global.replicaCount }}
+  selector:
+    matchLabels:
+      dpName: {{.name}}
+      {{- include "ks.labels" $ | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        {{- toYaml .deployment.podAnnotations | nindent 8 }}
+      labels:
+        dpName: {{.name}}
+        {{- include "ks.labels" $ | nindent 8 }}
+    spec:
+      imagePullSecrets:
+        {{- toYaml .deployment.imagePullSecrets | nindent 8 }}
+      serviceAccountName: {{ printf "sa-%s" $.Release.Name }}
+      containers:
+        - name: {{ $.Chart.Name }}
+          image: {{ .deployment.image }}
+          imagePullPolicy: {{ $.Values.global.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .service.port }}
+              protocol: TCP
+          env:
+            {{- range .deployment.env }}
+            - name: {{ .name | quote }}
+              value: {{ .value | quote }}
+            {{- end }}
+          livenessProbe:
+            {{- toYaml .deployment.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .deployment.readinessProbe | nindent 12 }}
+          resources:
+            {{- toYaml .deployment.resources | nindent 12 }}        
+{{- end}}

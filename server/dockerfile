@@ -1,10 +1,10 @@
 # 使用基础镜像
-FROM crpi-o5e9g8vha41iltg8.cn-hangzhou.personal.cr.aliyuncs.com/ks_img/alpine:3.20
+FROM crpi-o5e9g8vha41iltg8.cn-hangzhou.personal.cr.aliyuncs.com/generic_img/alpine:3.20
 # 配置登录用户名、密码、程序启动端口号
 ENV KUBECONFIGPATH=/app/kubeconfig
 ENV USERNAME=Admin
 ENV PASSWORD=Admin123
-ENV PORT=:8080
+ENV PORT=:80
 # 设置工作目录
 WORKDIR /app
 # 准备程序文件
