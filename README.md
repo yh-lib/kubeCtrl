@@ -52,4 +52,4 @@ helm install ks -n ks .
 
 ### 效果图：
 
-![image-20260516220539725](./assets/image-20260516220539725.png)
+![image-20260516220844023](./assets/image-20260516220844023.png)
