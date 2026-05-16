@@ -1,10 +1,52 @@
-1. Get the application URL by running these commands:
+===================================================================
+===================================================================
+感谢您安装 {{ .Chart.Name }}！
+您的发布名称为：{{ .Release.Name }}
 
-{{- range .Values.app}}
-{{$ingressItem:=.ingress}}
-{{- range $host := .ingress.hosts }}
-  {{- range .paths }}
-  http{{ if $ingressItem.tls }}s{{ end }}://{{ $host.host }}{{ .path }}
-  {{- end }}
-{{- end }}
-{{- end}}
+📘 获取发布状态：
+	helm status {{ .Release.Name }} -n {{ .Release.Namespace }}
+
+🔍 查看所有资源：
+	helm get all {{ .Release.Name }} -n {{ .Release.Namespace }}
+
+🌐 访问服务：
+
+[ service 访问 ]
+	{{- range .Values.app}}
+	{{- if .service.enabled}}
+	{{ .name }} :
+	  - ClusterIP: 在集群内部通过 http://{{ .service.name }}.{{ $.Release.Namespace }}.svc:{{ .service.port }} 访问
+	{{- end}}
+	{{- end}}
+
+[ ingress 访问]
+	{{- if .Values.global.ingress.enabled }}
+	  - Ingress 域名：http{{ if .Values.global.ingress.tls }}s{{ end }}://{{ .Values.global.ingress.host | quote }}
+	{{- end }}
+
+⚙️ 自定义配置：
+	如需修改配置，请编辑 values.yaml 并执行：
+	helm upgrade {{ .Release.Name }} -n {{ .Release.Namespace }} .
+
+
+💡 提示：
+	- 日志查看：kubectl logs -l app.kubernetes.io/instance={{ .Release.Name }} -n {{ .Release.Namespace }}
+	- 删除发布：helm uninstall {{ .Release.Name }} -n {{ .Release.Namespace }}
+	- 默认登录凭证:
+		{{- $envList := (index .Values.app 0).deployment.env }}
+		{{- $username := "" }}
+		{{- $password := "" }}
+		{{- range $envList }}
+		  {{- if eq .name "USERNAME" }}
+		    {{- $username = .value }}
+		  {{- end }}
+		  {{- if eq .name "PASSWORD" }}
+		    {{- $password = .value }}
+		  {{- end }}
+		{{- end }}
+		username: {{ $username }}
+		password: {{ $password }}
+
+祝您使用愉快！
+===================================================================
+===================================================================

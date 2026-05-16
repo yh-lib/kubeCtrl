@@ -1,7 +1,9 @@
 # 应用程序配置
 app:
+  # 后端服务
   - name: ks-server
     deployment:
+      name: "dp-ks-server"
       image: crpi-o5e9g8vha41iltg8.cn-hangzhou.personal.cr.aliyuncs.com/ks_img/ks-server:latest
       podAnnotations: {}
       podLabels: {}
@@ -33,20 +35,14 @@ app:
         - name: PORT
           value: ":80"
     service:
+      enabled: true
+      name: "svc-ks-server"
       type: ClusterIP
       port: 80
-    ingress:
-      enabled: true
-      className: "nginx"
-      annotations: {}
-      hosts:
-        - host: ks-server.tpass.local
-          paths:
-            - path: /
-              pathType: ImplementationSpecific
-      tls: []
+  # 前端服务        
   - name: ks-web
     deployment:
+      name: "dp-ks-web"
       image: crpi-o5e9g8vha41iltg8.cn-hangzhou.personal.cr.aliyuncs.com/ks_img/ks-web:v1.0
       podAnnotations: {}
       podLabels: {}
@@ -64,18 +60,10 @@ app:
         - name: LANG
           value: C.UTF-8      
     service:
+      enabled: true
+      name: "svc-ks-web"
       type: ClusterIP
       port: 80
-    ingress:
-      enabled: true
-      className: "nginx"
-      annotations: {}
-      hosts:
-        - host: ks-web.tpass.local
-          paths:
-            - path: /
-              pathType: ImplementationSpecific
-      tls: []
 # 全局配置
 global:
   replicaCount: 1
@@ -86,13 +74,15 @@ global:
     create: true
     automount: true
     annotations: {}
-    name: ""
+    name: "sa-ks"
   nodeSelector: {}
   tolerations: []
   affinity: {}
   roleBinding:
+    name: "rb-ks"
     create: true
   ingress:
+    name: "ingress-ks"
     enabled: true
     className: "nginx"
     annotations: {}

@@ -3,29 +3,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ printf "dp-%s" .name }}
+  name: {{ .deployment.name }}
   labels:
-    dpName: {{.name}}
+    dpName: {{ .deployment.name }}
     {{- include "ks.labels" $ | nindent 4 }}
 spec:
   replicas: {{ $.Values.global.replicaCount }}
   selector:
     matchLabels:
-      dpName: {{.name}}
+      dpName: {{ .deployment.name }}
       {{- include "ks.labels" $ | nindent 6 }}
   template:
     metadata:
       annotations:
         {{- toYaml .deployment.podAnnotations | nindent 8 }}
       labels:
-        dpName: {{.name}}
+        dpName: {{ .deployment.name }}
         {{- include "ks.labels" $ | nindent 8 }}
     spec:
       imagePullSecrets:
-        {{- toYaml .deployment.imagePullSecrets | nindent 8 }}
-      serviceAccountName: {{ printf "sa-%s" $.Release.Name }}
+        {{- toYaml $.Values.global.imagePullSecrets | nindent 8 }}
+      serviceAccountName: {{ $.Values.global.serviceAccount.name }}
       containers:
-        - name: {{ $.Chart.Name }}
+        - name: {{ .name }}
           image: {{ .deployment.image }}
           imagePullPolicy: {{ $.Values.global.image.pullPolicy }}
           ports:

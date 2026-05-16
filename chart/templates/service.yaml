@@ -3,10 +3,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ printf "svc-%s" .name }}
+  name: {{ .service.name }}
   namespace: {{$.Release.Namespace}}
   labels:
-    dpName: {{.name}}
+    dpName: {{.deployment.name}}
     {{- include "ks.labels" $ | nindent 4 }}
 spec:
   type: {{ .service.type }}
@@ -16,6 +16,6 @@ spec:
       protocol: TCP
       name: http
   selector:
-    dpName: {{.name}}
+    dpName: {{.deployment.name}}
     {{- include "ks.labels" $ | nindent 4 }}
 {{- end }}
